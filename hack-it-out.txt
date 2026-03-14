@@ -1,0 +1,81 @@
+HACK IT OUT
+OVERVIEW
+
+Visualizing simulation output is crucial for scientific
+understanding and public outreach. This project challenges you to
+build PyClimaExplorer, a rapid-prototype interactive visualizer for
+climate model data (e.g., NetCDF files from models like CESM or
+ERA5 reanalysis).
+
+Leveraging the power of the Python data ecosystem, you will create
+a web-based dashboard that allows users to slice, dice, and
+visualize complex multi-dimensional climate data in real-time. The
+goal is to make a tool that turns raw numbers into a compelling
+story about our changing planet within a single day.
+
+CHALLENGE SCOPE
+
+Goal: Build a functional, interactive web dashboard that can load a
+climate dataset and produce at least two different types of
+visualizations (e.g., a global heatmap and a time-series line plot).
+
+Input Data: Use standard NetCDF files (.nc) containing variables like
+Temperature, Precipitation, or Wind Speed.
+
+Although you may use any dataset which fits the specifications,
+here are some datsets for reference.
+
+Target Audience: Researchers needing quick looks at data, or the
+general public interested in climate trends.
+DESIRED SKILLS
+
+  Language : Python (Intermediate)
+  Data Handling: Xarray (essential for climate data), Pandas,
+  NumPy.
+  Visualization: Plotly, Matplotlib, or Altair.
+  Web Framework: Streamlit (Highly Recommended for speed)
+  or Plotly Dash.
+
+HACKATHON SPECS
+
+  Difficulty: Medium (High impact, clear tools available)
+  Duration: 24 Hours
+  Team Size: 2-4 Developers
+
+DELIVERABLES
+
+A Web Interface: A dashboard running locally or deployed (e.g.,
+Streamlit Cloud) where a user can select variables (e.g., "Surface
+Temperature") and a time range.
+
+     Interactive Plots
+      Spatial View: A map showing data distribution for a selected
+     time slice.
+     Temporal View: A time-series graph showing how a variable
+     changes over time at a specific location.
+     Documentation: A generic README.md explaining how to run
+     the app and where to get sample data.
+BONUS
+
+   3D Visualization: Use libraries like PyDeck or PyVista to render
+   a 3D globe.
+   Comparison Mode: Allow side-by-side comparison of two
+   different datasets (e.g., 1990 vs 2020)
+   Story Mode: A "Guided Tour" feature that highlights specific
+   climate anomalies.
+SUBMISSION GUIDELINES
+
+     Submit a 7 page presentation (including front page and end
+     page) for Phase-1 by 13th March till 11:59 PM.
+     For Phase-2: Hackathon will be conducted from 14th March 9:30
+     AM to 15th March 9:30 AM at LT-3 IIT(BHU)
+     Final pitching for top 15 teams will be on 15th March 11 AM
+     onward.
+
+EVALUATION CRITEREON
+
+   20% weightage is given to ideation and research done in
+   Phase-1
+   80% weightage is given to the deliverable of the Phase-2
+   (offline Hackathon)
+
