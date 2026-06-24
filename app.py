@@ -102,7 +102,7 @@ def main() -> None:
         timeline_df = latest_series.to_dataframe(name="temperature").reset_index().rename(columns={latest_axes["time"]: "time"})
     metric_cols = st.columns(4)
     with metric_cols[0]:
-        render_metric_card("Global surface temperature", f"{latest_value:.2f} deg C", f"Latest global anomaly from {source_label}")
+        render_metric_card("Global temperature anomaly", f"{latest_value:+.2f} deg C", f"Deviation from 1951-1980 baseline from {source_label}")
     with metric_cols[1]:
         if live_snapshot:
             render_metric_card(
