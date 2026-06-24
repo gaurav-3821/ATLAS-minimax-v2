@@ -111,22 +111,13 @@ ATLAS_CSS = """
     }
 
     header[data-testid="stHeader"] {
+        display: flex !important;
         background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
         backdrop-filter: none !important;
-        height: 0 !important;
-        min-height: 0 !important;
-        overflow: visible !important;
-        z-index: 100 !important;
     }
 
     .stAppToolbar {
         display: none !important;
-    }
-
-    .appview-container .main {
-        margin-top: 0 !important;
     }
 
     [data-testid="stSidebarNav"] {
