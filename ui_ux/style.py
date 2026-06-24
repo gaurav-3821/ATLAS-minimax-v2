@@ -105,8 +105,26 @@ ATLAS_CSS = """
         100% { transform: scale(0.95) rotate(-1deg); opacity: 0.5; }
     }
 
-    #MainMenu, footer, .stAppToolbar {
+    #MainMenu, footer {
         display: none;
+    }
+
+    button[data-testid="stSidebarCollapsedControl"],
+    button[data-testid="stSidebarCollapseButton"] {
+        display: flex !important;
+        background: rgba(0,229,255,0.1) !important;
+        border: 1px solid rgba(0,229,255,0.3) !important;
+        border-radius: 8px !important;
+        color: var(--atlas-cyan) !important;
+        padding: 0.4rem !important;
+        min-width: 2.2rem !important;
+        min-height: 2.2rem !important;
+        backdrop-filter: blur(12px) !important;
+    }
+
+    button[data-testid="stSidebarCollapsedControl"]:hover,
+    button[data-testid="stSidebarCollapseButton"]:hover {
+        background: rgba(0,229,255,0.2) !important;
     }
 
     [data-testid="stSidebarNav"] {
@@ -942,11 +960,108 @@ def _escape(value: str) -> str:
     return html.escape(value, quote=True)
 
 
+@st.cache_data(show_spinner=False)
+def get_base64_bg(mode: str) -> str:
+    import base64
+    current_dir = Path(__file__).resolve().parent
+    if mode == "light":
+        path = current_dir / "theme mode" / "light_compressed.jpg"
+    else:
+        path = current_dir / "theme mode" / "dark_compressed.jpg"
+        
+    if path.exists():
+        try:
+            with open(path, "rb") as f:
+                return base64.b64encode(f.read()).decode("utf-8")
+        except Exception:
+            pass
+    return ""
+
+
 def apply_atlas_theme() -> None:
     st.markdown(ATLAS_CSS, unsafe_allow_html=True)
     light_mode = st.session_state.get("atlas_light_mode", False)
     if light_mode:
         st.markdown(ATLAS_CSS_LIGHT_OVERRIDES, unsafe_allow_html=True)
+        b64 = get_base64_bg("light")
+        if b64:
+            st.markdown(
+                f"""
+                <style>
+                    html[data-theme="light"] .stApp {{
+                        background: url('data:image/jpeg;base64,{b64}') no-repeat center center fixed !important;
+                        background-size: cover !important;
+                    }}
+                    html[data-theme="light"] [data-testid="stAppViewContainer"],
+                    html[data-theme="light"] .main,
+                    html[data-theme="light"] [data-testid="stHeader"] {{
+                        background-color: transparent !important;
+                        background-image: none !important;
+                    }}
+                    html[data-theme="light"] [data-testid="stSidebar"],
+                    html[data-theme="light"] [data-testid="stSidebarContent"],
+                    html[data-theme="light"] [data-testid="stSidebar"] > div:first-child {{
+                        background-color: #ffffff !important;
+                        background-image: none !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                    }}
+                    html[data-theme="light"] [data-testid="stSidebar"] > div:first-child {{
+                        background: rgba(255, 255, 255, 0.98) !important;
+                    }}
+                    html[data-theme="light"] [data-testid="collapsedControl"] {{
+                        display: block !important;
+                        visibility: visible !important;
+                        z-index: 999999 !important;
+                        background-color: #ffffff !important;
+                        border: 1px solid rgba(0,0,0,0.1) !important;
+                        border-radius: 4px !important;
+                        padding: 3px !important;
+                    }}
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
+    else:
+        b64 = get_base64_bg("dark")
+        if b64:
+            st.markdown(
+                f"""
+                <style>
+                    .stApp {{
+                        background: url('data:image/jpeg;base64,{b64}') no-repeat center center fixed !important;
+                        background-size: cover !important;
+                    }}
+                    [data-testid="stAppViewContainer"],
+                    .main,
+                    [data-testid="stHeader"] {{
+                        background-color: transparent !important;
+                        background-image: none !important;
+                    }}
+                    [data-testid="stSidebar"],
+                    [data-testid="stSidebarContent"],
+                    [data-testid="stSidebar"] > div:first-child {{
+                        background-color: #0b0f1a !important;
+                        background-image: none !important;
+                        opacity: 1 !important;
+                        visibility: visible !important;
+                    }}
+                    [data-testid="stSidebar"] > div:first-child {{
+                        background: linear-gradient(180deg, rgba(10,14,24,0.98) 0%, rgba(15,20,34,0.98) 100%) !important;
+                    }}
+                    [data-testid="collapsedControl"] {{
+                        display: block !important;
+                        visibility: visible !important;
+                        z-index: 999999 !important;
+                        background-color: #0b0f1a !important;
+                        border: 1px solid rgba(255,255,255,0.1) !important;
+                        border-radius: 4px !important;
+                        padding: 3px !important;
+                    }}
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 def render_sidebar_navigation(active_page: str) -> None:
