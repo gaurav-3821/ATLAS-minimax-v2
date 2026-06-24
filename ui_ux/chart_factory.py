@@ -109,13 +109,15 @@ def _apply_chart_style(
             title_font=dict(color=MUTED_COLOR),
         )
     if yaxis_title is not None:
-        figure.update_yaxes(
-            title=yaxis_title,
-            showgrid=True,
-            gridcolor=GRID_COLOR,
-            zeroline=False,
-            color=TEXT_COLOR,
-            title_font=dict(color=MUTED_COLOR),
+        figure.update_layout(
+            yaxis=dict(
+                title=yaxis_title,
+                showgrid=True,
+                gridcolor=GRID_COLOR,
+                zeroline=False,
+                color=TEXT_COLOR,
+                title_font=dict(color=MUTED_COLOR),
+            )
         )
     return figure
 
@@ -838,7 +840,7 @@ def create_forecast_delta_figure(forecast_df: pd.DataFrame, title: str) -> go.Fi
             )
         )
     _apply_chart_style(figure, title=title, xaxis_title="Time", yaxis_title="Temperature shift (C)")
-    figure.update_yaxes(zeroline=True, zerolinecolor="rgba(255,255,255,0.35)")
+    figure.update_layout(yaxis=dict(zeroline=True, zerolinecolor="rgba(255,255,255,0.35)"))
     return figure
 
 
