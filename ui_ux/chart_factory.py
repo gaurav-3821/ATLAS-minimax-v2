@@ -78,9 +78,10 @@ def _apply_chart_style(
     yaxis_title: str | None = None,
     show_legend: bool = True,
 ) -> go.Figure:
+    r_margin = 60 if "yaxis2" in figure.layout else 15
     figure.update_layout(
         title=title,
-        margin=dict(l=10, r=10, t=56, b=12),
+        margin=dict(l=10, r=r_margin, t=56, b=12),
         paper_bgcolor=PAPER_BG,
         plot_bgcolor=PLOT_BG,
         font=dict(family=FONT_FAMILY, color=TEXT_COLOR),
@@ -933,9 +934,9 @@ def create_risk_timeline_figure(timeline_df: pd.DataFrame, title: str) -> go.Fig
                 name=label,
                 line=dict(color=colors[key], width=2.5),
                 line_shape="spline",
-                stackgroup="risk",
             )
         )
+    figure.update_yaxes(range=[0, 100])
     return _apply_chart_style(figure, title=title, xaxis_title="Time", yaxis_title="Risk score")
 
 
