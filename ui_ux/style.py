@@ -26,42 +26,42 @@ ATLAS_CSS = """
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
     :root {
-        --atlas-bg-primary: #0B0F1A;
-        --atlas-bg-secondary: #111827;
-        --atlas-card-bg: rgba(17, 24, 39, 0.85);
-        --atlas-card-glass: rgba(21, 26, 46, 0.72);
-        --atlas-card-border: rgba(255,255,255,0.06);
+        --atlas-bg-primary: #060a14;
+        --atlas-bg-secondary: #0c1123;
+        --atlas-card-bg: rgba(15, 22, 46, 0.55);
+        --atlas-card-glass: rgba(12, 18, 38, 0.65);
+        --atlas-card-border: rgba(255,255,255,0.07);
+        --atlas-glass-shine: rgba(255,255,255,0.04);
         --atlas-cyan: #00E5FF;
         --atlas-yellow: #FFD84D;
         --atlas-green: #6EFF9A;
         --atlas-pink: #FF5C8A;
         --atlas-purple: #A78BFA;
         --atlas-text: #FFFFFF;
-        --atlas-text-secondary: #D1D5DB;
-        --atlas-muted: #9CA3AF;
-        --atlas-subtle: #6B7280;
-        --atlas-shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-        --atlas-shadow-md: 0 4px 16px rgba(0,0,0,0.25);
-        --atlas-shadow-lg: 0 8px 32px rgba(0,0,0,0.3);
-        --atlas-radius-sm: 8px;
-        --atlas-radius-md: 12px;
-        --atlas-radius-lg: 16px;
-        --atlas-radius-xl: 20px;
-        --atlas-grid-line: rgba(255,255,255,0.03);
+        --atlas-text-secondary: #E2E8F0;
+        --atlas-muted: #94A3B8;
+        --atlas-subtle: #64748B;
+        --atlas-shadow-glass: 0 8px 32px rgba(0,0,0,0.35);
+        --atlas-shadow-hover: 0 12px 48px rgba(0,0,0,0.45);
+        --atlas-radius-sm: 10px;
+        --atlas-radius-md: 14px;
+        --atlas-radius-lg: 20px;
+        --atlas-radius-xl: 24px;
         --atlas-space-xs: 0.25rem;
         --atlas-space-sm: 0.5rem;
         --atlas-space-md: 1rem;
         --atlas-space-lg: 1.75rem;
         --atlas-space-xl: 2.5rem;
+        --atlas-glass-blur: 18px;
         --atlas-color-success: #6EFF9A;
         --atlas-color-warning: #FFD84D;
         --atlas-color-error: #FF5C8A;
         --atlas-color-info: #00E5FF;
-        --atlas-focus-ring: 0 0 0 3px rgba(0,229,255,0.4);
+        --atlas-focus-ring: 0 0 0 3px rgba(0,229,255,0.35);
         --atlas-font-mono: 'Fira Code', 'JetBrains Mono', monospace;
         --atlas-font-body: 'Fira Sans', 'Inter', sans-serif;
         --atlas-font-heading: 'Space Grotesk', sans-serif;
-        --atlas-transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        --atlas-transition: 350ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     html, body, [class*="css"] {
@@ -70,23 +70,38 @@ ATLAS_CSS = """
 
     .stApp {
         background:
-            radial-gradient(ellipse at 20% 10%, rgba(0,229,255,0.08), transparent 30%),
-            radial-gradient(ellipse at 80% 15%, rgba(167,139,250,0.06), transparent 28%),
-            radial-gradient(ellipse at 50% 100%, rgba(110,255,154,0.06), transparent 30%),
-            linear-gradient(170deg, #060a14 0%, #0b0f1a 35%, #0f1522 70%, #0b0f1a 100%);
+            radial-gradient(ellipse at 15% 8%, rgba(0,229,255,0.10), transparent 35%),
+            radial-gradient(ellipse at 85% 12%, rgba(167,139,250,0.08), transparent 30%),
+            radial-gradient(ellipse at 50% 90%, rgba(110,255,154,0.06), transparent 32%),
+            radial-gradient(ellipse at 30% 55%, rgba(255,92,138,0.04), transparent 28%),
+            linear-gradient(165deg, #040812 0%, #080e1f 25%, #0c1528 50%, #080e1f 75%, #040812 100%);
+        animation: atlasLiquid 24s ease-in-out infinite;
+        background-size: 200% 200%;
+    }
+
+    @keyframes atlasLiquid {
+        0% { background-position: 0% 0%; }
+        25% { background-position: 100% 20%; }
+        50% { background-position: 50% 100%; }
+        75% { background-position: 0% 60%; }
+        100% { background-position: 0% 0%; }
     }
 
     .stApp::before {
         content: "";
         position: fixed;
         inset: 0;
-        background-image:
-            linear-gradient(var(--atlas-grid-line) 1px, transparent 1px),
-            linear-gradient(90deg, var(--atlas-grid-line) 1px, transparent 1px);
-        background-size: 56px 56px;
+        background:
+            radial-gradient(ellipse at 20% 30%, rgba(0,229,255,0.06), transparent 35%),
+            radial-gradient(ellipse at 80% 70%, rgba(167,139,250,0.05), transparent 35%);
         pointer-events: none;
-        opacity: 0.4;
-        mask-image: radial-gradient(ellipse at 50% 0%, black 40%, transparent 70%);
+        animation: atlasBlob 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes atlasBlob {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+        50% { transform: scale(1.1) rotate(2deg); opacity: 0.8; }
+        100% { transform: scale(0.95) rotate(-1deg); opacity: 0.5; }
     }
 
     #MainMenu, footer, header[data-testid="stHeader"] {
@@ -112,6 +127,7 @@ ATLAS_CSS = """
         color: var(--atlas-text);
         letter-spacing: -0.02em;
         font-weight: 600;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
 
     p, li, label, div[data-testid="stMarkdownContainer"], span {
@@ -123,7 +139,9 @@ ATLAS_CSS = """
     }
 
     [data-testid="stSidebar"] > div:first-child {
-        background: linear-gradient(180deg, rgba(10,14,24,0.98) 0%, rgba(15,20,34,0.98) 100%);
+        background: rgba(8, 13, 28, 0.65);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
         border-right: 1px solid rgba(255,255,255,0.06);
     }
 
@@ -148,7 +166,7 @@ ATLAS_CSS = """
         grid-template-columns: 1.1fr 1.0fr 0.6fr;
         gap: 0.75rem;
         margin-bottom: 1.2rem;
-        animation: atlasFadeUp 0.4s ease-out;
+        animation: atlasFadeUp 0.5s ease-out;
     }
 
     .atlas-topbar-card,
@@ -166,16 +184,43 @@ ATLAS_CSS = """
         background: var(--atlas-card-bg);
         border: 1px solid var(--atlas-card-border);
         border-radius: var(--atlas-radius-md);
-        box-shadow: var(--atlas-shadow-sm);
-        backdrop-filter: blur(12px);
-        transition: box-shadow var(--atlas-transition), border-color var(--atlas-transition);
+        box-shadow: var(--atlas-shadow-glass);
+        backdrop-filter: blur(var(--atlas-glass-blur));
+        -webkit-backdrop-filter: blur(var(--atlas-glass-blur));
+        transition: box-shadow var(--atlas-transition), border-color var(--atlas-transition), transform var(--atlas-transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .atlas-topbar-card::before,
+    .atlas-hero::before,
+    .atlas-feature-card::before,
+    .atlas-source-card::before,
+    .atlas-metric-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at 30% 20%, var(--atlas-glass-shine), transparent 50%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity var(--atlas-transition);
+    }
+
+    .atlas-feature-card:hover::before,
+    .atlas-source-card:hover::before,
+    .atlas-metric-card:hover::before {
+        opacity: 1;
     }
 
     .atlas-feature-card:hover,
     .atlas-source-card:hover,
     .atlas-metric-card:hover {
-        border-color: rgba(0,229,255,0.15);
-        box-shadow: var(--atlas-shadow-md);
+        border-color: rgba(0,229,255,0.18);
+        box-shadow: var(--atlas-shadow-hover);
+        transform: translateY(-2px);
     }
 
     .atlas-topbar-card {
@@ -211,8 +256,8 @@ ATLAS_CSS = """
         align-items: center;
         gap: 0.3rem;
         padding: 0.3rem 0.6rem;
-        border-radius: 6px;
-        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.08);
         color: var(--atlas-text-secondary);
         font-size: 0.72rem;
@@ -220,12 +265,13 @@ ATLAS_CSS = """
         text-transform: uppercase;
         letter-spacing: 0.06em;
         line-height: 1;
+        backdrop-filter: blur(6px);
     }
 
-    .atlas-chip.cyan { color: var(--atlas-cyan); background: rgba(0,229,255,0.08); border-color: rgba(0,229,255,0.15); }
-    .atlas-chip.yellow { color: var(--atlas-yellow); background: rgba(255,216,77,0.08); border-color: rgba(255,216,77,0.15); }
-    .atlas-chip.green { color: var(--atlas-green); background: rgba(110,255,154,0.08); border-color: rgba(110,255,154,0.15); }
-    .atlas-chip.pink { color: var(--atlas-pink); background: rgba(255,92,138,0.08); border-color: rgba(255,92,138,0.15); }
+    .atlas-chip.cyan { color: var(--atlas-cyan); background: rgba(0,229,255,0.10); border-color: rgba(0,229,255,0.18); }
+    .atlas-chip.yellow { color: var(--atlas-yellow); background: rgba(255,216,77,0.10); border-color: rgba(255,216,77,0.18); }
+    .atlas-chip.green { color: var(--atlas-green); background: rgba(110,255,154,0.10); border-color: rgba(110,255,154,0.18); }
+    .atlas-chip.pink { color: var(--atlas-pink); background: rgba(255,92,138,0.10); border-color: rgba(255,92,138,0.18); }
 
     .atlas-side-brand {
         padding: 0.85rem;
@@ -233,25 +279,12 @@ ATLAS_CSS = """
         border: 1px solid var(--atlas-card-border);
         border-radius: var(--atlas-radius-md);
         background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, transparent 60%);
+        backdrop-filter: blur(12px);
     }
 
     .atlas-side-brand .atlas-kicker {
         margin-bottom: 0.3rem;
         font-size: 0.65rem;
-    }
-
-    .atlas-side-brand h3 {
-        margin: 0;
-        font-size: 1.2rem;
-        font-weight: 700;
-        letter-spacing: -0.03em;
-    }
-
-    .atlas-side-brand p {
-        margin: 0.25rem 0 0 0;
-        color: var(--atlas-muted);
-        font-size: 0.75rem;
-        line-height: 1.4;
     }
 
     .atlas-side-section {
@@ -265,14 +298,15 @@ ATLAS_CSS = """
     }
 
     .atlas-active-page {
-        padding: 0.55rem 0.75rem;
+        padding: 0.45rem 0.65rem;
         border: 1px solid rgba(0,229,255,0.2);
         border-radius: var(--atlas-radius-sm);
         background: linear-gradient(135deg, rgba(0,229,255,0.08) 0%, rgba(167,139,250,0.06) 100%);
         font-family: var(--atlas-font-mono);
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         color: var(--atlas-cyan);
         margin-bottom: 0.5rem;
+        backdrop-filter: blur(6px);
     }
 
     .stButton > button,
@@ -281,27 +315,29 @@ ATLAS_CSS = """
     .stFormSubmitButton > button {
         border: none !important;
         border-radius: var(--atlas-radius-sm) !important;
-        background: linear-gradient(135deg, #00E5FF 0%, #A78BFA 100%) !important;
-        color: #0B0F1A !important;
-        font-weight: 700 !important;
+        background: linear-gradient(135deg, rgba(0,229,255,0.85) 0%, rgba(167,139,250,0.85) 100%) !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
         font-family: var(--atlas-font-body) !important;
-        box-shadow: var(--atlas-shadow-sm) !important;
+        box-shadow: var(--atlas-shadow-glass) !important;
         min-height: 2.5rem !important;
+        backdrop-filter: blur(8px) !important;
         transition: transform var(--atlas-transition), box-shadow var(--atlas-transition) !important;
+        letter-spacing: 0.02em;
     }
 
     .stButton > button:hover,
     .stDownloadButton > button:hover,
     .stLinkButton > a:hover,
     .stFormSubmitButton > button:hover {
-        transform: translateY(-1px);
-        box-shadow: var(--atlas-shadow-md) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: var(--atlas-shadow-hover) !important;
+        background: linear-gradient(135deg, rgba(0,229,255,0.95) 0%, rgba(167,139,250,0.95) 100%) !important;
     }
 
     .stButton > button:active,
     .stDownloadButton > button:active {
-        transform: translateY(0);
-        box-shadow: var(--atlas-shadow-sm) !important;
+        transform: translateY(0) !important;
     }
 
     .stTextInput input,
@@ -315,13 +351,15 @@ ATLAS_CSS = """
         border: 1px solid rgba(255,255,255,0.08) !important;
         border-radius: var(--atlas-radius-sm) !important;
         box-shadow: none !important;
-        transition: border-color var(--atlas-transition);
+        backdrop-filter: blur(6px) !important;
+        transition: border-color var(--atlas-transition), box-shadow var(--atlas-transition);
     }
 
     .stTextInput input:focus,
     .stNumberInput input:focus,
     .stTextArea textarea:focus {
         border-color: var(--atlas-cyan) !important;
+        box-shadow: 0 0 0 3px rgba(0,229,255,0.12) !important;
     }
 
     .stSlider [data-baseweb="slider"] {
@@ -362,13 +400,15 @@ ATLAS_CSS = """
         background: var(--atlas-card-bg);
         border: 1px solid var(--atlas-card-border);
         border-radius: var(--atlas-radius-sm);
-        box-shadow: var(--atlas-shadow-sm);
+        box-shadow: var(--atlas-shadow-glass);
+        backdrop-filter: blur(var(--atlas-glass-blur));
         padding: 0.7rem 0.85rem;
-        transition: border-color var(--atlas-transition);
+        transition: border-color var(--atlas-transition), transform var(--atlas-transition);
     }
 
     [data-testid="stMetric"]:hover {
-        border-color: rgba(0,229,255,0.15);
+        border-color: rgba(0,229,255,0.18);
+        transform: translateY(-2px);
     }
 
     [data-testid="stPlotlyChart"],
@@ -384,11 +424,11 @@ ATLAS_CSS = """
         padding: 2.5rem 2.5rem 2rem;
         margin-bottom: 1.5rem;
         background:
-            radial-gradient(ellipse at 100% 0%, rgba(0,229,255,0.1), transparent 40%),
-            radial-gradient(ellipse at 0% 100%, rgba(167,139,250,0.08), transparent 40%),
-            linear-gradient(135deg, rgba(17,24,39,0.95) 0%, rgba(11,15,26,0.98) 100%);
+            radial-gradient(ellipse at 100% 0%, rgba(0,229,255,0.08), transparent 40%),
+            radial-gradient(ellipse at 0% 100%, rgba(167,139,250,0.06), transparent 40%);
+        background-color: var(--atlas-card-glass);
         border: 1px solid var(--atlas-card-border);
-        border-radius: var(--atlas-radius-lg);
+        border-radius: var(--atlas-radius-xl);
         position: relative;
         overflow: hidden;
     }
@@ -407,7 +447,7 @@ ATLAS_CSS = """
         align-items: center;
         gap: 0.3rem;
         padding: 0.25rem 0.6rem;
-        border-radius: 6px;
+        border-radius: 8px;
         background: rgba(0,229,255,0.08);
         border: 1px solid rgba(0,229,255,0.15);
         color: var(--atlas-cyan);
@@ -416,6 +456,7 @@ ATLAS_CSS = """
         text-transform: uppercase;
         letter-spacing: 0.08em;
         line-height: 1;
+        backdrop-filter: blur(6px);
     }
 
     .atlas-hero h1 {
@@ -502,6 +543,7 @@ ATLAS_CSS = """
     .atlas-info-banner {
         background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, transparent 100%);
         border-left: 3px solid var(--atlas-cyan);
+        backdrop-filter: blur(12px);
     }
 
     .atlas-card-grid {
@@ -563,6 +605,7 @@ ATLAS_CSS = """
         border: 1px solid var(--atlas-card-border);
         border-radius: var(--atlas-radius-sm);
         background: rgba(255,255,255,0.02);
+        backdrop-filter: blur(6px);
         transition: border-color var(--atlas-transition), background var(--atlas-transition);
     }
 
@@ -597,7 +640,7 @@ ATLAS_CSS = """
         align-items: center;
         gap: 0.3rem;
         padding: 0.2rem 0.5rem;
-        border-radius: 6px;
+        border-radius: 8px;
         background: rgba(110,255,154,0.08);
         border: 1px solid rgba(110,255,154,0.15);
         color: var(--atlas-green);
@@ -606,6 +649,7 @@ ATLAS_CSS = """
         text-transform: uppercase;
         letter-spacing: 0.06em;
         line-height: 1;
+        backdrop-filter: blur(4px);
     }
 
     .atlas-status.warning {
@@ -627,13 +671,21 @@ ATLAS_CSS = """
     }
 
     @keyframes atlasFadeUp {
-        from { opacity: 0; transform: translateY(8px); }
+        from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes atlasSkeleton {
         0% { background-position: 200% 0; }
         100% { background-position: -200% 0; }
+    }
+
+    @keyframes atlasLiquid {
+        0% { background-position: 0% 0%; }
+        25% { background-position: 100% 20%; }
+        50% { background-position: 50% 100%; }
+        75% { background-position: 0% 60%; }
+        100% { background-position: 0% 0%; }
     }
 
     .atlas-skeleton {
@@ -654,6 +706,22 @@ ATLAS_CSS = """
         box-shadow: var(--atlas-focus-ring) !important;
     }
 
+    .atlas-blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        opacity: 0.15;
+        animation: atlasBlob 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes atlasBlob {
+        0% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -20px) scale(1.1); }
+        66% { transform: translate(-20px, 10px) scale(0.9); }
+        100% { transform: translate(10px, -30px) scale(1.05); }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
             animation-duration: 0.01ms !important;
@@ -661,6 +729,8 @@ ATLAS_CSS = """
             transition-duration: 0.01ms !important;
         }
         .atlas-skeleton { animation: none; }
+        .stApp { animation: none; }
+        .stApp::before { animation: none; }
     }
 
     @media (max-width: 1200px) {

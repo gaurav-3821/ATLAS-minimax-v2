@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import plotly.graph_objects as go
 import streamlit as st
 
 from ui_ux.chart_factory import (
@@ -10,6 +9,7 @@ from ui_ux.chart_factory import (
     create_gauge_figure,
     create_ranked_bar_figure,
     create_risk_radar,
+    create_risk_timeline_figure,
     create_station_history_figure,
 )
 from utils.live_data import fetch_air_quality, fetch_forecast, fetch_noaa_station_history, fetch_current_weather, get_default_location_query, resolve_location
@@ -18,33 +18,6 @@ from ui_ux.style import render_app_shell, render_feature_card, render_info_banne
 
 
 st.set_page_config(page_title="ATLAS | Risk Intelligence", page_icon=":material/warning:", layout="wide")
-
-
-def _risk_timeline_chart(timeline_df) -> go.Figure:
-    figure = go.Figure()
-    for column, color in [("heatwave", "#FF5C8A"), ("flood", "#00E5FF"), ("storm", "#FFD84D")]:
-        figure.add_trace(
-            go.Scatter(
-                x=timeline_df["time"],
-                y=timeline_df[column],
-                mode="lines",
-                name=column.title(),
-                line=dict(color=color, width=2.4),
-            )
-        )
-    figure.update_layout(
-        title="Short-range risk timeline",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(17,24,39,0.86)",
-        font=dict(color="#FFFFFF", family="'Fira Sans', sans-serif"),
-        margin=dict(l=10, r=10, t=56, b=12),
-        xaxis_title="Time",
-        yaxis_title="Risk score",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0.0),
-    )
-    figure.update_xaxes(showgrid=True, gridcolor="rgba(255,255,255,0.08)", zeroline=False)
-    figure.update_yaxes(showgrid=True, gridcolor="rgba(255,255,255,0.08)", zeroline=False, range=[0, 100])
-    return figure
 
 
 def main() -> None:
@@ -107,7 +80,7 @@ def main() -> None:
     if risk_timeline.empty:
         st.info("Forecast data is required to build the risk timeline.")
     else:
-        st.plotly_chart(_risk_timeline_chart(risk_timeline), use_container_width=True)
+        st.plotly_chart(create_risk_timeline_figure(risk_timeline, title="Short-range risk timeline"), use_container_width=True)
 
     alert_col, aq_col = st.columns(2)
     with alert_col:
