@@ -5,18 +5,23 @@ import streamlit as st
 from utils.data_loader import detect_axes, get_active_dataset, spatial_mean_series, to_display_array
 from utils.live_data import fetch_air_quality, fetch_current_weather, get_default_location_query, resolve_location
 from utils.report_builder import build_report_markdown, build_report_pdf
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Reports", page_icon=":material/description:", layout="wide")
 
 
 def main() -> None:
-    render_app_shell(
+    topbar_search = render_app_shell(
         "Reports",
         "Generate shareable climate briefs with markdown and PDF exports.",
         search_placeholder="Search briefing sections, metrics, or location",
     )
+    if topbar_search:
+        st.session_state["atlas_ops_location"] = topbar_search
+
+    location_query = st.session_state.get("atlas_ops_location", get_default_location_query())
+
     render_page_hero(
         "Delivery layer",
         "Reports",
@@ -26,8 +31,6 @@ def main() -> None:
 
     with st.sidebar:
         st.header("Report settings")
-        location_query = st.text_input("Location", value=st.session_state.get("atlas_ops_location", get_default_location_query()))
-        st.session_state["atlas_ops_location"] = location_query
         report_title = st.text_input("Report title", value="ATLAS Climate Brief")
         presentation_mode = st.toggle("Presentation mode", value=False)
 

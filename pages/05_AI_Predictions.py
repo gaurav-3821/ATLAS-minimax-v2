@@ -3,7 +3,7 @@ from __future__ import annotations
 import streamlit as st
 
 from utils.ai_copilot import generate_prediction_brief, get_openrouter_api_key
-from utils.chart_factory import (
+from ui_ux.chart_factory import (
     create_anomaly_bar_figure,
     create_forecast_delta_figure,
     create_prediction_figure,
@@ -11,7 +11,7 @@ from utils.chart_factory import (
 )
 from utils.data_loader import REGION_BOUNDS, detect_axes, get_active_dataset, spatial_mean_series, to_display_array
 from utils.prediction_engine import build_forecast_frame, compute_model_diagnostics, parse_natural_language_query
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | AI Predictions", page_icon=":material/auto_graph:", layout="wide")
@@ -146,16 +146,13 @@ def main() -> None:
             "The parser maps plain language onto the available historical variables and regions so teams can move faster.",
             eyebrow="Query",
         )
-        st.code(
-            "\n".join(
-                [
-                    f"query = {user_query}",
-                    f"variable = {parsed['variable']}",
-                    f"region = {parsed['region']}",
-                    f"anomaly_mode = {parsed['anomaly_mode']}",
-                ]
-            ),
-            language="text",
+        st.markdown(
+            f"""
+            - **Query:** *{user_query}*
+            - **Variable:** `{parsed['variable']}`
+            - **Region:** `{parsed['region']}`
+            - **Anomaly Mode:** `{parsed['anomaly_mode']}`
+            """
         )
     with lower_right:
         render_section_intro(

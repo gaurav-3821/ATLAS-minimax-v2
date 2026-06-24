@@ -117,11 +117,14 @@ def _secret_value(names: tuple[str, ...]) -> str | None:
         return None
 
     for name in names:
-        if name in secrets and secrets[name]:
-            return str(secrets[name]).strip()
-        lowered = name.lower()
-        if lowered in secrets and secrets[lowered]:
-            return str(secrets[lowered]).strip()
+        try:
+            if name in secrets and secrets[name]:
+                return str(secrets[name]).strip()
+            lowered = name.lower()
+            if lowered in secrets and secrets[lowered]:
+                return str(secrets[lowered]).strip()
+        except Exception:
+            pass
     return None
 
 
@@ -265,7 +268,10 @@ def _truthy(value: str | None) -> bool:
 
 
 def runtime_credential_entry_enabled() -> bool:
-    return _truthy(_secret_value(RUNTIME_CREDENTIAL_FLAG_NAMES))
+    value = _secret_value(RUNTIME_CREDENTIAL_FLAG_NAMES)
+    if value is None:
+        return True
+    return _truthy(value)
 
 
 def get_default_location_query() -> str:

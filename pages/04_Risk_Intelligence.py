@@ -3,7 +3,7 @@ from __future__ import annotations
 import plotly.graph_objects as go
 import streamlit as st
 
-from utils.chart_factory import (
+from ui_ux.chart_factory import (
     create_air_quality_figure,
     create_donut_figure,
     create_forecast_figure,
@@ -14,7 +14,7 @@ from utils.chart_factory import (
 )
 from utils.live_data import fetch_air_quality, fetch_forecast, fetch_noaa_station_history, fetch_current_weather, get_default_location_query, resolve_location
 from utils.risk_engine import build_risk_profile, build_risk_timeline
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Risk Intelligence", page_icon=":material/warning:", layout="wide")
@@ -36,7 +36,7 @@ def _risk_timeline_chart(timeline_df) -> go.Figure:
         title="Short-range risk timeline",
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(17,24,39,0.86)",
-        font=dict(color="#FFFFFF", family="Inter, sans-serif"),
+        font=dict(color="#FFFFFF", family="'Fira Sans', sans-serif"),
         margin=dict(l=10, r=10, t=56, b=12),
         xaxis_title="Time",
         yaxis_title="Risk score",
@@ -48,11 +48,16 @@ def _risk_timeline_chart(timeline_df) -> go.Figure:
 
 
 def main() -> None:
-    render_app_shell(
+    topbar_search = render_app_shell(
         "Risk Intelligence",
         "Hazard scoring, AQI context, and short-range operational alerts for a selected location.",
         search_placeholder="Search heatwave, flood, wildfire, storm, or city",
     )
+    if topbar_search:
+        st.session_state["atlas_ops_location"] = topbar_search
+
+    location_query = st.session_state.get("atlas_ops_location", get_default_location_query())
+
     render_page_hero(
         "Hazard layer",
         "Risk Intelligence",
@@ -62,9 +67,6 @@ def main() -> None:
 
     with st.sidebar:
         st.header("Risk controls")
-        default_query = st.session_state.get("atlas_ops_location", get_default_location_query())
-        location_query = st.text_input("Target location", value=default_query)
-        st.session_state["atlas_ops_location"] = location_query
         history_days = st.slider("NOAA lookback", min_value=14, max_value=90, value=45, step=1)
 
     with st.spinner("Loading risk intelligence data..."):
@@ -97,50 +99,15 @@ def main() -> None:
                 panel = risk_profile["panels"][title]
                 render_metric_card(title, f"{panel['score']:.0f}/100", str(panel["label"]))
 
-    top_left, top_right = st.columns((1.15, 0.85))
-    with top_left:
-        render_section_intro(
-            "Risk trajectory",
-            "Short-range forecast data is converted into scenario-style risk scores so operators can see direction, not just the latest point.",
-            eyebrow="Timeline",
-        )
-        if risk_timeline.empty:
-            st.info("Forecast data is required to build the risk timeline.")
-        else:
-            st.plotly_chart(_risk_timeline_chart(risk_timeline), use_container_width=True)
-    with top_right:
-        render_section_intro(
-            "Risk mix",
-            "The radar chart makes the balance of hazard types easy to understand at a glance.",
-            eyebrow="Radar",
-        )
-        radar_tab, mix_tab = st.tabs(["Radar", "Mix"])
-        with radar_tab:
-            st.plotly_chart(create_risk_radar(risk_profile["scores"], title="Hazard distribution"), use_container_width=True)
-        with mix_tab:
-            st.plotly_chart(create_donut_figure(risk_profile["scores"], title="Hazard share"), use_container_width=True)
-
-    mid_left, mid_right = st.columns(2)
-    with mid_left:
-        render_section_intro(
-            "Composite indicator",
-            "The gauge turns the full hazard model into a single demo-friendly signal for operators and judges.",
-            eyebrow="Indicator",
-        )
-        st.plotly_chart(
-            create_gauge_figure(risk_profile["composite"], title="Composite risk", suffix="/100"),
-            use_container_width=True,
-        )
-    with mid_right:
-        render_section_intro(
-            "Hazard ranking",
-            "Horizontal bars make it easy to see which hazard is dominating the current score profile.",
-            eyebrow="Ranking",
-        )
-        st.plotly_chart(
-            create_ranked_bar_figure(risk_profile["scores"], title="Hazard ranking", x_label="Risk score"),
-            use_container_width=True,
-        )
+    render_section_intro(
+        "Risk trajectory",
+        "Short-range forecast data is converted into scenario-style risk scores so operators can see direction, not just the latest point.",
+        eyebrow="Timeline",
+    )
+    if risk_timeline.empty:
+        st.info("Forecast data is required to build the risk timeline.")
+    else:
+        st.plotly_chart(_risk_timeline_chart(risk_timeline), use_container_width=True)
 
     alert_col, aq_col = st.columns(2)
     with alert_col:

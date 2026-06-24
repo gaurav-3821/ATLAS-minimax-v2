@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from utils.chart_factory import (
+from ui_ux.chart_factory import (
     create_air_quality_figure,
     create_anomaly_bar_figure,
     create_donut_figure,
@@ -21,18 +21,23 @@ from utils.data_loader import detect_axes, get_active_dataset, spatial_mean_seri
 from utils.live_data import fetch_air_quality, fetch_forecast, fetch_noaa_station_history, fetch_current_weather, get_default_location_query, resolve_location
 from utils.risk_engine import build_risk_profile, build_risk_timeline
 from utils.real_climate import get_real_global_temperature_frames
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Dashboard", page_icon=":material/dashboard:", layout="wide")
 
 
 def main() -> None:
-    render_app_shell(
+    topbar_search = render_app_shell(
         "Dashboard",
         "Global KPI summary, live location monitoring, and top-line climate risk signals.",
         search_placeholder="Search a city, signal, or climate KPI",
     )
+    if topbar_search:
+        st.session_state["atlas_ops_location"] = topbar_search
+
+    location_query = st.session_state.get("atlas_ops_location", "Delhi, IN")
+
     render_page_hero(
         "Mission control",
         "Dashboard",
@@ -42,9 +47,6 @@ def main() -> None:
 
     with st.sidebar:
         st.header("Operational inputs")
-        default_query = st.session_state.get("atlas_ops_location", "Delhi, IN")
-        location_query = st.text_input("Tracked location", value=default_query)
-        st.session_state["atlas_ops_location"] = location_query
         history_days = st.slider("NOAA history window", min_value=14, max_value=90, value=45, step=1)
 
     dataset, source_label = get_active_dataset()

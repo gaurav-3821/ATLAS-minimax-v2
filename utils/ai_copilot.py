@@ -31,11 +31,14 @@ def _secret_value(names: tuple[str, ...]) -> str | None:
         return None
 
     for name in names:
-        if name in secrets and secrets[name]:
-            return str(secrets[name]).strip()
-        lowered = name.lower()
-        if lowered in secrets and secrets[lowered]:
-            return str(secrets[lowered]).strip()
+        try:
+            if name in secrets and secrets[name]:
+                return str(secrets[name]).strip()
+            lowered = name.lower()
+            if lowered in secrets and secrets[lowered]:
+                return str(secrets[lowered]).strip()
+        except Exception:
+            pass
     return None
 
 

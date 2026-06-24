@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from utils.chart_factory import create_animated_heatmap, create_heatmap, create_spatial_map, create_time_series
+from ui_ux.chart_factory import create_animated_heatmap, create_heatmap, create_spatial_map, create_time_series
 from utils.data_loader import (
     REGION_BOUNDS,
     annual_mean_series,
@@ -22,7 +22,7 @@ from utils.data_loader import (
 )
 from utils.stats_engine import build_trend_series, compute_linear_trend, detect_anomalies, summarize_values
 from utils.real_climate import get_real_temperature_array
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Data Explorer", page_icon=":material/travel_explore:", layout="wide")
@@ -80,8 +80,20 @@ def main() -> None:
     region_view = subset_region(data_array, axes, region_name)
     lat_values = region_view[axes["lat"]].values
     lon_values = region_view[axes["lon"]].values
-    selected_lat = st.sidebar.slider("Latitude", min_value=float(lat_values.min()), max_value=float(lat_values.max()), value=float(lat_values[len(lat_values) // 2]), step=2.5)
-    selected_lon = st.sidebar.slider("Longitude", min_value=float(lon_values.min()), max_value=float(lon_values.max()), value=float(lon_values[len(lon_values) // 2]), step=2.5)
+    selected_lat = st.sidebar.number_input(
+        "Latitude",
+        min_value=float(lat_values.min()),
+        max_value=float(lat_values.max()),
+        value=float(lat_values[len(lat_values) // 2]),
+        step=2.5,
+    )
+    selected_lon = st.sidebar.number_input(
+        "Longitude",
+        min_value=float(lon_values.min()),
+        max_value=float(lon_values.max()),
+        value=float(lon_values[len(lon_values) // 2]),
+        step=2.5,
+    )
 
     map_slice = prepare_map_slice(data_array, axes, pd.Timestamp(selected_time), region_name, anomaly_mode)
     series = nearest_point_series(data_array, axes, selected_lat, selected_lon, anomaly_mode)

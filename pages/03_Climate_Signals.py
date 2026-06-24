@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from utils.chart_factory import (
+from ui_ux.chart_factory import (
     create_anomaly_bar_figure,
     create_heatmap,
     create_ranked_bar_figure,
@@ -20,7 +20,7 @@ from utils.data_loader import (
     to_display_array,
 )
 from utils.real_climate import get_real_global_temperature_frames, get_real_temperature_array
-from utils.style import render_app_shell, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Climate Signals", page_icon=":material/query_stats:", layout="wide")

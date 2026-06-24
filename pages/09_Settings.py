@@ -16,7 +16,7 @@ from utils.live_data import (
     runtime_credential_entry_enabled,
 )
 from utils.ai_copilot import get_openrouter_api_key
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_page_hero, render_section_intro, render_source_card
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_page_hero, render_section_intro, render_source_card
 
 
 st.set_page_config(page_title="ATLAS | Settings", page_icon=":material/settings:", layout="wide")
@@ -122,24 +122,6 @@ def main() -> None:
     render_feature_card("OpenRouter", "Configured" if get_openrouter_api_key() else "Not configured")
     render_feature_card("NASA Earthdata token", "Configured" if get_nasa_earthdata_token() else "Not configured")
 
-    render_section_intro(
-        "Deployment secrets",
-        "Use these server-side variables for local testing or hosted deployment. The hackathon build only needs OpenWeather and NOAA keys for the live data paths.",
-        eyebrow="Secrets",
-    )
-    st.code(
-        "\n".join(
-            [
-                "OPENWEATHER_API_KEY=<your key>",
-                "NOAA_API_TOKEN=<your token>",
-                "NASA_EARTHDATA_TOKEN=<your token>",
-                "OPENROUTER_API_KEY=<your key>",
-                "ATLAS_DEFAULT_LOCATION=Delhi, IN",
-                "ATLAS_ENABLE_RUNTIME_CREDENTIAL_INPUTS=false",
-            ]
-        ),
-        language="bash",
-    )
 
     render_section_intro(
         "Integration notes",

@@ -4,11 +4,11 @@ from pathlib import Path
 
 import streamlit as st
 
-from utils.chart_factory import create_globe, create_timeline_figure
+from ui_ux.chart_factory import create_globe, create_timeline_figure
 from utils.data_loader import detect_axes, get_active_dataset, spatial_mean_series, to_display_array
 from utils.live_data import fetch_air_quality, fetch_current_weather, get_default_location_query, get_deploy_source_count, get_source_status, resolve_location
 from utils.real_climate import get_real_global_temperature_frames, get_real_temperature_array
-from utils.style import (
+from ui_ux.style import (
     render_app_shell,
     render_feature_card,
     render_info_banner,
@@ -44,7 +44,7 @@ def main() -> None:
         search_placeholder="Search dashboards, locations, or climate signals",
     )
     dataset, source_label = get_active_dataset()
-    logo_path = Path(__file__).resolve().parent / "assets" / "atlas_logo.svg"
+    logo_path = Path(__file__).resolve().parent / "assets" / "ATLAS LOGO.png"
     with st.spinner("Loading live climate data..."):
         live_snapshot = _load_live_snapshot(st.session_state.get("atlas_ops_location", get_default_location_query()))
     real_monthly, _, real_source = get_real_global_temperature_frames()
@@ -52,9 +52,7 @@ def main() -> None:
     logo_col, hero_col = st.columns((0.12, 0.88))
     with logo_col:
         if logo_path.exists():
-            svg_content = logo_path.read_text(encoding="utf-8")
-            styled_svg = svg_content.replace("<svg", '<svg role="img" aria-label="ATLAS logo - Climate Intelligence Platform"')
-            st.markdown(styled_svg, unsafe_allow_html=True)
+            st.image(str(logo_path), use_container_width=True)
 
     with hero_col:
         render_page_hero(

@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 import xarray as xr
 
-from utils.chart_factory import create_heatmap, create_prediction_figure
+from ui_ux.chart_factory import create_heatmap, create_prediction_figure
 from utils.data_loader import (
     REGION_BOUNDS,
     clear_uploaded_file,
@@ -23,7 +23,7 @@ from utils.data_loader import (
     variable_options,
 )
 from utils.prediction_engine import build_forecast_frame
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Research Lab", page_icon=":material/science:", layout="wide")

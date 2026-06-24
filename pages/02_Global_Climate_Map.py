@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import pandas as pd
 import streamlit as st
 
-from utils.chart_factory import create_globe, create_heatmap, create_latitude_profile, create_spatial_map
+from ui_ux.chart_factory import create_globe, create_heatmap, create_latitude_profile, create_spatial_map
 from utils.data_loader import (
     REGION_BOUNDS,
     detect_axes,
@@ -22,7 +22,7 @@ from utils.data_loader import (
 )
 from utils.live_data import SATELLITE_LAYERS, fetch_satellite_snapshot, get_default_location_query, resolve_location
 from utils.real_climate import get_real_temperature_array
-from utils.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
 
 
 st.set_page_config(page_title="ATLAS | Global Climate Map", page_icon=":material/public:", layout="wide")
@@ -69,10 +69,11 @@ def main() -> None:
             format_func=lambda ts: pd.Timestamp(ts).strftime("%Y-%m"),
         )
         region_name = st.selectbox("Region filter", list(REGION_BOUNDS.keys()), index=0)
-        projection = st.selectbox("2D map style", ["Analyst contour", "Dense field", "Regional focus"], index=0)
         anomaly_mode = st.toggle("Anomaly mode", value=False)
-        satellite_layer = st.selectbox("Satellite overlay", list(SATELLITE_LAYERS.keys()), index=0)
-        satellite_date = st.date_input("Satellite date", value=date.today() - timedelta(days=1), max_value=date.today())
+        with st.sidebar.expander("Advanced layer controls"):
+            projection = st.selectbox("2D map style", ["Analyst contour", "Dense field", "Regional focus"], index=0)
+            satellite_layer = st.selectbox("Satellite overlay", list(SATELLITE_LAYERS.keys()), index=0)
+            satellite_date = st.date_input("Satellite date", value=date.today() - timedelta(days=1), max_value=date.today())
 
     map_slice = prepare_map_slice(data_array, axes, pd.Timestamp(selected_time), region_name, anomaly_mode)
     colorscale = _layer_palette(selected_var, anomaly_mode)
@@ -115,16 +116,7 @@ def main() -> None:
                 ),
                 use_container_width=True,
             )
-            st.plotly_chart(
-                create_heatmap(
-                    map_slice,
-                    axes,
-                    title="Grid intensity view",
-                    colorscale=colorscale,
-                    colorbar_title=format_variable_units(data_array) or selected_var,
-                ),
-                use_container_width=True,
-            )
+
         with tab_globe:
             st.plotly_chart(
                 create_globe(
