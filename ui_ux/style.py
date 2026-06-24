@@ -6,6 +6,8 @@ from pathlib import Path
 
 import streamlit as st
 
+from ui_ux.chart_factory import set_chart_theme
+
 
 NAV_ITEMS = [
     {"label": "Story Mode", "path": "pages/00_Story_Mode.py", "icon": ":material/play_circle:"},
@@ -104,8 +106,19 @@ ATLAS_CSS = """
         100% { transform: scale(0.95) rotate(-1deg); opacity: 0.5; }
     }
 
-    #MainMenu, footer, header[data-testid="stHeader"] {
+    #MainMenu, footer {
         display: none;
+    }
+
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+
+    .stAppToolbar {
+        display: none !important;
     }
 
     [data-testid="stSidebarNav"] {
@@ -776,6 +789,163 @@ ATLAS_CSS = """
         .atlas-chip { justify-content: center; }
         [data-testid="stSidebar"] { min-width: 160px; }
     }
+
+</style>
+"""
+
+ATLAS_CSS_LIGHT_OVERRIDES = """
+<style>
+    html[data-theme="light"] {
+        --atlas-bg-primary: #f0f4f8;
+        --atlas-bg-secondary: #e2e8f0;
+        --atlas-card-bg: rgba(255, 255, 255, 0.7);
+        --atlas-card-glass: rgba(255, 255, 255, 0.8);
+        --atlas-card-border: rgba(0, 0, 0, 0.07);
+        --atlas-glass-shine: rgba(255, 255, 255, 0.5);
+        --atlas-text: #0f172a;
+        --atlas-text-secondary: #1e293b;
+        --atlas-muted: #475569;
+        --atlas-subtle: #64748b;
+        --atlas-shadow-glass: 0 8px 32px rgba(0,0,0,0.08);
+        --atlas-shadow-hover: 0 12px 48px rgba(0,0,0,0.12);
+        --atlas-color-success: #16a34a;
+        --atlas-color-warning: #ca8a04;
+        --atlas-color-error: #dc2626;
+        --atlas-color-info: #0891b2;
+        --atlas-focus-ring: 0 0 0 3px rgba(0,229,255,0.5);
+    }
+
+    html[data-theme="light"] .stApp {
+        background:
+            radial-gradient(ellipse at 15% 8%, rgba(0,229,255,0.06), transparent 35%),
+            radial-gradient(ellipse at 85% 12%, rgba(167,139,250,0.04), transparent 30%),
+            linear-gradient(165deg, #f0f4f8 0%, #e2e8f0 50%, #f0f4f8 100%);
+        animation: none;
+    }
+
+    html[data-theme="light"] .stApp::before {
+        opacity: 0;
+        animation: none;
+    }
+
+    html[data-theme="light"] h1, html[data-theme="light"] h2, html[data-theme="light"] h3,
+    html[data-theme="light"] h4, html[data-theme="light"] h5, html[data-theme="light"] h6 {
+        text-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    html[data-theme="light"] [data-testid="stSidebar"] > div:first-child {
+        background: rgba(255, 255, 255, 0.75);
+        border-right: 1px solid rgba(0,0,0,0.06);
+    }
+
+    html[data-theme="light"] .atlas-hero {
+        background:
+            radial-gradient(ellipse at 100% 0%, rgba(0,229,255,0.06), transparent 40%),
+            radial-gradient(ellipse at 0% 100%, rgba(167,139,250,0.04), transparent 40%);
+        background-color: rgba(255,255,255,0.8);
+    }
+
+    html[data-theme="light"] .atlas-hero h1 {
+        background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    html[data-theme="light"] .stButton > button,
+    html[data-theme="light"] .stDownloadButton > button,
+    html[data-theme="light"] .stLinkButton > a,
+    html[data-theme="light"] .stFormSubmitButton > button {
+        background: linear-gradient(135deg, rgba(0,229,255,0.9) 0%, rgba(167,139,250,0.9) 100%) !important;
+        color: #FFFFFF !important;
+    }
+
+    html[data-theme="light"] .stTextInput input,
+    html[data-theme="light"] .stNumberInput input,
+    html[data-theme="light"] .stTextArea textarea,
+    html[data-theme="light"] .stDateInput input,
+    html[data-theme="light"] .stSelectbox [data-baseweb="select"],
+    html[data-theme="light"] .stMultiSelect [data-baseweb="select"] {
+        background: rgba(255,255,255,0.7) !important;
+        border-color: rgba(0,0,0,0.12) !important;
+        color: #0f172a !important;
+    }
+
+    html[data-theme="light"] .atlas-chip {
+        background: rgba(0,0,0,0.03);
+        border-color: rgba(0,0,0,0.08);
+    }
+
+    html[data-theme="light"] .atlas-section-head {
+        background: rgba(0,229,255,0.04);
+    }
+
+    html[data-theme="light"] .atlas-info-banner {
+        background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 100%);
+    }
+
+    html[data-theme="light"] .atlas-kicker {
+        background: rgba(0,229,255,0.06);
+        border-color: rgba(0,229,255,0.15);
+    }
+
+    html[data-theme="light"] .atlas-active-page {
+        background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, rgba(167,139,250,0.04) 100%);
+    }
+
+    html[data-theme="light"] .atlas-step-chip {
+        background: rgba(0,0,0,0.02);
+        border-color: rgba(0,0,0,0.06);
+    }
+
+    html[data-theme="light"] .atlas-step-chip.active {
+        background: rgba(0,229,255,0.06);
+        border-color: rgba(0,229,255,0.2);
+    }
+
+    html[data-theme="light"] .atlas-status {
+        background: rgba(22,163,74,0.08);
+        border-color: rgba(22,163,74,0.15);
+        color: #16a34a;
+    }
+
+    html[data-theme="light"] .atlas-status.warning {
+        color: #ca8a04;
+        background: rgba(202,138,4,0.08);
+        border-color: rgba(202,138,4,0.15);
+    }
+
+    html[data-theme="light"] .atlas-status.neutral {
+        color: #64748b;
+        background: rgba(0,0,0,0.03);
+        border-color: rgba(0,0,0,0.06);
+    }
+
+    html[data-theme="light"] .atlas-feature-card:hover,
+    html[data-theme="light"] .atlas-source-card:hover,
+    html[data-theme="light"] .atlas-metric-card:hover {
+        border-color: rgba(0,229,255,0.3);
+    }
+
+    html[data-theme="light"] [data-testid="stMetric"]:hover {
+        border-color: rgba(0,229,255,0.3);
+    }
+
+    html[data-theme="light"] .atlas-side-brand {
+        background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 60%);
+    }
+
+    html[data-theme="light"] [data-testid="stSidebar"] a {
+        color: #475569 !important;
+    }
+
+    html[data-theme="light"] [data-testid="stSidebar"] a:hover {
+        color: #0f172a !important;
+    }
+
+    html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {
+        border-bottom-color: rgba(0,0,0,0.06);
+    }
 </style>
 """
 
@@ -786,6 +956,9 @@ def _escape(value: str) -> str:
 
 def apply_atlas_theme() -> None:
     st.markdown(ATLAS_CSS, unsafe_allow_html=True)
+    light_mode = st.session_state.get("atlas_light_mode", False)
+    if light_mode:
+        st.markdown(ATLAS_CSS_LIGHT_OVERRIDES, unsafe_allow_html=True)
 
 
 def render_sidebar_navigation(active_page: str) -> None:
@@ -806,6 +979,8 @@ def render_sidebar_navigation(active_page: str) -> None:
             "Operational climate monitoring, prediction workflows, and research-grade analysis.</p>",
             unsafe_allow_html=True,
         )
+        st.markdown("<div class='atlas-side-section'>Theme</div>", unsafe_allow_html=True)
+        st.toggle("Light mode", key="atlas_light_mode")
         st.page_link("app.py", label="Landing", icon=":material/rocket_launch:")
         st.text_input(
             "Sidebar Search",
@@ -821,7 +996,6 @@ def render_sidebar_navigation(active_page: str) -> None:
         st.markdown(
             """
             <div class="atlas-nav-panel">
-                <p class="atlas-nav-caption">Theme: Dark orbital mode</p>
                 <p class="atlas-nav-caption">Layout: 12-column responsive shell</p>
                 <p class="atlas-nav-caption">UI mix: NASA science + Apple glass + neobrutal cards</p>
             </div>
@@ -869,6 +1043,7 @@ def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Se
 
 def render_app_shell(active_page: str, subtitle: str, search_placeholder: str = "Search climate signals, regions, or datasets") -> str:
     apply_atlas_theme()
+    set_chart_theme(dark=not st.session_state.get("atlas_light_mode", False))
     render_sidebar_navigation(active_page)
     return render_topbar(active_page, subtitle, search_placeholder)
 

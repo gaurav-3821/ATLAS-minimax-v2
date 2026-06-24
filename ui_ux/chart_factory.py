@@ -18,6 +18,44 @@ GREEN = "#6EFF9A"
 SLATE = "#94A3B8"
 CRIMSON = "#FF5C8A"
 
+GEO_COASTLINE = "rgba(255,255,255,0.55)"
+GEO_COUNTRY = "rgba(255,255,255,0.22)"
+GEO_LAND = "rgba(32,42,65,0.62)"
+GEO_OCEAN = "rgba(7,11,22,0.88)"
+GEO_GRID = "rgba(255,255,255,0.10)"
+GLOBE_BASE_DARK = "#0F172A"
+GLOBE_BASE_LIGHT = "#23314F"
+
+
+def set_chart_theme(dark: bool = True) -> None:
+    global PLOT_BG, GRID_COLOR, TEXT_COLOR, MUTED_COLOR
+    global GEO_COASTLINE, GEO_COUNTRY, GEO_LAND, GEO_OCEAN, GEO_GRID
+    global GLOBE_BASE_DARK, GLOBE_BASE_LIGHT
+    if dark:
+        PLOT_BG = "rgba(17,24,39,0.86)"
+        GRID_COLOR = "rgba(255,255,255,0.08)"
+        TEXT_COLOR = "#FFFFFF"
+        MUTED_COLOR = "#9CA3AF"
+        GEO_COASTLINE = "rgba(255,255,255,0.55)"
+        GEO_COUNTRY = "rgba(255,255,255,0.22)"
+        GEO_LAND = "rgba(32,42,65,0.62)"
+        GEO_OCEAN = "rgba(7,11,22,0.88)"
+        GEO_GRID = "rgba(255,255,255,0.10)"
+        GLOBE_BASE_DARK = "#0F172A"
+        GLOBE_BASE_LIGHT = "#23314F"
+    else:
+        PLOT_BG = "rgba(240,244,248,0.95)"
+        GRID_COLOR = "rgba(0,0,0,0.08)"
+        TEXT_COLOR = "#0f172a"
+        MUTED_COLOR = "#64748b"
+        GEO_COASTLINE = "rgba(0,0,0,0.35)"
+        GEO_COUNTRY = "rgba(0,0,0,0.15)"
+        GEO_LAND = "rgba(210,225,235,0.85)"
+        GEO_OCEAN = "rgba(190,212,230,0.55)"
+        GEO_GRID = "rgba(0,0,0,0.08)"
+        GLOBE_BASE_DARK = "#D0D8E0"
+        GLOBE_BASE_LIGHT = "#E8EEF4"
+
 
 def _downsample_grid(
     lon_values: np.ndarray,
@@ -164,23 +202,23 @@ def create_spatial_map(
         margin=dict(l=10, r=10, t=56, b=12),
         paper_bgcolor=PAPER_BG,
         font=dict(family=FONT_FAMILY, color=TEXT_COLOR),
-        geo=dict(
-            projection_type=projection_map.get(projection, "natural earth"),
-            resolution=50,
-            showframe=False,
-            showcoastlines=True,
-            coastlinecolor="rgba(255,255,255,0.55)",
-            coastlinewidth=1.1,
-            showcountries=True,
-            countrycolor="rgba(255,255,255,0.22)",
-            showland=True,
-            landcolor="rgba(32,42,65,0.62)",
-            showocean=True,
-            oceancolor="rgba(7,11,22,0.88)",
-            lataxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.10)"),
-            lonaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.10)"),
-            bgcolor="rgba(0,0,0,0)",
-        ),
+            geo=dict(
+                projection_type=projection_map.get(projection, "natural earth"),
+                resolution=50,
+                showframe=False,
+                showcoastlines=True,
+                coastlinecolor=GEO_COASTLINE,
+                coastlinewidth=1.1,
+                showcountries=True,
+                countrycolor=GEO_COUNTRY,
+                showland=True,
+                landcolor=GEO_LAND,
+                showocean=True,
+                oceancolor=GEO_OCEAN,
+                lataxis=dict(showgrid=True, gridcolor=GEO_GRID),
+                lonaxis=dict(showgrid=True, gridcolor=GEO_GRID),
+                bgcolor="rgba(0,0,0,0)",
+            ),
     )
     return figure
 
@@ -269,7 +307,7 @@ def create_globe(
         y=base_y,
         z=base_z,
         surfacecolor=np.ones_like(overlay_values),
-        colorscale=[[0.0, "#0F172A"], [1.0, "#23314F"]],
+        colorscale=[[0.0, GLOBE_BASE_DARK], [1.0, GLOBE_BASE_LIGHT]],
         showscale=False,
         hoverinfo="skip",
         opacity=0.82,

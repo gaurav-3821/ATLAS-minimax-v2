@@ -15,6 +15,7 @@ from ui_ux.style import (
 )
 from ui_ux.chart_factory import (
     FONT_FAMILY,
+    set_chart_theme,
     create_air_quality_figure,
     create_animated_heatmap,
     create_anomaly_bar_figure,
