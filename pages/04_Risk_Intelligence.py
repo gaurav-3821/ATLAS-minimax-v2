@@ -67,25 +67,26 @@ def main() -> None:
         st.session_state["atlas_ops_location"] = location_query
         history_days = st.slider("NOAA lookback", min_value=14, max_value=90, value=45, step=1)
 
-    try:
-        location, resolved_weather = resolve_location(location_query)
-        weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
-        forecast_df = fetch_forecast(location["lat"], location["lon"])
-        air_current, air_forecast = fetch_air_quality(location["lat"], location["lon"])
+    with st.spinner("Loading risk intelligence data..."):
         try:
-            noaa_result = fetch_noaa_station_history(location["lat"], location["lon"], days=history_days)
-        except Exception:
-            noaa_result = None
-        history_df = noaa_result["history"] if noaa_result else None
-        risk_profile = build_risk_profile(weather, forecast_df, air_current, history_df)
-        risk_timeline = build_risk_timeline(forecast_df)
-        render_info_banner(
-            f"Risk scoring for {location['label']} is blending live weather, AQI, forecast progression, and any nearby NOAA ground observations."
-        )
-    except Exception as exc:
-        st.warning(f"Risk Intelligence could not connect to the live stack: {exc}")
-        st.info("Add valid API credentials in Settings or use coordinates for the target location.")
-        return
+            location, resolved_weather = resolve_location(location_query)
+            weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
+            forecast_df = fetch_forecast(location["lat"], location["lon"])
+            air_current, air_forecast = fetch_air_quality(location["lat"], location["lon"])
+            try:
+                noaa_result = fetch_noaa_station_history(location["lat"], location["lon"], days=history_days)
+            except Exception:
+                noaa_result = None
+            history_df = noaa_result["history"] if noaa_result else None
+            risk_profile = build_risk_profile(weather, forecast_df, air_current, history_df)
+            risk_timeline = build_risk_timeline(forecast_df)
+            render_info_banner(
+                f"Risk scoring for {location['label']} is blending live weather, AQI, forecast progression, and any nearby NOAA ground observations."
+            )
+        except Exception as exc:
+            st.warning(f"Risk Intelligence could not connect to the live stack: {exc}")
+            st.info("Add valid API credentials in Settings or use coordinates for the target location.")
+            return
 
     metric_cols = st.columns(5)
     for column, title in zip(metric_cols, ["Heatwave", "Flood", "Wildfire", "Storm", "Composite"]):

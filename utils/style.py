@@ -41,6 +41,16 @@ ATLAS_CSS = """
         --atlas-radius: 14px;
         --atlas-border-width: 3px;
         --atlas-grid-line: rgba(255,255,255,0.04);
+        --atlas-space-xs: 0.25rem;
+        --atlas-space-sm: 0.5rem;
+        --atlas-space-md: 1rem;
+        --atlas-space-lg: 1.75rem;
+        --atlas-space-xl: 2.5rem;
+        --atlas-color-success: #6EFF9A;
+        --atlas-color-warning: #FFD84D;
+        --atlas-color-error: #FF5C8A;
+        --atlas-color-info: #00E5FF;
+        --atlas-focus-ring: 0 0 0 3px rgba(0,229,255,0.5);
     }
 
     html, body, [class*="css"] {
@@ -509,6 +519,56 @@ ATLAS_CSS = """
         }
     }
 
+    @keyframes atlasSkeleton {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    .atlas-skeleton {
+        background: linear-gradient(90deg, var(--atlas-card-bg) 25%, rgba(255,255,255,0.06) 50%, var(--atlas-card-bg) 75%);
+        background-size: 200% 100%;
+        animation: atlasSkeleton 1.5s ease-in-out infinite;
+        border-radius: var(--atlas-radius);
+        min-height: 1rem;
+    }
+
+    .atlas-focusable:focus-visible,
+    .atlas-card-focus:focus-visible,
+    [tabindex]:focus-visible,
+    button:focus-visible,
+    a:focus-visible,
+    [role="button"]:focus-visible {
+        outline: none;
+        box-shadow: var(--atlas-focus-ring), var(--atlas-shadow-hard) !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+
+        .atlas-skeleton {
+            animation: none;
+            background: var(--atlas-card-bg);
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .atlas-hero h1 {
+            font-size: clamp(2rem, 4.5vw, 3.8rem);
+        }
+
+        .atlas-metric-value {
+            font-size: 1.5rem;
+        }
+
+        [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap;
+        }
+    }
+
     @media (max-width: 1100px) {
         .atlas-shell-topbar {
             grid-template-columns: 1fr;
@@ -519,6 +579,16 @@ ATLAS_CSS = """
         }
     }
 
+    @media (max-width: 900px) {
+        .atlas-card-grid {
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+
+        .atlas-stepper {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        }
+    }
+
     @media (max-width: 800px) {
         .atlas-hero {
             padding: 1.5rem;
@@ -526,6 +596,81 @@ ATLAS_CSS = """
 
         .atlas-hero h1 {
             font-size: 2.8rem;
+        }
+
+        .atlas-shell-topbar {
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+        }
+
+        .atlas-topbar-card {
+            padding: 0.7rem;
+            min-height: 70px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .atlas-hero {
+            padding: 1rem;
+        }
+
+        .atlas-hero h1 {
+            font-size: 2rem;
+        }
+
+        .atlas-hero .atlas-tagline {
+            font-size: 0.95rem;
+        }
+
+        .atlas-hero .atlas-subtitle {
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .atlas-metric-value {
+            font-size: 1.25rem;
+        }
+
+        .atlas-section-head,
+        .atlas-feature-card,
+        .atlas-panel,
+        .atlas-metric-card {
+            padding: 0.85rem;
+        }
+
+        [data-testid="stSidebar"] {
+            min-width: 220px;
+        }
+
+        .atlas-step-chip {
+            padding: 0.6rem;
+        }
+
+        .atlas-step-chip span {
+            font-size: 0.76rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .atlas-hero h1 {
+            font-size: 1.6rem;
+        }
+
+        .atlas-hero .atlas-tagline {
+            font-size: 0.85rem;
+        }
+
+        .atlas-chips-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .atlas-chip {
+            justify-content: center;
+        }
+
+        [data-testid="stSidebar"] {
+            min-width: 180px;
         }
     }
 </style>
@@ -544,7 +689,7 @@ def render_sidebar_navigation(active_page: str) -> None:
     with st.sidebar:
         st.markdown(
             """
-            <div class="atlas-side-brand">
+            <div class="atlas-side-brand" role="banner" aria-label="ATLAS brand">
                 <div class="atlas-kicker">ATLAS</div>
                 <h3>ATLAS mini max v2</h3>
                 <p>Operational climate monitoring, prediction workflows, and research-grade analysis.</p>
@@ -582,7 +727,7 @@ def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Se
     with left:
         st.markdown(
             f"""
-            <div class="atlas-topbar-card">
+            <div class="atlas-topbar-card" role="region" aria-label="Active view: {_escape(active_page)}">
                 <div class="atlas-kicker">Active View</div>
                 <h2>{_escape(active_page)}</h2>
                 <p>{_escape(subtitle)}</p>
@@ -600,10 +745,10 @@ def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Se
     with right:
         st.markdown(
             f"""
-            <div class="atlas-topbar-card">
+            <div class="atlas-topbar-card" role="region" aria-label="System status">
                 <div class="atlas-chip-row">
                     <span class="atlas-chip cyan">Live</span>
-                    <span class="atlas-chip yellow">{_escape(utc_stamp)}</span>
+                    <span class="atlas-chip yellow" aria-label="Time: {_escape(utc_stamp)}">{_escape(utc_stamp)}</span>
                     <span class="atlas-chip pink">Analyst</span>
                 </div>
             </div>
@@ -623,7 +768,7 @@ def render_page_hero(kicker: str, title: str, body: str, subtitle: str | None = 
     subtitle_html = f"<p class='atlas-tagline'>{_escape(subtitle)}</p>" if subtitle else ""
     st.markdown(
         f"""
-        <section class="atlas-hero">
+        <section class="atlas-hero" role="region" aria-label="{_escape(kicker)}: {_escape(title)}">
             <div class="atlas-kicker">{_escape(kicker)}</div>
             <h1>{_escape(title)}</h1>
             {subtitle_html}
@@ -638,7 +783,7 @@ def render_section_intro(title: str, body: str, eyebrow: str | None = None) -> N
     eyebrow_html = f"<div class='atlas-kicker'>{_escape(eyebrow)}</div>" if eyebrow else ""
     st.markdown(
         f"""
-        <div class="atlas-section-head">
+        <div class="atlas-section-head" role="heading" aria-level="2" aria-label="{_escape(title)}">
             {eyebrow_html}
             <h3>{_escape(title)}</h3>
             <p>{_escape(body)}</p>
@@ -651,10 +796,10 @@ def render_section_intro(title: str, body: str, eyebrow: str | None = None) -> N
 def render_feature_card(title: str, body: str) -> None:
     st.markdown(
         f"""
-        <div class="atlas-feature-card">
+        <article class="atlas-feature-card" tabindex="0" role="article" aria-label="{_escape(title)}">
             <h4>{_escape(title)}</h4>
             <p>{_escape(body)}</p>
-        </div>
+        </article>
         """,
         unsafe_allow_html=True,
     )
@@ -663,7 +808,7 @@ def render_feature_card(title: str, body: str) -> None:
 def render_info_banner(message: str) -> None:
     st.markdown(
         f"""
-        <div class="atlas-info-banner">
+        <div class="atlas-info-banner" role="status" aria-live="polite">
             <p>{_escape(message)}</p>
         </div>
         """,
@@ -674,7 +819,7 @@ def render_info_banner(message: str) -> None:
 def render_metric_card(title: str, value: str, subtext: str) -> None:
     st.markdown(
         f"""
-        <div class="atlas-metric-card">
+        <div class="atlas-metric-card" role="group" aria-label="{_escape(title)}: {_escape(value)}">
             <div class="atlas-metric-label">{_escape(title)}</div>
             <div class="atlas-metric-value">{_escape(value)}</div>
             <div class="atlas-metric-sub">{_escape(subtext)}</div>
@@ -687,7 +832,7 @@ def render_metric_card(title: str, value: str, subtext: str) -> None:
 def render_story_panel(title: str, body: str) -> None:
     st.markdown(
         f"""
-        <div class="atlas-story-panel">
+        <div class="atlas-story-panel" role="article" aria-label="{_escape(title)}">
             <h4>{_escape(title)}</h4>
             <p>{_escape(body)}</p>
         </div>
@@ -701,8 +846,8 @@ def render_source_card(title: str, status: str, detail: str) -> None:
     status_class = f"atlas-status {tone}".strip()
     st.markdown(
         f"""
-        <div class="atlas-source-card">
-            <span class="{status_class}">{_escape(status)}</span>
+        <div class="atlas-source-card" role="region" aria-label="{_escape(title)}: {_escape(status)}">
+            <span class="{status_class}" aria-label="Status: {_escape(status)}">{_escape(status)}</span>
             <h4>{_escape(title)}</h4>
             <p>{_escape(detail)}</p>
         </div>

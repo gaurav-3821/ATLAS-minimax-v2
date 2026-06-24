@@ -162,20 +162,21 @@ def main() -> None:
             "Region logic",
             "This build uses region filters instead of heavy country polygons so the historical NetCDF workflow stays fast and portable."
         )
-        try:
-            location_query = st.session_state.get("atlas_ops_location", get_default_location_query())
-            location, _ = resolve_location(location_query)
-            satellite_bytes, satellite_meta = fetch_satellite_snapshot(
-                location["lat"],
-                location["lon"],
-                image_date=satellite_date,
-                layer_name=satellite_layer,
-                span_degrees=10.0,
-            )
-            st.image(satellite_bytes, caption=f"{satellite_meta['layer_name']} around {location['label']}", use_container_width=True)
-            st.link_button("Open in NASA Worldview", satellite_meta["worldview_url"], use_container_width=True)
-        except Exception:
-            st.info("Satellite overlay becomes available when a live location and NASA imagery request succeed.")
+        with st.spinner("Fetching satellite imagery..."):
+            try:
+                location_query = st.session_state.get("atlas_ops_location", get_default_location_query())
+                location, _ = resolve_location(location_query)
+                satellite_bytes, satellite_meta = fetch_satellite_snapshot(
+                    location["lat"],
+                    location["lon"],
+                    image_date=satellite_date,
+                    layer_name=satellite_layer,
+                    span_degrees=10.0,
+                )
+                st.image(satellite_bytes, caption=f"{satellite_meta['layer_name']} around {location['label']}", use_container_width=True)
+                st.link_button("Open in NASA Worldview", satellite_meta["worldview_url"], use_container_width=True)
+            except Exception:
+                st.info("Satellite overlay becomes available when a live location and NASA imagery request succeed.")
 
 
 if __name__ == "__main__":

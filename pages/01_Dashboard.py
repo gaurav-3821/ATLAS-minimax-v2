@@ -70,17 +70,18 @@ def main() -> None:
     noaa_result = None
     live_error = None
 
-    try:
-        location, resolved_weather = resolve_location(location_query)
-        weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
-        forecast_df = fetch_forecast(location["lat"], location["lon"])
-        air_current, air_forecast = fetch_air_quality(location["lat"], location["lon"])
+    with st.spinner("Connecting to live data sources..."):
         try:
-            noaa_result = fetch_noaa_station_history(location["lat"], location["lon"], days=history_days)
-        except Exception:
-            noaa_result = None
-    except Exception as exc:
-        live_error = str(exc)
+            location, resolved_weather = resolve_location(location_query)
+            weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
+            forecast_df = fetch_forecast(location["lat"], location["lon"])
+            air_current, air_forecast = fetch_air_quality(location["lat"], location["lon"])
+            try:
+                noaa_result = fetch_noaa_station_history(location["lat"], location["lon"], days=history_days)
+            except Exception:
+                noaa_result = None
+        except Exception as exc:
+            live_error = str(exc)
 
     risk_profile = build_risk_profile(
         weather or {"temperature_c": 0.0, "humidity_pct": 0.0, "wind_mps": 0.0, "pressure_hpa": 1013.0},

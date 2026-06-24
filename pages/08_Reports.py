@@ -44,18 +44,19 @@ def main() -> None:
         "Operational risk and live AQI sections can be added automatically when APIs are connected.",
     ]
 
-    try:
-        location, resolved_weather = resolve_location(location_query)
-        weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
-        air_current, _ = fetch_air_quality(location["lat"], location["lon"])
-        live_summary = (
-            f"{location['label']} is currently {weather['description']} at {weather['temperature_c']:.1f} deg C "
-            f"with AQI {air_current['aqi']} ({air_current['category']})."
-        )
-        bullets.insert(0, live_summary)
-        location_label = str(location["label"])
-    except Exception:
-        location_label = location_query
+    with st.spinner("Collecting live data for report..."):
+        try:
+            location, resolved_weather = resolve_location(location_query)
+            weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
+            air_current, _ = fetch_air_quality(location["lat"], location["lon"])
+            live_summary = (
+                f"{location['label']} is currently {weather['description']} at {weather['temperature_c']:.1f} deg C "
+                f"with AQI {air_current['aqi']} ({air_current['category']})."
+            )
+            bullets.insert(0, live_summary)
+            location_label = str(location["label"])
+        except Exception:
+            location_label = location_query
 
     source_notes = [
         "OpenWeather powers live weather and AQI when credentials are configured.",

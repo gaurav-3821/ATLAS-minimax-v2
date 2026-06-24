@@ -11,6 +11,7 @@ from utils.live_data import (
     get_openweather_api_key,
     get_noaa_api_token,
     get_source_status,
+    resolve_location,
     run_live_diagnostics,
     runtime_credential_entry_enabled,
 )
@@ -45,9 +46,38 @@ def main() -> None:
         st.header("Deploy profile")
         st.caption("The public demo should use server-side secrets or environment variables.")
         if runtime_credential_entry_enabled():
-            st.text_input("OpenWeather API key", key=OPENWEATHER_SESSION_KEY, type="password")
-            st.text_input("NOAA API token", key=NOAA_SESSION_KEY, type="password")
-            st.text_input("NASA Earthdata token", key=NASA_SESSION_KEY, type="password")
+            show_keys = st.checkbox("Show API keys", value=False, key="atlas_show_keys")
+            key_type = "text" if show_keys else "password"
+            st.text_input("OpenWeather API key", key=OPENWEATHER_SESSION_KEY, type=key_type)
+            if st.button("Test OpenWeather", key="test_ow", use_container_width=True, type="secondary"):
+                from utils.live_data import fetch_current_weather
+                with st.spinner("Testing OpenWeather..."):
+                    try:
+                        loc, _ = resolve_location("Delhi, IN")
+                        w = fetch_current_weather(loc["lat"], loc["lon"])
+                        st.success(f"OpenWeather OK: {w['temperature_c']} deg C")
+                    except Exception as e:
+                        st.error(f"OpenWeather failed: {e}")
+            st.text_input("NOAA API token", key=NOAA_SESSION_KEY, type=key_type)
+            if st.button("Test NOAA", key="test_noaa", use_container_width=True, type="secondary"):
+                from utils.live_data import fetch_noaa_station_history
+                with st.spinner("Testing NOAA..."):
+                    try:
+                        loc, _ = resolve_location("Delhi, IN")
+                        r = fetch_noaa_station_history(loc["lat"], loc["lon"], days=7)
+                        st.success(f"NOAA OK: {len(r['history'])} records from {r['station']['name']}")
+                    except Exception as e:
+                        st.error(f"NOAA failed: {e}")
+            st.text_input("NASA Earthdata token", key=NASA_SESSION_KEY, type=key_type)
+            if st.button("Test NASA", key="test_nasa", use_container_width=True, type="secondary"):
+                from utils.live_data import fetch_satellite_snapshot
+                with st.spinner("Testing NASA GIBS..."):
+                    try:
+                        loc, _ = resolve_location("Delhi, IN")
+                        s, m = fetch_satellite_snapshot(loc["lat"], loc["lon"])
+                        st.success(f"NASA GIBS OK: {m['layer_name']}")
+                    except Exception as e:
+                        st.error(f"NASA GIBS failed: {e}")
             st.caption("Runtime key entry is enabled for local development.")
         else:
             st.success("Runtime key entry is disabled.")
