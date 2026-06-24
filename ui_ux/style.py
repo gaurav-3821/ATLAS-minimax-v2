@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import html
 from pathlib import Path
 
@@ -106,18 +105,8 @@ ATLAS_CSS = """
         100% { transform: scale(0.95) rotate(-1deg); opacity: 0.5; }
     }
 
-    #MainMenu, footer {
+    #MainMenu, footer, .stAppToolbar {
         display: none;
-    }
-
-    header[data-testid="stHeader"] {
-        display: flex !important;
-        background: transparent !important;
-        backdrop-filter: none !important;
-    }
-
-    .stAppToolbar {
-        display: none !important;
     }
 
     [data-testid="stSidebarNav"] {
@@ -1004,8 +993,7 @@ def render_sidebar_navigation(active_page: str) -> None:
 
 
 def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Search climate signals, regions, or datasets") -> str:
-    utc_stamp = datetime.now(timezone.utc).strftime("%H:%M UTC")
-    left, center, right = st.columns((1.15, 1.0, 0.7))
+    left, center = st.columns((1.15, 1.0))
     with left:
         st.markdown(
             f"""
@@ -1023,19 +1011,6 @@ def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Se
             placeholder=search_placeholder,
             key=f"atlas_topbar_search_{active_page.lower().replace(' ', '_')}",
             label_visibility="collapsed",
-        )
-    with right:
-        st.markdown(
-            f"""
-            <div class="atlas-topbar-card" role="region" aria-label="System status">
-                <div class="atlas-chip-row">
-                    <span class="atlas-chip cyan">Live</span>
-                    <span class="atlas-chip yellow" aria-label="Time: {_escape(utc_stamp)}">{_escape(utc_stamp)}</span>
-                    <span class="atlas-chip pink">Analyst</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
         )
     return search_value
 
