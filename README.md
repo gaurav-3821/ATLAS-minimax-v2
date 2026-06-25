@@ -1,8 +1,8 @@
 # ATLAS Climate Intelligence Platform
 
-![Operational Dashboard](assets/stitch/c842b64b351144098ca8a9f66fda9187.png)
+![ATLAS Logo](assets/atlas-logo.png)
 
-ATLAS is a dark, multi-page Streamlit climate product built around stable live APIs, historical NetCDF analysis, risk scoring, model-assisted forecasting, and report generation.
+ATLAS is a dark, multi-page Streamlit climate product built around stable live APIs, historical NetCDF analysis, risk scoring, model-assisted forecasting, and report generation. It unifies data from NASA, NOAA, OpenWeather, and local climate models into a single mission-control interface.
 
 The current build blends:
 
@@ -10,6 +10,39 @@ The current build blends:
 - **Mission Control aesthetic** — Space Grotesk headlines, Geist body, JetBrains Mono data
 - **Scientific Vanguard styling** — atmospheric cyan accents, emergency amber alerts, critical red risks
 - **Light / Dark mode** — toggleable with persistent OS preference detection
+
+---
+
+## Why ATLAS? — Comparison with Other Climate Platforms
+
+| Dimension | ATLAS | NASA Earthdata / NOAA CDO / Copernicus CDS | Enterprise platforms (EarthScan, Jupiter, Climate X) | OS-Climate / CLIMADA | ClimateIQ AI |
+|-----------|-------|--------------------------------------------|------------------------------------------------------|----------------------|--------------|
+| **Cost** | Free (open-source, Streamlit Cloud) | Free (data only) | $10k–$100k+/year enterprise | Free (library) | Free (open-source) |
+| **Deployment** | 1-click Streamlit Cloud; local too | Web portal only (no self-host) | SaaS / enterprise install | Python library, no UI | Vercel / self-host |
+| **Live API integration** | NASA GIBS, NOAA CDO, OpenWeather built-in | Each is its own silo | Proprietary data feeds | Manual data ingestion | NASA FIRMS, OpenWeather, NREL |
+| **Offline mode** | Built-in (fallback synthetic data) | Not available | Not available | Not applicable | No fallback |
+| **Risk scoring engine** | Flood, wildfire, heatwave, storm, AQI — real-time + historical | Not available | Core product (11+ hazards) | physrisk library (Python) | Not available |
+| **AI predictions** | Model-assisted forecasting + NL queries | Not available | Some ML (Jupiter uses ML) | Not available | Gemini multi-agent |
+| **NetCDF support** | Native (xarray, heatmaps, globes, profiles) | Raw data portals | Not available | Supported | Not available |
+| **Report generation** | PDF + Markdown with ReportLab | Not available | Some (EarthScan auto-reports) | Not available | Not available |
+| **Story / narrative mode** | Guided climate narrative with chapters | Not available | Not available | Not available | Not available |
+| **UI / UX** | Stitch Mission Control design (glassmorphism, animated, dark/light) | Functional / academic | Professional but generic | CLI / notebook only | Tailwind CSS |
+| **Multi-page workspace** | 10 integrated modules | Separate portals per dataset | Dashboard only | Not applicable | Single-page app |
+| **Research Lab** | Dataset upload, scenario simulation, model testing | Not available | Not available | Available (Python) | Not available |
+| **Custom design system** | Atmos Mission Control (Stitch MCP) | Not applicable | Enterprise branding | Not applicable | No |
+| **Light/Dark mode** | OS-aware persistent toggle | Light only | Varies | N/A | Light only |
+
+### Where ATLAS excels
+
+1. **Only free platform that unifies live APIs + offline NetCDF + risk scoring + AI predictions in one deployable app.** Enterprise platforms cost thousands and lack offline/synthetic data. Raw data portals are silos with no application layer. OS-Climate/CLIMADA are Python libraries without UIs.
+
+2. **Only platform with a guided climate narrative mode.** Story Mode takes users through chapters with maps, charts, and projections — built for education, demos, and stakeholder briefings.
+
+3. **First Streamlit-native climate platform with a professional design system.** The Atmos Mission Control design (designed via Stitch MCP) matches or exceeds enterprise dashboards while being fully open-source.
+
+4. **Offline-first architecture.** Every module falls back gracefully when APIs are unavailable — synthetic NetCDF data auto-generates on first launch. No other listed platform handles API downtime this gracefully.
+
+5. **Multi-source fusion.** Combines NASA satellite imagery, NOAA station records, OpenWeather live data, and local NetCDF analysis in one workspace — whereas alternatives lock you into a single data provider.
 
 ## Product Modules
 
