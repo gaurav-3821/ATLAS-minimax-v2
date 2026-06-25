@@ -27,3 +27,6 @@ ui_ux/audit_results/
 ui_ux/screenshot.png
 ui_ux/test_sidebar.py
 ui_ux/theme mode/
+
+# Streamlit node logs
+atlas-streamlit-node-*.log
