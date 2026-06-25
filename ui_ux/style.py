@@ -24,7 +24,7 @@ NAV_ITEMS = [
 
 ATLAS_CSS = """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
     :root {
@@ -82,9 +82,19 @@ ATLAS_CSS = """
         --atlas-transition-fast: 200ms ease;
     }
 
-    html, body, [class*="css"] {
-        font-family: var(--atlas-font-body);
-        color: var(--atlas-text);
+    html, body, [class*="css"], [class*="st-"], .stApp, .main, div, span, p, a, li, label, input, textarea, select, button, option {
+        font-family: var(--atlas-font-body) !important;
+        color: var(--atlas-text) !important;
+    }
+    h1, h2, h3, h4, h5, h6, .st-emotion-cache-1104yt, [class*="header"], [class*="title"], .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4 {
+        font-family: var(--atlas-font-heading) !important;
+    }
+    code, pre, kbd, samp, .stCodeBlock, [class*="mono"], [class*="code"] {
+        font-family: var(--atlas-font-mono) !important;
+    }
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stToolbar"] {
+        background-color: var(--atlas-bg) !important;
+        background-image: none !important;
     }
 
     .stApp {

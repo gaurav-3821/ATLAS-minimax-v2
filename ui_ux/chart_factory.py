@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
-FONT_FAMILY = "'Fira Sans', sans-serif"
+FONT_FAMILY = "'Geist', sans-serif"
 PAPER_BG = "rgba(0,0,0,0)"
 PLOT_BG = "rgba(17,24,39,0.86)"
 GRID_COLOR = "rgba(255,255,255,0.08)"

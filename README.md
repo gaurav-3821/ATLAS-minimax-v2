@@ -7,7 +7,7 @@ ATLAS is a dark, multi-page Streamlit climate product built around stable live A
 The current build blends:
 
 - **Liquid glassmorphism** — animated frosted-glass panels with shimmer sweeps and ambient blob drift
-- **Mission Control aesthetic** — Hanken Grotesk headlines, JetBrains Mono telemetry, Fira Sans body
+- **Mission Control aesthetic** — Space Grotesk headlines, Geist body, JetBrains Mono data
 - **Scientific Vanguard styling** — atmospheric cyan accents, emergency amber alerts, critical red risks
 - **Light / Dark mode** — toggleable with persistent OS preference detection
 
@@ -29,15 +29,15 @@ The current build blends:
 
 ## Design System
 
-ATLAS uses a custom design system called **Atmos Mission Control** with the following tokens:
+ATLAS uses **Atmos Mission Control**, a custom design system built on the Stitch MCP platform with these tokens:
 
-- **Color palette**: Deep space (#020408) base, atmospheric cyan (#00E5FF) primary, emergency amber (#FFAB00) tertiary, critical red (#FF3D00) for alerts
-- **Typography**: Hanken Grotesk (headlines), Inter (body), JetBrains Mono (data/labels)
-- **Glassmorphism**: `backdrop-filter: blur(28px)`, multi-layer shadows, radial caustic overlays, animated shimmer sweeps
-- **Border radius**: Organic 16–36px for cards, 8px for buttons/inputs
-- **Spacing**: 4px base unit, 24px gutters, 48px page margins (desktop)
+- **Color palette**: Deep space (#111318) base, atmospheric cyan (#00dbe7) primary, galactic purple (#7000ff) secondary, warm amber (#ffd49c) tertiary
+- **Typography**: Space Grotesk (headlines), Geist (body), JetBrains Mono (data), Inter (UI labels)
+- **Glassmorphism**: `backdrop-filter: blur(20px) saturate(180%)`, `rgba(255,255,255,0.05)` fill, inner-edge highlights
+- **Border radius**: 0.25rem (sm), 0.5rem (md), 0.75rem (lg)
+- **Spacing**: 4px base unit, multipliers for `--atlas-space-sm` (16px), `--atlas-space-md` (32px), `--atlas-space-lg` (48px)
 
-> Full design tokens and component specs are available in the Stitch MCP design system (`assets/stitch/`).
+> Full design tokens and component specs are available in `assets/stitch/`.
 
 ## Live APIs
 
@@ -88,18 +88,17 @@ streamlit run app.py
 
 4. Add server-side credentials through `.streamlit/secrets.toml` or environment variables.
 
-## One-Click Deploy
+## Deploy to Streamlit Community Cloud (free)
 
-ATLAS includes `render.yaml` for a simple Render deployment.
-
-Set these environment variables in the host:
-
-```bash
-OPENWEATHER_API_KEY=<your key>
-NOAA_API_TOKEN=<your token>
-ATLAS_DEFAULT_LOCATION=Delhi, IN
-ATLAS_ENABLE_RUNTIME_CREDENTIAL_INPUTS=false
-```
+1. Push this repo to your GitHub account
+2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub
+3. Click **"New app"**, select this repo, branch `main`, file `app.py`
+4. In **Settings → Secrets**, add:
+   ```toml
+   OPENWEATHER_API_KEY = "your_key_here"
+   ATLAS_DEFAULT_LOCATION = "Delhi, IN"
+   ```
+5. Click **"Deploy"** — auto-deploys on every `git push` to `main`
 
 ## Verification
 

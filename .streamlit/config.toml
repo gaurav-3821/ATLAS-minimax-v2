@@ -1,7 +1,1 @@
-[theme]
-base = "dark"
-primaryColor = "#00E5FF"
-backgroundColor = "#0B0F1A"
-secondaryBackgroundColor = "#111827"
-textColor = "#FFFFFF"
-font = "sans serif"
+; Theme disabled — fully controlled by Stitch CSS in ui_ux/style.py
