@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import date
+
 import streamlit as st
 
 from utils.live_data import (
@@ -74,7 +76,7 @@ def main() -> None:
                 with st.spinner("Testing NASA GIBS..."):
                     try:
                         loc, _ = resolve_location("Delhi, IN")
-                        s, m = fetch_satellite_snapshot(loc["lat"], loc["lon"])
+                        s, m = fetch_satellite_snapshot(loc["lat"], loc["lon"], image_date=date.today())
                         st.success(f"NASA GIBS OK: {m['layer_name']}")
                     except Exception as e:
                         st.error(f"NASA GIBS failed: {e}")

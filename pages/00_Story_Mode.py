@@ -83,7 +83,12 @@ def _render_visual(step: dict[str, object]) -> None:
             use_container_width=True,
         )
         return
-    st.warning("Visualization not implemented yet")
+    gt = source["global_temperature"]
+    st.plotly_chart(
+        create_story_timeline(gt["years"], gt["temperature_anomaly_c"], str(step["title"])),
+        use_container_width=True,
+    )
+    st.info("Fallback visualization rendered because this chapter uses an unrecognized component type.")
 
 
 def main() -> None:

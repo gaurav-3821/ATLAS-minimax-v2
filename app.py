@@ -48,6 +48,7 @@ def main() -> None:
     with st.spinner("Loading live climate data..."):
         live_snapshot = _load_live_snapshot(st.session_state.get("atlas_ops_location", get_default_location_query()))
     real_monthly, _, real_source = get_real_global_temperature_frames()
+    live_mode = "Live stack connected" if live_snapshot else "Offline demo fallback"
 
     logo_col, hero_col = st.columns((0.12, 0.88))
     with logo_col:
@@ -80,10 +81,7 @@ def main() -> None:
         st.page_link("pages/06_Data_Explorer.py", label="Open Data Explorer", icon=":material/travel_explore:")
 
     render_info_banner(
-        (
-            f"Historical baseline is running from {source_label}. The deploy profile uses server-side environment variables "
-            "or Streamlit secrets so API keys never need to be exposed in the public UI."
-        )
+        f"Historical baseline is running from {source_label}. Current mode: {live_mode}. The deploy profile uses server-side environment variables or Streamlit secrets so API keys never need to be exposed in the public UI."
     )
 
     render_section_intro(
@@ -113,7 +111,7 @@ def main() -> None:
                 str(live_snapshot["location"]["label"]),
             )
         else:
-            render_metric_card("Live city temperature", "API ready", "Connect OpenWeather to enable this card")
+            render_metric_card("Live city temperature", "Offline demo", "OpenWeather is unavailable, so this card uses the local fallback climate profile")
     with metric_cols[2]:
         if live_snapshot:
             render_metric_card(
@@ -122,7 +120,7 @@ def main() -> None:
                 str(live_snapshot["air"]["category"]),
             )
         else:
-            render_metric_card("Air quality", "API ready", "Connect OpenWeather air data to enable this card")
+            render_metric_card("Air quality", "Offline demo", "Air-quality fallback keeps the page usable without external credentials")
     with metric_cols[3]:
         render_metric_card("Connected sources", str(get_deploy_source_count()), "NASA GIBS, NOAA, OpenWeather, and the NetCDF workspace")
 
@@ -176,7 +174,7 @@ def main() -> None:
 
     render_section_intro(
         "Research highlights",
-        "ATLAS is designed to feel polished enough for a product demo while staying transparent about where the data comes from.",
+        "ATLAS is designed to stay transparent about where each signal comes from, whether it is live or locally synthesized.",
         eyebrow="Source fabric",
     )
     source_cols = st.columns(3)

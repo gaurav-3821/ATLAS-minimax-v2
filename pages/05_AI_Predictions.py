@@ -70,7 +70,13 @@ def main() -> None:
                 ai_brief = f"AI briefing unavailable: {exc}"
         render_feature_card("ATLAS Copilot", ai_brief)
     else:
-        render_feature_card("ATLAS Copilot", "Add an OpenRouter API key in server-side secrets to enable a live AI forecast summary.")
+        render_feature_card(
+            "ATLAS Copilot",
+            (
+                f"Offline mode: the model is still interactive. {region_name} is currently anchored to the observed {variable} series, "
+                f"with a {horizon}-month interpretable forecast and {('anomaly-centered' if anomaly_mode else 'absolute')} output."
+            ),
+        )
 
     metric_cols = st.columns(4)
     with metric_cols[0]:

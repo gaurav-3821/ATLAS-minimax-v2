@@ -40,7 +40,7 @@ def main() -> None:
     global_series = spatial_mean_series(temp, axes, "Global", anomaly_mode=False)
     latest_global = float(global_series.values[-1])
 
-    live_summary = "Live services not available."
+    live_summary = "Offline report mode is using the bundled climate workspace and local fallback weather data."
     bullets = [
         f"Historical climate baseline source: {label}.",
         f"Latest global temperature mean in the historical workspace: {latest_global:.2f} deg C.",
@@ -118,6 +118,7 @@ def main() -> None:
         eyebrow="Present",
     )
     render_feature_card("Live summary", "When APIs are connected, the report automatically pulls in the current weather and AQI snapshot.")
+    render_feature_card("Offline summary", "In offline mode, it still generates a usable brief from the local workspace.")
     render_feature_card("Historical context", "Every report includes the latest global climate baseline from the bundled or uploaded NetCDF workspace.")
     render_feature_card("Export path", "Reports are available in markdown and PDF so the handoff works both for product and research teams.")
 

@@ -84,6 +84,7 @@ def main() -> None:
                 noaa_result = None
         except Exception as exc:
             live_error = str(exc)
+    live_mode = "Live stack connected" if not live_error else "Offline demo fallback"
 
     risk_profile = build_risk_profile(
         weather or {"temperature_c": 0.0, "humidity_pct": 0.0, "wind_mps": 0.0, "pressure_hpa": 1013.0},
@@ -95,7 +96,7 @@ def main() -> None:
 
     if live_error:
         render_info_banner(
-            f"Live operations are not fully connected for '{location_query}'. Historical climate analytics remain active. Details: {live_error}"
+            f"Live operations are not fully connected for '{location_query}'. Historical climate analytics remain active in {live_mode} mode. Details: {live_error}"
         )
     else:
         render_info_banner(
@@ -110,12 +111,12 @@ def main() -> None:
         if weather:
             render_metric_card("Tracked city", f"{weather['temperature_c']:.1f} deg C", str(location["label"]))
         else:
-            render_metric_card("Tracked city", "API ready", "Connect OpenWeather or use coordinates")
+            render_metric_card("Tracked city", "Offline demo", "OpenWeather is unavailable, so the page uses the local climate profile")
     with metric_cols[2]:
         if air_current:
             render_metric_card("Air quality", f"AQI {air_current['aqi']}", str(air_current["category"]))
         else:
-            render_metric_card("Air quality", "API ready", "AQI becomes available with OpenWeather")
+            render_metric_card("Air quality", "Offline demo", "Air-quality fallback keeps the dashboard usable without live credentials")
     with metric_cols[3]:
         render_metric_card("Climate anomaly", f"{recent_anomaly:+.2f} deg C", "Relative to the trailing 10-year mean")
     with metric_cols[4]:
@@ -123,7 +124,7 @@ def main() -> None:
 
     render_section_intro(
         "Executive surface",
-        "Top-level views now center on real Delhi forecast dynamics, air quality, and risk progression instead of treating Delhi as a side input.",
+        "Top-level views center on Delhi forecast dynamics, air quality, and risk progression, with fallback data when live services are unavailable.",
         eyebrow="Overview",
     )
     top_left, top_right = st.columns((1.18, 0.82))

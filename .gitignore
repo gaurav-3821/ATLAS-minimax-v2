@@ -21,3 +21,9 @@ atlas-graph-review-board.png
 *.zip
 *.mp4
 *.nc
+
+# UI/UX dev artifacts
+ui_ux/audit_results/
+ui_ux/screenshot.png
+ui_ux/test_sidebar.py
+ui_ux/theme mode/
