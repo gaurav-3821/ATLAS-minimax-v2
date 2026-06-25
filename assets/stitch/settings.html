@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ATLAS CLIMATE - MISSION CONTROL SETTINGS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#452b00",
+                        "on-secondary-container": "#ddcdff",
+                        "background": "#111318",
+                        "on-background": "#e2e2e8",
+                        "on-secondary-fixed-variant": "#5700c9",
+                        "surface-tint": "#00dbe7",
+                        "on-tertiary-container": "#845600",
+                        "surface-variant": "#333539",
+                        "on-secondary-fixed": "#23005b",
+                        "secondary-fixed-dim": "#d1bcff",
+                        "secondary-container": "#7000ff",
+                        "surface": "#111318",
+                        "surface-dim": "#111318",
+                        "primary": "#e1fdff",
+                        "tertiary-fixed-dim": "#ffb950",
+                        "tertiary": "#fff6ef",
+                        "on-primary-container": "#006a71",
+                        "tertiary-container": "#ffd49c",
+                        "on-secondary": "#3c0090",
+                        "primary-fixed": "#74f5ff",
+                        "primary-fixed-dim": "#00dbe7",
+                        "inverse-primary": "#00696f",
+                        "secondary": "#d1bcff",
+                        "outline-variant": "#3a494b",
+                        "surface-container-low": "#1a1c20",
+                        "surface-bright": "#37393e",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#1e2024",
+                        "on-primary-fixed-variant": "#004f54",
+                        "tertiary-fixed": "#ffddb3",
+                        "primary-container": "#00f2ff",
+                        "inverse-surface": "#e2e2e8",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#291800",
+                        "error": "#ffb4ab",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "surface-container-highest": "#333539",
+                        "inverse-on-surface": "#2f3035",
+                        "on-primary": "#00363a",
+                        "surface-container-high": "#282a2e",
+                        "outline": "#849495",
+                        "on-primary-fixed": "#002022",
+                        "surface-container-lowest": "#0c0e12",
+                        "on-surface": "#e2e2e8",
+                        "on-surface-variant": "#b9cacb",
+                        "secondary-fixed": "#e9ddff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-sm": "16px",
+                        "gutter": "16px",
+                        "margin-md": "32px",
+                        "margin-lg": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Space Grotesk"],
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "body-md": ["Geist"],
+                        "display-lg": ["Space Grotesk"],
+                        "data-mono": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0c0e12;
+            color: #e2e2e8;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .liquid-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(0, 219, 231, 0.05) 0%, transparent 70%);
+        }
+        .laser-focus:focus-within {
+            border-color: #00dbe7;
+            box-shadow: 0 0 10px rgba(0, 219, 231, 0.2);
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .3; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333539;
+        }
+    </style>
+</head>
+<body class="font-body-md bg-background">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center px-margin-lg w-full fixed top-0 z-50 bg-white/5 backdrop-blur-[20px] saturate-[180%] border-b border-white/20 shadow-[0_0_20px_rgba(0,219,231,0.1)] h-16">
+<div class="flex items-center gap-margin-md">
+<span class="font-display-lg text-[24px] tracking-tighter text-primary">ATLAS CLIMATE</span>
+<nav class="hidden md:flex gap-margin-md">
+<a class="font-data-mono text-data-mono text-on-surface-variant hover:bg-white/10 transition-all px-2 py-1" href="#">MONITOR</a>
+<a class="font-data-mono text-data-mono text-on-surface-variant hover:bg-white/10 transition-all px-2 py-1" href="#">ARCHIVE</a>
+<a class="font-data-mono text-data-mono text-primary border-b-2 border-primary px-2 py-1" href="#">SYSTEM</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">sensors</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">account_circle</span>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full py-margin-md w-64 fixed left-0 top-0 bg-white/5 backdrop-blur-[30px] saturate-[180%] border-r border-white/20 shadow-[10px_0_30px_rgba(0,0,0,0.3)] z-40">
+<div class="px-margin-md mb-12 mt-16">
+<h2 class="font-headline-md text-headline-md text-primary mb-1">MISSION CONTROL</h2>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70">OPERATOR 07-A</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">DASHBOARD</span>
+</div>
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">public</span>
+<span class="font-label-caps text-label-caps">GLOBAL MAP</span>
+</div>
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-caps text-label-caps">RISK INTEL</span>
+</div>
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-caps text-label-caps">PREDICTIONS</span>
+</div>
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">science</span>
+<span class="font-label-caps text-label-caps">RESEARCH</span>
+</div>
+</nav>
+<div class="px-margin-md mt-auto pt-8 flex flex-col gap-1 border-t border-white/10">
+<div class="bg-secondary-container/30 text-primary border-l-4 border-primary flex items-center gap-4 px-margin-md py-3 cursor-pointer">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps">SETTINGS</span>
+</div>
+<div class="flex items-center gap-4 px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-caps text-label-caps">SUPPORT</span>
+</div>
+<button class="mt-4 w-full bg-primary-container text-on-primary-container py-3 font-data-mono text-[12px] tracking-widest hover:brightness-110 active:scale-95 transition-all">
+                SYNC TELEMETRY
+            </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-0 md:ml-64 pt-24 px-margin-md pb-margin-lg min-h-screen relative overflow-hidden">
+<!-- Atmospheric Background Element -->
+
+<div class="max-w-6xl mx-auto relative z-10">
+<!-- Header Section -->
+<div class="mb-margin-lg">
+<div class="flex items-center gap-2 text-primary opacity-60 mb-2">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="font-data-mono text-[10px] tracking-[0.2em]">SYSTEM_PATH: /ROOT/CONFIG/API_AUTH</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary leading-none">SYSTEM CONFIGURATION</h1>
+<p class="mt-4 font-body-md text-on-surface-variant max-w-2xl">Manage your global telemetry sources, API orchestrations, and environmental variables. Ensure data persistence through valid credential mapping.</p>
+</div>
+<!-- Bento Grid Settings -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- API Credentials Panel -->
+<section class="lg:col-span-8 flex flex-col gap-gutter">
+<div class="glass-panel p-margin-md border border-white/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">key</span>
+                                EXTERNAL DATA SOURCES
+                            </h3>
+<span class="bg-primary/10 text-primary px-3 py-1 font-data-mono text-[10px] border border-primary/20">3 ACTIVE CONNECTIONS</span>
+</div>
+<!-- NASA Integration -->
+<div class="mb-8 group">
+<div class="flex justify-between items-end mb-2">
+<label class="font-data-mono text-label-caps text-on-surface-variant">NASA_POWER_API_KEY</label>
+<span class="text-[10px] text-green-400 font-data-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-green-400 rounded-full status-pulse"></span>
+                                    CONNECTED
+                                </span>
+</div>
+<div class="relative laser-focus border border-white/20 bg-black/40 h-12 flex items-center px-4 transition-all">
+<input class="bg-transparent border-none focus:ring-0 w-full font-data-mono text-primary text-sm tracking-widest outline-none" type="password" value="****************************************"/>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">visibility</button>
+</div>
+<p class="mt-2 text-[11px] text-on-surface-variant/60 font-body-md">Primary source for solar irradiance and atmospheric temperature profiles.</p>
+</div>
+<!-- NOAA Integration -->
+<div class="mb-8 group">
+<div class="flex justify-between items-end mb-2">
+<label class="font-data-mono text-label-caps text-on-surface-variant">NOAA_NCEI_TOKEN</label>
+<span class="text-[10px] text-green-400 font-data-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-green-400 rounded-full status-pulse"></span>
+                                    CONNECTED
+                                </span>
+</div>
+<div class="relative laser-focus border border-white/20 bg-black/40 h-12 flex items-center px-4 transition-all">
+<input class="bg-transparent border-none focus:ring-0 w-full font-data-mono text-primary text-sm tracking-widest outline-none" type="password" value="**********************"/>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">visibility</button>
+</div>
+<p class="mt-2 text-[11px] text-on-surface-variant/60 font-body-md">Utilized for historical climate trend analysis and oceanic telemetry.</p>
+</div>
+<!-- OpenWeatherMap Integration -->
+<div class="group">
+<div class="flex justify-between items-end mb-2">
+<label class="font-data-mono text-label-caps text-on-surface-variant">OPENWEATHER_APP_ID</label>
+<span class="text-[10px] text-amber-400 font-data-mono flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-amber-400 rounded-full"></span>
+                                    PENDING AUTH
+                                </span>
+</div>
+<div class="relative laser-focus border border-amber-500/30 bg-amber-500/5 h-12 flex items-center px-4 transition-all">
+<input class="bg-transparent border-none focus:ring-0 w-full font-data-mono text-on-surface text-sm outline-none placeholder:text-on-surface-variant/30" placeholder="Enter API Key..." type="text"/>
+<button class="text-amber-400 font-data-mono text-[10px] hover:underline">VALIDATE</button>
+</div>
+<p class="mt-2 text-[11px] text-on-surface-variant/60 font-body-md">Real-time weather station feedback for localized anomaly detection.</p>
+</div>
+</div>
+<!-- Environment Toggles -->
+<div class="glass-panel p-margin-md border border-white/10">
+<h3 class="font-headline-md text-headline-md text-white mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">tune</span>
+                            ENVIRONMENTAL FLAGS
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex justify-between items-center p-4 bg-white/5 border border-white/5">
+<div>
+<p class="font-data-mono text-sm text-primary">REAL_TIME_STREAMING</p>
+<p class="text-[11px] text-on-surface-variant">Enable low-latency websocket updates</p>
+</div>
+<div class="w-12 h-6 bg-secondary-container rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-white/5 border border-white/5 opacity-60">
+<div>
+<p class="font-data-mono text-sm text-on-surface">DEBUG_MODE</p>
+<p class="text-[11px] text-on-surface-variant">Verbose logging in console</p>
+</div>
+<div class="w-12 h-6 bg-surface-variant rounded-full relative cursor-pointer">
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-white/5 border border-white/5">
+<div>
+<p class="font-data-mono text-sm text-primary">PREDICTIVE_CACHING</p>
+<p class="text-[11px] text-on-surface-variant">Pre-fetch risk models for active regions</p>
+</div>
+<div class="w-12 h-6 bg-secondary-container rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex justify-between items-center p-4 bg-white/5 border border-white/5">
+<div>
+<p class="font-data-mono text-sm text-primary">GEOJSON_OPTIMIZATION</p>
+<p class="text-[11px] text-on-surface-variant">Simplify complex map geometries</p>
+</div>
+<div class="w-12 h-6 bg-secondary-container rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-white rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Status/Diagnostics -->
+<aside class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Source Status Diagnostic Lights -->
+<div class="glass-panel p-6 border border-white/10 bg-black/20">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-4 border-b border-white/10 pb-2">SOURCE STATUS DIAGNOSTICS</h4>
+<ul class="space-y-4">
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]"></span>
+<span class="font-data-mono text-[12px]">GEO-SAT-01</span>
+</div>
+<span class="text-[10px] text-on-surface-variant">LATENCY: 42ms</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.5)]"></span>
+<span class="font-data-mono text-[12px]">TERRA-MODIS</span>
+</div>
+<span class="text-[10px] text-on-surface-variant">LATENCY: 128ms</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-amber-400 status-pulse"></span>
+<span class="font-data-mono text-[12px]">ARGO-FLOAT-7</span>
+</div>
+<span class="text-[10px] text-amber-400">UNSTABLE</span>
+</li>
+<li class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<span class="font-data-mono text-[12px]">LOCAL-SENSOR-NET</span>
+</div>
+<span class="text-[10px] text-red-500">OFFLINE</span>
+</li>
+</ul>
+<div class="mt-8 pt-4 border-t border-white/10">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant">DATABASE LOAD</span>
+<span class="font-data-mono text-[10px] text-primary">24%</span>
+</div>
+<div class="w-full h-1 bg-white/10">
+<div class="w-[24%] h-full bg-primary"></div>
+</div>
+</div>
+</div>
+<!-- System Action Card -->
+<div class="glass-panel p-6 border border-white/10 bg-primary/5">
+<h4 class="font-label-caps text-label-caps text-primary mb-4">CRITICAL ACTIONS</h4>
+<div class="space-y-3">
+<button class="w-full py-3 border border-primary/30 text-primary font-data-mono text-[11px] hover:bg-primary/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                                PURGE CACHE &amp; REBOOT
+                            </button>
+<button class="w-full py-3 border border-red-500/30 text-red-400 font-data-mono text-[11px] hover:bg-red-500/10 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">settings_backup_restore</span>
+                                FACTORY RESET SYSTEM
+                            </button>
+</div>
+</div>
+<!-- Visual Asset - Telemetry Display -->
+<div class="relative aspect-square overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover grayscale opacity-40" data-alt="A highly detailed close-up of a futuristic glass control panel showing digital climate data, swirling blue liquid patterns, and glowing teal interfaces. The lighting is dark and cinematic with high contrast highlights on sharp edges. Minimalist technical indicators and data streams are visible through the transparent surface against a deep black background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG4FRWsMBk3PKdDxt5bOOpjn7lPgMdgivs3j-XBOvTIBDk84XdsGieM39qTlBPE2Gd3iUCK2AT8egpIKAikPWHljX86pzmWBaDWzuXZZFvphujTRagz3PZYgSB8pxmIEPsNqyDFD6Wo2OVPSKOseB5uPjcOpFNS_9pyZMB98Cem4GysQmnKuXxWQqve2d5ozbDmMJdgz-VKLIkcyMDnI7Z3RAIroBDZLZMwhTuEhfoEcBzQyXW_O9iiiqOU09ZF08nG7UbJAfoHQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<p class="font-data-mono text-[10px] text-primary opacity-80 uppercase tracking-widest">Global Telemetry Visualization Active</p>
+<div class="flex gap-1 mt-1">
+<div class="h-1 flex-1 bg-primary/20"></div>
+<div class="h-1 flex-1 bg-primary"></div>
+<div class="h-1 flex-1 bg-primary/20"></div>
+<div class="h-1 flex-1 bg-primary/20"></div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer Save Bar -->
+<div class="mt-margin-lg sticky bottom-6 z-30">
+<div class="glass-panel p-4 flex flex-col md:flex-row items-center justify-between border border-primary/20 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4 mb-4 md:mb-0">
+<span class="material-symbols-outlined text-primary">info</span>
+<span class="font-body-md text-sm text-on-surface-variant">You have <strong class="text-primary">4 unsaved changes</strong> in System Configuration.</span>
+</div>
+<div class="flex gap-4 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-8 py-3 bg-transparent border border-white/20 font-data-mono text-sm hover:bg-white/5 transition-all">DISCARD</button>
+<button class="flex-1 md:flex-none px-8 py-3 bg-gradient-to-r from-primary-fixed-dim to-primary-container text-black font-data-mono text-sm font-bold shadow-[0_0_15px_rgba(0,219,231,0.4)] hover:brightness-110 active:scale-95 transition-all" id="saveBtn">
+                            COMMIT CHANGES
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden flex justify-around items-center w-full fixed bottom-0 z-50 bg-white/5 backdrop-blur-[20px] h-16 border-t border-white/10">
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-[8px]">DASHBOARD</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">public</span>
+<span class="font-label-caps text-[8px]">MAP</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-caps text-[8px]">SYSTEM</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-caps text-[8px]">PROFILE</span>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for the save button
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            this.innerText = 'COMMITTING...';
+            this.classList.add('animate-pulse');
+            setTimeout(() => {
+                this.innerText = 'CHANGES SYNCED';
+                this.classList.remove('animate-pulse');
+                this.classList.replace('from-primary-fixed-dim', 'from-green-400');
+                this.classList.replace('to-primary-container', 'to-green-500');
+            }, 1500);
+        });
+
+        // Add "hover" effect to cards via mouse position (subtle)
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+            panel.addEventListener('mousemove', e => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                panel.style.setProperty('--mouse-x', `${x}px`);
+                panel.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

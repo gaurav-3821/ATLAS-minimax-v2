@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ATLAS CLIMATE | Risk Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Geist:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#452b00",
+                    "on-secondary-container": "#ddcdff",
+                    "background": "#111318",
+                    "on-background": "#e2e2e8",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "surface-tint": "#00dbe7",
+                    "on-tertiary-container": "#845600",
+                    "surface-variant": "#333539",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "secondary-container": "#7000ff",
+                    "surface": "#111318",
+                    "surface-dim": "#111318",
+                    "primary": "#e1fdff",
+                    "tertiary-fixed-dim": "#ffb950",
+                    "tertiary": "#fff6ef",
+                    "on-primary-container": "#006a71",
+                    "tertiary-container": "#ffd49c",
+                    "on-secondary": "#3c0090",
+                    "primary-fixed": "#74f5ff",
+                    "primary-fixed-dim": "#00dbe7",
+                    "inverse-primary": "#00696f",
+                    "secondary": "#d1bcff",
+                    "outline-variant": "#3a494b",
+                    "surface-container-low": "#1a1c20",
+                    "surface-bright": "#37393e",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#1e2024",
+                    "on-primary-fixed-variant": "#004f54",
+                    "tertiary-fixed": "#ffddb3",
+                    "primary-container": "#00f2ff",
+                    "inverse-surface": "#e2e2e8",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#291800",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-container-highest": "#333539",
+                    "inverse-on-surface": "#2f3035",
+                    "on-primary": "#00363a",
+                    "surface-container-high": "#282a2e",
+                    "outline": "#849495",
+                    "on-primary-fixed": "#002022",
+                    "surface-container-lowest": "#0c0e12",
+                    "on-surface": "#e2e2e8",
+                    "on-surface-variant": "#b9cacb",
+                    "secondary-fixed": "#e9ddff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-sm": "16px",
+                    "gutter": "16px",
+                    "margin-md": "32px",
+                    "margin-lg": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Geist"],
+                    "data-mono": ["JetBrains Mono"],
+                    "label-caps": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0c0e12;
+            color: #e2e2e8;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .neo-brutalist-card {
+            border: 2px solid #e1fdff;
+            background: #111318;
+            box-shadow: 6px 6px 0px rgba(0, 219, 231, 0.2);
+            transition: all 0.2s ease;
+        }
+        .neo-brutalist-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px rgba(0, 219, 231, 0.4);
+        }
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 219, 231, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(112, 0, 255, 0.15) 0%, transparent 40%);
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 219, 231, 0.1);
+            position: absolute;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan {
+            from { top: 0%; }
+            to { top: 100%; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="font-body-md">
+<div class="liquid-bg"></div>
+<div class="scanline"></div>
+<!-- SideNavBar -->
+<nav class="flex flex-col h-full py-margin-md w-64 h-screen fixed left-0 top-0 bg-white/5 backdrop-blur-[30px] saturate-[180%] border-r border-white/20 shadow-[10px_0_30px_rgba(0,0,0,0.3)] z-50">
+<div class="px-margin-md mb-10">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tighter">MISSION CONTROL</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70">OPERATOR 07-A</p>
+</div>
+<div class="flex-1 space-y-2">
+<a class="flex items-center px-margin-md py-4 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center px-margin-md py-4 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">public</span> Global Map
+            </a>
+<a class="flex items-center px-margin-md py-4 bg-secondary-container/30 text-primary border-l-4 border-primary hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">warning</span> Risk Intel
+            </a>
+<a class="flex items-center px-margin-md py-4 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">insights</span> Predictions
+            </a>
+<a class="flex items-center px-margin-md py-4 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">science</span> Research
+            </a>
+</div>
+<div class="px-margin-md mb-8">
+<button class="w-full py-3 bg-primary text-on-primary font-label-caps text-label-caps tracking-widest active:brightness-125 transition-all">
+                SYNC TELEMETRY
+            </button>
+</div>
+<div class="mt-auto space-y-1">
+<a class="flex items-center px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">settings</span> Settings
+            </a>
+<a class="flex items-center px-margin-md py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">help</span> Support
+            </a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="ml-64 p-margin-lg pt-24 min-h-screen">
+<!-- TopAppBar Placeholder/Integrated Header -->
+<header class="flex justify-between items-center px-margin-lg w-[calc(100%-16rem)] fixed top-0 right-0 h-16 z-40 bg-white/5 backdrop-blur-[20px] saturate-[180%] border-b border-white/20 shadow-[0_0_20px_rgba(0,219,231,0.1)]">
+<div class="flex items-center gap-4">
+<span class="font-data-mono text-data-mono text-primary border-b-2 border-primary py-2 px-4">RISK INTELLIGENCE</span>
+<div class="flex items-center bg-white/5 px-3 py-1 rounded-sm border border-white/10">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-data-mono text-xs text-primary placeholder-on-surface-variant/40 w-48" placeholder="Locate Coordinates..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/10 p-2 transition-all">sensors</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/10 p-2 transition-all">notifications</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:bg-white/10 p-2 transition-all">account_circle</span>
+</div>
+</header>
+<!-- Risk Header -->
+<div class="mb-margin-md">
+<h2 class="font-display-lg text-display-lg text-primary tracking-tighter mb-2">OPERATIONAL THREATS</h2>
+<div class="flex items-center gap-4">
+<span class="bg-surface-container border border-outline px-3 py-1 font-label-caps text-label-caps text-on-surface">LOC: SECTOR 7-BETA (COASTAL)</span>
+<span class="bg-secondary-container/20 border border-secondary text-secondary px-3 py-1 font-label-caps text-label-caps">STATUS: ACTIVE SCANNING</span>
+</div>
+</div>
+<!-- Bento Grid for Risk Cards -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Wildfire Risk (Primary Card) -->
+<div class="col-span-12 lg:col-span-8 neo-brutalist-card p-6 flex flex-col relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 font-data-mono text-xs opacity-30">REF_ID: WLDFR_092</div>
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">WILDFIRE RISK</h3>
+<p class="font-data-mono text-data-mono text-on-surface-variant uppercase">High-density forest perimeter analysis</p>
+</div>
+<div class="text-right">
+<div class="text-5xl font-display-lg text-secondary">8.4<span class="text-xl">/10</span></div>
+<div class="font-label-caps text-label-caps text-error">+2.1 vs HIST_AVG</div>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-3 gap-6 mb-8">
+<div class="border-l-2 border-primary/30 pl-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">ARIDITY INDEX</div>
+<div class="font-data-mono text-headline-md text-primary">0.92</div>
+</div>
+<div class="border-l-2 border-primary/30 pl-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">WIND VELOCITY</div>
+<div class="font-data-mono text-headline-md text-primary">42 km/h</div>
+</div>
+<div class="border-l-2 border-primary/30 pl-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">FUEL LOAD</div>
+<div class="font-data-mono text-headline-md text-primary">CRITICAL</div>
+</div>
+</div>
+<div class="h-32 w-full glass-panel border border-white/10 relative">
+
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-label-caps text-label-caps tracking-widest bg-background/80 px-4 py-1 border border-primary/20">LIVE SPECTRAL FEED</span>
+</div>
+</div>
+</div>
+<!-- Heat Displacement (Status Card) -->
+<div class="col-span-12 lg:col-span-4 neo-brutalist-card p-6 flex flex-col bg-surface-container-high/40 backdrop-blur-md">
+<div class="flex justify-between items-start mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">HEAT INDEX</h3>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-1 font-label-caps text-label-caps">EXTREME</span>
+</div>
+<div class="mb-auto">
+<div class="text-6xl font-display-lg text-primary mb-4">9.2</div>
+<p class="font-body-md text-on-surface-variant text-sm mb-6">Localized urban heat island effect expected to exceed 48°C. Displacement risk is high for elderly populations in Sector 7.</p>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center font-data-mono text-xs">
+<span>EVACUATION READINESS</span>
+<span class="text-primary">85%</span>
+</div>
+<div class="w-full h-2 bg-surface-variant overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<button class="mt-8 border border-primary py-3 font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-all">VIEW THERMAL MAP</button>
+</div>
+<!-- Flooding Risk (Visual Card) -->
+<div class="col-span-12 lg:col-span-6 neo-brutalist-card p-0 overflow-hidden flex flex-col md:flex-row">
+<div class="w-full md:w-1/2 h-48 md:h-auto overflow-hidden relative">
+<img class="w-full h-full object-cover grayscale opacity-60 hover:grayscale-0 transition-all duration-700" data-alt="A futuristic satellite thermal map of a coastal city showing rising flood waters in glowing neon blue against a dark, high-contrast terrain. The image is rendered in a high-precision scientific visualization style with sharp data overlays and monospaced text indicators in Aurora Teal. The atmosphere is technical and urgent, reflecting climate risk intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQel-A3PyTDPCRZiRkTAobuyzN8KVtYth4DGJTCNW53yI_sC8VOArs5jdhzT5TxJwJNHcAsLCPqeDAmdrpY82L4jeZJV9tOABed3ZY4Pnj_9phklPuPdlUnpQ053J1rrqTD7lzCl8u3vhKdkRpjDlmcCRGaJ-RfM-WLYK3-xPRE7EgjnA8HN6WpXrtPL8Zg3hGU-tfVGJaP4osJu1bpGijKwdtL6lVYLASEtM8QlocR6HcbXblTIICIbUtyRZU_Od0R2ZG6xye6w"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background to-transparent"></div>
+</div>
+<div class="w-full md:w-1/2 p-6 flex flex-col justify-center">
+<h3 class="font-headline-md text-headline-md text-primary mb-2">FLOODING</h3>
+<div class="flex items-center gap-4 mb-4">
+<div class="text-3xl font-display-lg text-primary">4.8</div>
+<div class="bg-primary/10 border border-primary/20 px-2 py-0.5 font-label-caps text-[10px] text-primary">STABLE</div>
+</div>
+<p class="font-body-md text-sm text-on-surface-variant mb-6">Sea level delta remains within ±0.2m variance. Tidal surge mitigation systems operating at peak capacity.</p>
+<div class="flex gap-2">
+<span class="bg-surface-variant p-2 cursor-pointer hover:bg-primary/20 transition-all"><span class="material-symbols-outlined text-primary">water_drop</span></span>
+<span class="bg-surface-variant p-2 cursor-pointer hover:bg-primary/20 transition-all"><span class="material-symbols-outlined text-primary">hide</span></span>
+<span class="bg-surface-variant p-2 cursor-pointer hover:bg-primary/20 transition-all"><span class="material-symbols-outlined text-primary">waves</span></span>
+</div>
+</div>
+</div>
+<!-- Storm Risk (Data-Heavy) -->
+<div class="col-span-12 lg:col-span-6 neo-brutalist-card p-6 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">STORM INTEL</h3>
+<div class="font-data-mono text-xs text-on-surface-variant">UTC 14:00</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container p-4 border-l-4 border-secondary">
+<div class="font-label-caps text-[10px] text-on-surface-variant">BAROMETRIC PRESS.</div>
+<div class="font-data-mono text-xl text-primary">982 hPa</div>
+</div>
+<div class="bg-surface-container p-4 border-l-4 border-primary">
+<div class="font-label-caps text-[10px] text-on-surface-variant">PRECIPITATION</div>
+<div class="font-data-mono text-xl text-primary">12 mm/h</div>
+</div>
+</div>
+<div class="flex-1 border-t border-white/10 pt-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-4">THREAT TRAJECTORY</div>
+<div class="flex justify-between items-end gap-1 h-24">
+<!-- Tiny Data Bars -->
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 40%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 60%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 35%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 85%"></div>
+<div class="bg-secondary w-full hover:bg-primary transition-all cursor-crosshair" style="height: 95%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 70%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 45%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 20%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 15%"></div>
+<div class="bg-primary/20 w-full hover:bg-primary transition-all cursor-crosshair" style="height: 10%"></div>
+</div>
+<div class="flex justify-between mt-2 font-data-mono text-[10px] text-on-surface-variant">
+<span>T-12H</span>
+<span>NOW</span>
+<span>T+12H</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Telemetry Feed (Neo-brutalist Footer Area) -->
+<section class="mt-margin-lg glass-panel p-6 border border-white/10 overflow-hidden">
+<div class="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 bg-error animate-pulse rounded-full"></div>
+<span class="font-label-caps text-label-caps tracking-widest">LIVE DATASTREAM</span>
+</div>
+<div class="font-data-mono text-xs text-primary">ENCRYPTED // ATLS-4-99</div>
+</div>
+<div class="space-y-2 font-data-mono text-[11px] leading-relaxed opacity-60 h-32 overflow-hidden">
+<p>&gt; [INFO] INITIALIZING NEURAL CLIMATE MODELS...</p>
+<p>&gt; [WARN] ANOMALOUS TEMPERATURE SPIKE DETECTED IN SECTOR 3A</p>
+<p>&gt; [SUCCESS] SATELLITE RELAY ESTABLISHED AT 14:02:11 UTC</p>
+<p>&gt; [DATA] CO2 CONCENTRATION: 421.5 PPM (+0.3 YoY)</p>
+<p>&gt; [INFO] RISK SCORE CALCULATION COMPLETED FOR ALL SECTORS</p>
+<p>&gt; [ALERT] SEVERE STORM SYSTEM MOVING WEST AT 12 KNOTS</p>
+<p>&gt; [SYSTEM] OPERATOR 07-A AUTHENTICATED</p>
+</div>
+</section>
+</main>
+<!-- FAB (Suppressed on Details/Internal as per instructions, but adding here as a Global Action on Dashboard context) -->
+<button class="fixed bottom-margin-md right-margin-md bg-secondary-container text-white w-14 h-14 flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</button>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('.neo-brutalist-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.classList.add('scale-110');
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.material-symbols-outlined');
+                if (icon) {
+                    icon.classList.remove('scale-110');
+                }
+            });
+        });
+
+        // Simulating live data updates
+        setInterval(() => {
+            const scores = document.querySelectorAll('.text-5xl, .text-6xl, .text-3xl');
+            scores.forEach(score => {
+                if (Math.random() > 0.8) {
+                    const current = parseFloat(score.innerText);
+                    const delta = (Math.random() - 0.5) * 0.1;
+                    score.childNodes[0].nodeValue = (current + delta).toFixed(1);
+                }
+            });
+        }, 3000);
+    </script>
+</body></html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ATLAS CLIMATE - Global Map</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#452b00",
+                    "on-secondary-container": "#ddcdff",
+                    "background": "#111318",
+                    "on-background": "#e2e2e8",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "surface-tint": "#00dbe7",
+                    "on-tertiary-container": "#845600",
+                    "surface-variant": "#333539",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "secondary-container": "#7000ff",
+                    "surface": "#111318",
+                    "surface-dim": "#111318",
+                    "primary": "#e1fdff",
+                    "tertiary-fixed-dim": "#ffb950",
+                    "tertiary": "#fff6ef",
+                    "on-primary-container": "#006a71",
+                    "tertiary-container": "#ffd49c",
+                    "on-secondary": "#3c0090",
+                    "primary-fixed": "#74f5ff",
+                    "primary-fixed-dim": "#00dbe7",
+                    "inverse-primary": "#00696f",
+                    "secondary": "#d1bcff",
+                    "outline-variant": "#3a494b",
+                    "surface-container-low": "#1a1c20",
+                    "surface-bright": "#37393e",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#1e2024",
+                    "on-primary-fixed-variant": "#004f54",
+                    "tertiary-fixed": "#ffddb3",
+                    "primary-container": "#00f2ff",
+                    "inverse-surface": "#e2e2e8",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#291800",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-container-highest": "#333539",
+                    "inverse-on-surface": "#2f3035",
+                    "on-primary": "#00363a",
+                    "surface-container-high": "#282a2e",
+                    "outline": "#849495",
+                    "on-primary-fixed": "#002022",
+                    "surface-container-lowest": "#0c0e12",
+                    "on-surface": "#e2e2e8",
+                    "on-surface-variant": "#b9cacb",
+                    "secondary-fixed": "#e9ddff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-sm": "16px",
+                    "gutter": "16px",
+                    "margin-md": "32px",
+                    "margin-lg": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Grotesk"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "body-md": ["Geist"],
+                    "display-lg": ["Space Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "label-caps": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #111318;
+            color: #e2e2e8;
+            overflow: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.15);
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 219, 231, 0.1);
+            position: absolute;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan {
+            from { top: 0; }
+            to { top: 100%; }
+        }
+        .liquid-hover:hover {
+            backdrop-filter: blur(30px) saturate(200%);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 15px rgba(0, 219, 231, 0.15);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Background Shader Layer -->
+
+<div class="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,219,231,0.05),transparent_70%)] z-0"></div>
+<div class="scanline z-10"></div>
+<!-- SideNavBar (Shared Component Strategy) -->
+<aside class="w-64 h-screen fixed left-0 top-0 bg-white/5 backdrop-blur-[30px] saturate-[180%] border-r border-white/20 flex flex-col py-margin-md z-[60] shadow-[10px_0_30px_rgba(0,0,0,0.3)]">
+<div class="px-6 mb-10">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">MISSION CONTROL</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mt-1">OPERATOR 07-A</p>
+</div>
+<nav class="flex-1 space-y-2 px-2">
+<!-- Dashboard -->
+<div class="group flex items-center px-4 py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer active:brightness-125 font-label-caps text-label-caps">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="">Dashboard</span>
+</div>
+<!-- Global Map (Active) -->
+<div class="group flex items-center px-4 py-3 bg-secondary-container/30 text-primary border-l-4 border-primary hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer active:brightness-125 font-label-caps text-label-caps">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">public</span>
+<span class="">Global Map</span>
+</div>
+<!-- Risk Intel -->
+<div class="group flex items-center px-4 py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer active:brightness-125 font-label-caps text-label-caps">
+<span class="material-symbols-outlined mr-3">warning</span>
+<span class="">Risk Intel</span>
+</div>
+<!-- Predictions -->
+<div class="group flex items-center px-4 py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer active:brightness-125 font-label-caps text-label-caps">
+<span class="material-symbols-outlined mr-3">insights</span>
+<span class="">Predictions</span>
+</div>
+<!-- Research -->
+<div class="group flex items-center px-4 py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 cursor-pointer active:brightness-125 font-label-caps text-label-caps">
+<span class="material-symbols-outlined mr-3">science</span>
+<span class="">Research</span>
+</div>
+</nav>
+<div class="mt-auto px-4 space-y-4">
+<button class="w-full bg-gradient-to-r from-[#00dbe7] to-background text-on-primary py-3 font-data-mono text-[12px] tracking-widest border border-primary/20 shadow-[0_0_15px_rgba(0,219,231,0.2)] active:scale-95 transition-transform">
+                SYNC TELEMETRY
+            </button>
+<div class="pt-4 border-t border-white/10">
+<div class="flex items-center px-4 py-2 text-on-surface-variant opacity-70 hover:bg-white/10 transition-all font-label-caps text-label-caps cursor-pointer">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="">Settings</span>
+</div>
+<div class="flex items-center px-4 py-2 text-on-surface-variant opacity-70 hover:bg-white/10 transition-all font-label-caps text-label-caps cursor-pointer">
+<span class="material-symbols-outlined mr-3">help</span>
+<span class="">Support</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Shared Component Strategy) -->
+<header class="flex justify-between items-center px-margin-lg w-full fixed top-0 left-64 z-50 h-16 bg-white/5 backdrop-blur-[20px] saturate-[180%] border-b border-white/20 shadow-[0_0_20px_rgba(0,219,231,0.1)]">
+<div class="flex items-center space-x-6">
+<div class="font-display-lg text-display-lg tracking-tighter text-primary scale-50 origin-left">ATLAS CLIMATE</div>
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary/50 text-sm">search</span>
+<input class="bg-black/20 border border-white/10 font-data-mono text-xs px-10 py-1 focus:ring-1 focus:ring-primary focus:outline-none w-64 rounded-none" placeholder="GEO-QUERY COORDS..." type="text">
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="flex space-x-8 font-data-mono text-data-mono">
+<span class="text-primary border-b-2 border-primary cursor-pointer h-16 flex items-center">VIEW_01</span>
+<span class="text-on-surface-variant hover:bg-white/10 transition-all cursor-pointer h-16 flex items-center px-2">ANALYTICS</span>
+<span class="text-on-surface-variant hover:bg-white/10 transition-all cursor-pointer h-16 flex items-center px-2">ARCHIVE</span>
+</div>
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-primary cursor-pointer liquid-hover p-2 transition-all">sensors</span>
+<span class="material-symbols-outlined text-primary cursor-pointer liquid-hover p-2 transition-all">notifications</span>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a tech-focused climate scientist operator, high-contrast lighting with cyan and violet rim lights, dark background, extreme close-up." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH9ibpU_vToVca0j1qTDenvjKP2FRc39pRm6aTk4UQox7EDaDQvd4mVTJmKFoknvd2Ch-1UYMcvJZ4mn5XKLgVlyjNQuwkywGeJouxWxVxUk0cy2m2mGkJ6-r9OoSuXxpihGiT5a6AjhXeJriXG-sLBlOd2f1vg4eXcyYg47TkVoD_Jjp3ArLUfwxFcHlWWO8FdysTuLMA2w-K3bLGApGEI3imFv4n6z2hcHuXjJvqdgJU0TU2mwPMmDJ-w27Z3P5-0mSz5zthww">
+</div>
+</div>
+</div>
+</header>
+<!-- Main Map Canvas -->
+<main class="ml-64 pt-16 h-screen relative flex flex-col overflow-hidden">
+<!-- Interactive Map Element (Simulated) -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full grayscale-[0.2] brightness-[0.7] contrast-[1.1]" data-alt="A detailed high-resolution satellite view of the Earth at night from low orbit, showing vibrant city lights and deep ocean textures, with subtle glowing digital data overlays like lat-long grids and technical markers in cyan and amber." data-location="Global" style="background-image: url(&quot;https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&amp;fit=crop&amp;q=80&amp;w=2072&quot;); background-size: cover; background-position: center center;"></div>
+<!-- Map Interactive Markers (Floating) -->
+<div class="absolute top-[30%] left-[45%] group cursor-pointer">
+<div class="w-4 h-4 bg-primary-container rounded-full animate-ping absolute opacity-75"></div>
+<div class="w-4 h-4 bg-primary-container border-2 border-white relative z-10"></div>
+<div class="hidden group-hover:block absolute left-6 top-0 glass-panel p-3 min-w-[200px] inner-glow">
+<p class="font-label-caps text-label-caps text-primary mb-1">REGION: ARCTIC_A2</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">TEMP_DEV: +2.4°C</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">CONFIDENCE: 98.4%</p>
+</div>
+</div>
+<div class="absolute top-[60%] left-[70%] group cursor-pointer">
+<div class="w-4 h-4 bg-error-container rounded-full animate-ping absolute opacity-75"></div>
+<div class="w-4 h-4 bg-error border-2 border-white relative z-10"></div>
+<div class="hidden group-hover:block absolute left-6 top-0 glass-panel p-3 min-w-[200px] inner-glow">
+<p class="font-label-caps text-label-caps text-error mb-1">REGION: PACIFIC_VORTEX</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">ANOMALY: CAT_5_RISE</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">THREAT: CRITICAL</p>
+</div>
+</div>
+</div>
+<!-- Overlays (Glassmorphism & Neo-brutalist) -->
+<!-- Bottom Left: Telemetry Data -->
+<div class="absolute bottom-10 left-10 z-30 glass-panel p-4 w-72 inner-glow z-50">
+<div class="flex justify-between items-center mb-4 border-b border-white/10 pb-2">
+<span class="font-label-caps text-label-caps text-primary">COORD_TRACKER</span>
+<span class="material-symbols-outlined text-sm text-primary">location_searching</span>
+</div>
+<div class="space-y-3 font-data-mono text-[12px]">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">LATITUDE</span>
+<span class="text-primary font-bold" id="lat-val">42.3590 N</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">LONGITUDE</span>
+<span class="text-primary font-bold" id="lon-val">71.0605 W</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">ALTITUDE</span>
+<span class="text-primary font-bold">342.1 KM</span>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-white/10">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+<span class="font-label-caps text-label-caps text-[9px] tracking-widest text-on-surface-variant">ORBITAL UPLINK ACTIVE</span>
+</div>
+</div>
+</div>
+<!-- Top Right: Layer Toggles -->
+<div class="absolute top-10 right-10 z-30 flex flex-col space-y-4 z-50">
+<div class="glass-panel p-6 w-64 inner-glow">
+<h3 class="font-label-caps text-label-caps text-primary mb-4 border-b border-white/10 pb-2">MAP_LAYERS</h3>
+<div class="space-y-4">
+<!-- Layer Toggle Item -->
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="font-data-mono text-xs text-on-surface-variant group-hover:text-primary transition-colors">HEATMAPS_FLUX</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-8 h-4 bg-white/10 rounded-none peer peer-checked:after:translate-x-full peer-checked:after:bg-primary after:content-[''] after:absolute after:top-0 after:left-0 after:bg-white/40 after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="font-data-mono text-xs text-on-surface-variant group-hover:text-primary transition-colors">SATELLITE_GIBS</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox">
+<div class="w-8 h-4 bg-white/10 rounded-none peer peer-checked:after:translate-x-full peer-checked:after:bg-primary after:content-[''] after:absolute after:top-0 after:left-0 after:bg-white/40 after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="font-data-mono text-xs text-on-surface-variant group-hover:text-primary transition-colors">VECTOR_HOTSPOTS</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-8 h-4 bg-white/10 rounded-none peer peer-checked:after:translate-x-full peer-checked:after:bg-primary after:content-[''] after:absolute after:top-0 after:left-0 after:bg-white/40 after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- Legend (Neo-Brutalist) -->
+<div class="bg-black/80 border-2 border-primary/20 p-4 w-64 shadow-[0_0_20px_rgba(0,219,231,0.05)]">
+<h3 class="font-label-caps text-label-caps text-primary text-[10px] mb-3">DATA_LEGEND</h3>
+<div class="space-y-2">
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 bg-error shadow-[0_0_8px_rgba(255,180,171,0.5)]"></div>
+<span class="font-data-mono text-[10px] text-on-surface-variant">CRITICAL_RISK</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 bg-tertiary-fixed-dim"></div>
+<span class="font-data-mono text-[10px] text-on-surface-variant">THERMAL_FLUCTUATION</span>
+</div>
+<div class="flex items-center space-x-3">
+<div class="w-3 h-3 bg-primary"></div>
+<span class="font-data-mono text-[10px] text-on-surface-variant">NOMINAL_ZONE</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button (Contextual FAB Suppression Check - Rendered as this is the Map Dashboard) -->
+<button class="fixed bottom-10 right-10 z-40 bg-primary-container text-on-primary-container p-4 rounded-none shadow-[0_0_30px_rgba(0,219,231,0.4)] flex items-center space-x-3 hover:scale-105 transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">add_location</span>
+<span class="font-label-caps text-label-caps pr-2 border-r border-on-primary-container/20">DEPLOY NODE</span>
+<span class="font-data-mono text-[10px] opacity-70">R-07</span>
+</button>
+</main>
+<!-- Global Interaction Logic -->
+<script>
+        // Update coordinate tracking simulation
+        const latEl = document.getElementById('lat-val');
+        const lonEl = document.getElementById('lon-val');
+
+        setInterval(() => {
+            const baseLat = 42.3601;
+            const baseLon = 71.0589;
+            const driftLat = (Math.random() - 0.5) * 0.005;
+            const driftLon = (Math.random() - 0.5) * 0.005;
+            
+            latEl.textContent = (baseLat + driftLat).toFixed(4) + ' N';
+            lonEl.textContent = (baseLon + driftLon).toFixed(4) + ' W';
+        }, 1500);
+
+        // Click interaction for telemetry button
+        document.querySelector('button').addEventListener('click', function() {
+            this.textContent = "SYNCHRONIZING...";
+            this.classList.add('animate-pulse');
+            setTimeout(() => {
+                this.textContent = "SYNC TELEMETRY";
+                this.classList.remove('animate-pulse');
+            }, 2000);
+        });
+
+        // Toggle layer states
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const label = e.target.closest('label').querySelector('span').textContent;
+                console.log(`Layer toggle: ${label} is now ${e.target.checked}`);
+            });
+        });
+    </script>
+
+
+</body></html>

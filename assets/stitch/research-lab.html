@@ -1,0 +1,484 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ATLAS - Research Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#452b00",
+                    "on-secondary-container": "#ddcdff",
+                    "background": "#111318",
+                    "on-background": "#e2e2e8",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "surface-tint": "#00dbe7",
+                    "on-tertiary-container": "#845600",
+                    "surface-variant": "#333539",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "secondary-container": "#7000ff",
+                    "surface": "#111318",
+                    "surface-dim": "#111318",
+                    "primary": "#e1fdff",
+                    "tertiary-fixed-dim": "#ffb950",
+                    "tertiary": "#fff6ef",
+                    "on-primary-container": "#006a71",
+                    "tertiary-container": "#ffd49c",
+                    "on-secondary": "#3c0090",
+                    "primary-fixed": "#74f5ff",
+                    "primary-fixed-dim": "#00dbe7",
+                    "inverse-primary": "#00696f",
+                    "secondary": "#d1bcff",
+                    "outline-variant": "#3a494b",
+                    "surface-container-low": "#1a1c20",
+                    "surface-bright": "#37393e",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#1e2024",
+                    "on-primary-fixed-variant": "#004f54",
+                    "tertiary-fixed": "#ffddb3",
+                    "primary-container": "#00f2ff",
+                    "inverse-surface": "#e2e2e8",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#291800",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-container-highest": "#333539",
+                    "inverse-on-surface": "#2f3035",
+                    "on-primary": "#00363a",
+                    "surface-container-high": "#282a2e",
+                    "outline": "#849495",
+                    "on-primary-fixed": "#002022",
+                    "surface-container-lowest": "#0c0e12",
+                    "on-surface": "#e2e2e8",
+                    "on-surface-variant": "#b9cacb",
+                    "secondary-fixed": "#e9ddff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-sm": "16px",
+                    "gutter": "16px",
+                    "margin-md": "32px",
+                    "margin-lg": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Grotesk"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "body-md": ["Geist"],
+                    "display-lg": ["Space Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "label-caps": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0c0e12;
+            overflow-x: hidden;
+            color: #e2e2e8;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 219, 231, 0.05);
+        }
+
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 219, 231, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(112, 0, 255, 0.15) 0%, transparent 40%);
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            from { transform: scale(1); }
+            to { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .laser-focus:focus-within {
+            border-color: #00dbe7;
+            box-shadow: 0 0 10px rgba(0, 219, 231, 0.3);
+        }
+
+        .neo-brutalist-card {
+            border: 2px solid #3a494b;
+            background: rgba(12, 14, 18, 0.8);
+        }
+
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 24px;
+            background: #00dbe7;
+            cursor: pointer;
+            border-radius: 0;
+        }
+
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary-container selection:text-on-primary-container">
+<div class="liquid-bg"></div>
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center px-margin-lg w-full fixed top-0 z-50 bg-white/5 backdrop-blur-[20px] saturate-[180%] border-b border-white/20 h-16 shadow-[0_0_20px_rgba(0,219,231,0.1)]">
+<div class="flex items-center gap-margin-sm">
+<span class="font-display-lg text-[24px] tracking-tighter text-primary">ATLAS CLIMATE</span>
+<div class="h-4 w-px bg-white/20 ml-4 hidden md:block"></div>
+<div class="hidden md:flex gap-6 ml-6">
+<a class="font-data-mono text-data-mono text-on-surface-variant hover:text-primary transition-colors" href="#">LIVE FEED</a>
+<a class="font-data-mono text-data-mono text-primary border-b-2 border-primary pb-1" href="#">RESEARCH LAB</a>
+<a class="font-data-mono text-data-mono text-on-surface-variant hover:text-primary transition-colors" href="#">ARCHIVES</a>
+</div>
+</div>
+<div class="flex items-center gap-margin-sm">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-white/5 border border-white/10 pl-10 pr-4 py-1 text-data-mono font-data-mono text-xs focus:outline-none focus:border-primary w-48 transition-all" placeholder="QUERY DATASET..." type="text">
+</div>
+<div class="flex gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-all active:scale-95"><span class="material-symbols-outlined">sensors</span></button>
+<button class="hover:text-primary transition-all active:scale-95"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-all active:scale-95"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full py-margin-md w-64 fixed left-0 top-0 bg-white/5 backdrop-blur-[30px] saturate-[180%] border-r border-white/20 shadow-[10px_0_30px_rgba(0,0,0,0.3)] z-40 mt-16">
+<div class="px-6 mb-8">
+<div class="font-headline-md text-headline-md text-primary mb-1">MISSION CONTROL</div>
+<div class="font-label-caps text-label-caps opacity-60">OPERATOR 07-A</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-6 py-3 font-label-caps text-label-caps text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-8 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span> DASHBOARD
+            </a>
+<a class="flex items-center gap-4 px-6 py-3 font-label-caps text-label-caps text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-8 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span> GLOBAL MAP
+            </a>
+<a class="flex items-center gap-4 px-6 py-3 font-label-caps text-label-caps text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-8 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-[20px]">warning</span> RISK INTEL
+            </a>
+<a class="flex items-center gap-4 px-6 py-3 font-label-caps text-label-caps text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-8 transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span> PREDICTIONS
+            </a>
+<a class="flex items-center gap-4 px-6 py-3 font-label-caps text-label-caps bg-secondary-container/30 text-primary border-l-4 border-primary pl-5" href="#">
+<span class="material-symbols-outlined text-[20px]">science</span> RESEARCH
+            </a>
+</nav>
+<div class="px-6 mt-auto space-y-4">
+<button class="w-full py-3 bg-primary text-on-primary font-label-caps text-label-caps tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(0,219,231,0.4)] font-bold">
+                SYNC TELEMETRY
+            </button>
+<div class="flex gap-2">
+<a class="flex-1 flex items-center justify-center py-2 border border-white/10 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</a>
+<a class="flex-1 flex items-center justify-center py-2 border border-white/10 hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-64 pt-24 px-margin-md pb-margin-lg min-h-screen">
+<!-- Header Section -->
+<header class="mb-margin-md flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container font-label-caps text-[10px]">EXPERIMENTAL</span>
+<span class="text-on-surface-variant font-data-mono text-xs">ID: LAB-SIM-882</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary leading-tight">RESEARCH LAB</h1>
+<p class="text-on-surface-variant max-w-xl">Advanced dataset simulation and testing environment for planetary-scale climate stressors. Calibrate parameters to visualize feedback loops.</p>
+</div>
+<div class="flex gap-4">
+<div class="glass-panel p-4 flex flex-col items-end">
+<span class="text-[10px] font-label-caps opacity-50 uppercase">Core Load</span>
+<span class="font-data-mono text-xl text-primary-container">42.8%</span>
+</div>
+<div class="glass-panel p-4 flex flex-col items-end border-primary-container/30">
+<span class="text-[10px] font-label-caps opacity-50 uppercase">Active Nodes</span>
+<span class="font-data-mono text-xl text-primary">1,204</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Workspace -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Dataset Upload Zone -->
+<div class="col-span-12 lg:col-span-4 h-full">
+<div class="glass-panel p-margin-sm h-full flex flex-col border-dashed border-2 border-white/10 hover:border-primary/50 transition-colors group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<span class="font-label-caps text-label-caps text-primary">DATASET UPLOAD</span>
+<span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform">cloud_upload</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center text-center p-8">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl text-primary">file_open</span>
+</div>
+<p class="font-headline-md text-headline-md text-primary mb-2">Drop local data</p>
+<p class="text-sm opacity-60 mb-6">Supports .CSV, .JSON, .HDF5, or Satellite Streams</p>
+<button class="px-6 py-2 border border-primary/40 text-primary font-label-caps text-[12px] hover:bg-primary/10 transition-all">BROWSE DIRECTORY</button>
+</div>
+<div class="mt-6 pt-6 border-t border-white/10 space-y-3">
+<div class="flex justify-between text-[11px] font-data-mono opacity-60">
+<span class="">LAST IMPORTED:</span>
+<span class="">ARCTIC_METHANE_V4.CSV</span>
+</div>
+<div class="w-full bg-white/5 h-1">
+<div class="bg-primary h-full w-3/4"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Parameters Sliders -->
+<div class="col-span-12 lg:col-span-8">
+<div class="glass-panel p-margin-sm">
+<div class="flex justify-between items-center mb-8">
+<span class="font-label-caps text-label-caps text-primary">SCENARIO PARAMETERS</span>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-white/10"><span class="material-symbols-outlined text-sm">refresh</span></button>
+<button class="p-1 hover:bg-white/10"><span class="material-symbols-outlined text-sm">save</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+<!-- Slider 1 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps opacity-80">CO2 FLUX (PPM/YR)</label>
+<span class="font-data-mono text-primary text-lg">+2.45</span>
+</div>
+<input class="w-full h-1 bg-white/10 appearance-none cursor-pointer custom-range" max="100" min="0" type="range" value="65">
+<div class="flex justify-between text-[10px] font-data-mono opacity-40">
+<span class="">MIN: 0.00</span>
+<span class="">MAX: 10.00</span>
+</div>
+</div>
+<!-- Slider 2 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps opacity-80">ALBEDO SHIFT (%)</label>
+<span class="font-data-mono text-secondary text-lg">-0.12</span>
+</div>
+<input class="w-full h-1 bg-white/10 appearance-none cursor-pointer custom-range" max="100" min="0" type="range" value="40">
+<div class="flex justify-between text-[10px] font-data-mono opacity-40">
+<span class="">CRITICAL: -0.50</span>
+<span class="">STABLE: 0.00</span>
+</div>
+</div>
+<!-- Slider 3 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps opacity-80">THERMAL INERTIA</label>
+<span class="font-data-mono text-tertiary-fixed-dim text-lg">0.82k</span>
+</div>
+<input class="w-full h-1 bg-white/10 appearance-none cursor-pointer custom-range" max="100" min="0" type="range" value="82">
+<div class="flex justify-between text-[10px] font-data-mono opacity-40">
+<span class="">LO-RES</span>
+<span class="">HI-RES</span>
+</div>
+</div>
+<!-- Slider 4 -->
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<label class="font-label-caps text-label-caps opacity-80">BIOME RESILIENCE</label>
+<span class="font-data-mono text-error text-lg">CRITICAL</span>
+</div>
+<input class="w-full h-1 bg-white/10 appearance-none cursor-pointer custom-range" max="100" min="0" type="range" value="15">
+<div class="flex justify-between text-[10px] font-data-mono opacity-40">
+<span class="">EXTINCT</span>
+<span class="">ADAPTED</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visualizer Main -->
+<div class="col-span-12 lg:col-span-9 h-[450px] relative overflow-hidden glass-panel group">
+<div class="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between">
+<div class="flex justify-between">
+<div>
+<div class="font-label-caps text-label-caps text-primary mb-1">REAL-TIME MODEL OUTPUT</div>
+<div class="font-data-mono text-xs opacity-50">PROJECTION: RCP 8.5 MODIFIED</div>
+</div>
+<div class="flex gap-2">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="font-data-mono text-[10px] opacity-70">LIVE SIMULATION</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="neo-brutalist-card px-4 py-2">
+<div class="text-[9px] font-label-caps opacity-50">TEMP ANOMALY</div>
+<div class="text-xl font-data-mono text-primary">+4.2°C</div>
+</div>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-6 py-2 font-label-caps text-label-caps hover:brightness-110 shadow-[0_0_15px_rgba(0,219,231,0.4)] tracking-widest font-bold">RUN CALCULATION</button>
+</div>
+</div>
+</div>
+<!-- Simulation Visual (Placeholder for 3D/Shader) -->
+
+<!-- Grid Overlay -->
+<div class="absolute inset-0 pointer-events-none opacity-20" style="background-image: radial-gradient(circle, rgb(0, 219, 231) 1.5px, transparent 1.5px); background-size: 32px 32px; opacity: 0.15;"></div>
+<!-- Decorative scanline -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/20 blur-md animate-bounce"></div>
+</div>
+<!-- Telemetry Stack -->
+<div class="col-span-12 lg:col-span-3 space-y-gutter">
+<div class="glass-panel p-4 h-[215px] flex flex-col">
+<div class="font-label-caps text-label-caps text-primary mb-4">ATMOSPHERIC FEED</div>
+<div class="flex-1 overflow-y-auto scroll-hide space-y-3 font-data-mono text-[11px] leading-relaxed"><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:33</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:37</span><span class="">UPLOADING RESULTS TO MISSION CONTROL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:41</span><span class="">UPLOADING RESULTS TO MISSION CONTROL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:46</span><span class="">FEEDBACK LOOP DETECTED IN QUADRANT 4.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:49</span><span class="">FEEDBACK LOOP DETECTED IN QUADRANT 4.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:54</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:44:58</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:02</span><span class="">FEEDBACK LOOP DETECTED IN QUADRANT 4.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:06</span><span class="">UPLOADING RESULTS TO MISSION CONTROL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:10</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:14</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:18</span><span class="">ISOTOPIC ANALYSIS COMPLETE.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:22</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:26</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:30</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:34</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:38</span><span class="">ISOTOPIC ANALYSIS COMPLETE.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:42</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:46</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:50</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:54</span><span class="">FEEDBACK LOOP DETECTED IN QUADRANT 4.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:45:57</span><span class="">SCANNING SATELLITE T-88...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:46:01</span><span class="">ISOTOPIC ANALYSIS COMPLETE.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:46:06</span><span class="">FEEDBACK LOOP DETECTED IN QUADRANT 4.</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:46:10</span><span class="">CALIBRATING OCEANIC THERMAL...</span></div><div class="flex gap-3 animate-pulse"><span class="opacity-40">03:46:14</span><span class="">UPLOADING RESULTS TO MISSION CONTROL...</span></div></div>
+</div>
+<div class="glass-panel p-4 h-[215px] flex flex-col">
+<div class="font-label-caps text-label-caps text-primary mb-4">PLANETARY NODES</div>
+<div class="flex-1 space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-primary"></div>
+<span class="text-xs font-data-mono">ARCTIC-S01</span>
+</div>
+<span class="text-xs font-data-mono text-primary">ONLINE</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-secondary"></div>
+<span class="text-xs font-data-mono">AMAZON-X44</span>
+</div>
+<span class="text-xs font-data-mono text-secondary">PROCESSING</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-tertiary-fixed-dim"></div>
+<span class="text-xs font-data-mono">SAHARA-G12</span>
+</div>
+<span class="text-xs font-data-mono opacity-50">STANDBY</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-primary"></div>
+<span class="text-xs font-data-mono">PACIFIC-W09</span>
+</div>
+<span class="text-xs font-data-mono text-primary">ONLINE</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Stats Bar -->
+<footer class="mt-margin-md glass-panel p-4 flex flex-wrap items-center justify-between gap-6 border-t-0 border-b-2 border-primary/20">
+<div class="flex items-center gap-8">
+<div class="flex flex-col">
+<span class="text-[9px] font-label-caps opacity-50">SIMULATION ENGINE</span>
+<span class="text-sm font-data-mono">V.4.2.0-STABLE</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] font-label-caps opacity-50">LATENCY</span>
+<span class="text-sm font-data-mono text-primary">12ms</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] font-label-caps opacity-50">ENCRYPTION</span>
+<span class="text-sm font-data-mono">AES-256 QUANTUM</span>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm opacity-50">public</span>
+<span class="text-[10px] font-label-caps">GLOBAL SYNC ACTIVE</span>
+</div>
+<div class="w-px h-8 bg-white/10"></div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-background glass-panel flex items-center justify-center text-[10px] font-bold">JD</div>
+<div class="w-8 h-8 rounded-full border-2 border-background glass-panel flex items-center justify-center text-[10px] font-bold">AS</div>
+<div class="w-8 h-8 rounded-full border-2 border-background bg-primary text-on-primary flex items-center justify-center text-[10px] font-bold">+4</div>
+</div>
+</div>
+</footer>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/5 backdrop-blur-[30px] saturate-[180%] border-t border-white/20 flex justify-around py-3 z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[9px] font-label-caps">DASHBOARD</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">science</span>
+<span class="text-[9px] font-label-caps">RESEARCH</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">public</span>
+<span class="text-[9px] font-label-caps">MAP</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[9px] font-label-caps">DATA</span>
+</button>
+</nav>
+<script>
+        // Subtle micro-interactions
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                const valueLabel = e.target.parentElement.querySelector('span.text-lg');
+                if (valueLabel) {
+                    // Just a visual feedback example, not actually calculating
+                    const val = e.target.value;
+                    if (valueLabel.innerText.includes('%')) valueLabel.innerText = (val / 200 - 0.5).toFixed(2) + '%';
+                }
+            });
+        });
+
+        // Simulating console text typing
+        const consoleFeed = document.querySelector('.overflow-y-auto');
+        const logs = [
+            "SCANNING SATELLITE T-88...",
+            "ISOTOPIC ANALYSIS COMPLETE.",
+            "CALIBRATING OCEANIC THERMAL...",
+            "UPLOADING RESULTS TO MISSION CONTROL...",
+            "FEEDBACK LOOP DETECTED IN QUADRANT 4."
+        ];
+        
+        setInterval(() => {
+            const time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            const log = logs[Math.floor(Math.random() * logs.length)];
+            const div = document.createElement('div');
+            div.className = "flex gap-3 animate-pulse";
+            div.innerHTML = `<span class="opacity-40">${time}</span><span>${log}</span>`;
+            consoleFeed.appendChild(div);
+            consoleFeed.scrollTop = consoleFeed.scrollHeight;
+            if (consoleFeed.children.length > 20) consoleFeed.removeChild(consoleFeed.firstChild);
+        }, 4000);
+    </script>
+
+
+</body></html>

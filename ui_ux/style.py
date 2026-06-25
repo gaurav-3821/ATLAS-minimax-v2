@@ -96,37 +96,9 @@ ATLAS_CSS = """
         100% { transform: scale(0.95) rotate(-1deg); opacity: 0.5; }
     }
 
-    @keyframes atlasCaustics {
-        0% { background-position: 0% 0%, 100% 100%; }
-        33% { background-position: 30% 60%, 70% 40%; }
-        66% { background-position: 60% 20%, 40% 80%; }
-        100% { background-position: 0% 0%, 100% 100%; }
-    }
-
     @keyframes atlasShimmer {
         0% { transform: translateX(-100%) skewX(-15deg); }
         100% { transform: translateX(200%) skewX(-15deg); }
-    }
-
-    @keyframes atlasLiquidGlass {
-        0% { border-radius: 22px 28px 24px 30px; }
-        25% { border-radius: 28px 22px 30px 24px; }
-        50% { border-radius: 24px 30px 22px 28px; }
-        75% { border-radius: 30px 24px 28px 22px; }
-        100% { border-radius: 22px 28px 24px 30px; }
-    }
-
-    @keyframes atlasRefract {
-        0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-        25% { clip-path: polygon(0 2%, 98% 0, 100% 97%, 2% 100%); }
-        50% { clip-path: polygon(1% 0, 100% 1%, 99% 100%, 0 99%); }
-        75% { clip-path: polygon(0 1%, 99% 0, 100% 99%, 1% 100%); }
-        100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-    }
-
-    @keyframes atlasPulseGlow {
-        0%, 100% { box-shadow: var(--atlas-shadow-liquid), 0 0 20px rgba(0,229,255,0.0); }
-        50% { box-shadow: var(--atlas-shadow-liquid), 0 0 30px rgba(0,229,255,0.08); }
     }
 
     #MainMenu {
@@ -415,13 +387,26 @@ ATLAS_CSS = """
         display: block;
         max-width: 100%;
         height: auto;
-        mix-blend-mode: screen;
         filter: drop-shadow(0 2px 8px rgba(0,229,255,0.15)) drop-shadow(0 4px 16px rgba(0,0,0,0.3));
     }
 
-    html[data-theme="light"] .atlas-sidebar-logo-wrap img {
-        mix-blend-mode: multiply;
-        filter: drop-shadow(0 2px 8px rgba(0,229,255,0.1)) drop-shadow(0 4px 16px rgba(0,0,0,0.08));
+    .atlas-hero-logo-wrap {
+        padding: 0.25rem;
+        border: 1px solid var(--atlas-glass-edge);
+        border-radius: var(--atlas-radius-md);
+        background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, var(--atlas-card-bg) 100%);
+        backdrop-filter: blur(20px) saturate(1.4);
+        -webkit-backdrop-filter: blur(20px) saturate(1.4);
+        box-shadow: var(--atlas-shadow-liquid);
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .atlas-hero-logo-wrap img {
+        display: block;
+        max-width: 100%;
+        height: auto;
     }
 
     .atlas-side-brand .atlas-kicker {
@@ -889,10 +874,10 @@ ATLAS_CSS = """
         filter: blur(80px);
         pointer-events: none;
         opacity: 0.15;
-        animation: atlasBlob 18s ease-in-out infinite alternate;
+        animation: atlasBlobDrift 18s ease-in-out infinite alternate;
     }
 
-    @keyframes atlasBlob {
+    @keyframes atlasBlobDrift {
         0% { transform: translate(0, 0) scale(1); }
         33% { transform: translate(30px, -20px) scale(1.1); }
         66% { transform: translate(-20px, 10px) scale(0.9); }
@@ -993,10 +978,6 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         animation: none;
     }
 
-    html[data-theme="light"] h1, html[data-theme="light"] h2, html[data-theme="light"] h3,
-    html[data-theme="light"] h4, html[data-theme="light"] h5, html[data-theme="light"] h6 {
-        text-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
 
     html[data-theme="light"] [data-testid="stSidebar"] > div:first-child {
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 248, 0.9) 100%) !important;
@@ -1095,25 +1076,25 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
     }
 
     html[data-theme="light"] .atlas-section-head {
-        background: rgba(0,229,255,0.04);
+        background: rgba(0,229,255,0.04) !important;
     }
 
     html[data-theme="light"] .atlas-info-banner {
-        background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 100%);
+        background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 100%) !important;
     }
 
     html[data-theme="light"] .atlas-kicker {
-        background: rgba(0,229,255,0.06);
-        border-color: rgba(0,229,255,0.15);
+        background: rgba(0,229,255,0.06) !important;
+        border-color: rgba(0,229,255,0.15) !important;
     }
 
     html[data-theme="light"] .atlas-active-page {
-        background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, rgba(167,139,250,0.04) 100%);
+        background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, rgba(167,139,250,0.04) 100%) !important;
     }
 
     html[data-theme="light"] .atlas-step-chip {
-        background: rgba(0,0,0,0.02);
-        border-color: rgba(0,0,0,0.06);
+        background: rgba(0,0,0,0.02) !important;
+        border-color: rgba(0,0,0,0.06) !important;
     }
 
     html[data-theme="light"] .atlas-step-chip.active {
@@ -1152,14 +1133,14 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
     }
 
     html[data-theme="light"] .atlas-side-brand {
-        background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, var(--atlas-card-glass) 100%);
-        box-shadow: var(--atlas-shadow-liquid);
+        background: linear-gradient(135deg, rgba(0,229,255,0.06) 0%, var(--atlas-card-glass) 100%) !important;
+        box-shadow: var(--atlas-shadow-liquid) !important;
     }
 
     html[data-theme="light"] .atlas-sidebar-logo-wrap {
-        background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, var(--atlas-card-glass) 100%);
-        border-color: rgba(0,0,0,0.08);
-        box-shadow: var(--atlas-shadow-liquid);
+        background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, var(--atlas-card-glass) 100%) !important;
+        border-color: rgba(0,0,0,0.08) !important;
+        box-shadow: var(--atlas-shadow-liquid) !important;
     }
 
     html[data-theme="light"] .atlas-sidebar-logo-wrap::before {
@@ -1170,8 +1151,14 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         filter: drop-shadow(0 2px 8px rgba(0,229,255,0.1)) drop-shadow(0 4px 16px rgba(0,0,0,0.08));
     }
 
+    html[data-theme="light"] .atlas-hero-logo-wrap {
+        background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, var(--atlas-card-glass) 100%) !important;
+        border-color: rgba(0,0,0,0.08) !important;
+        box-shadow: var(--atlas-shadow-liquid) !important;
+    }
+
     html[data-theme="light"] [data-testid="stSidebar"] a {
-        color: #475569 !important;
+        color: #334155 !important;
     }
 
     html[data-theme="light"] [data-testid="stSidebar"] a:hover {
@@ -1179,7 +1166,15 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
     }
 
     html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {
-        border-bottom-color: rgba(0,0,0,0.06);
+        border-bottom-color: rgba(0,0,0,0.06) !important;
+    }
+
+    html[data-theme="light"] .stTabs [data-baseweb="tab"] {
+        color: #475569 !important;
+    }
+
+    html[data-theme="light"] .stTabs [data-baseweb="tab"][aria-selected="true"] {
+        color: #0891b2 !important;
     }
 </style>
 """
@@ -1203,64 +1198,50 @@ def _load_bg_b64(mode: str) -> str:
 
 def apply_atlas_theme() -> None:
     light_mode = st.session_state.get("atlas_light_mode", False)
-    theme = "light" if light_mode else "dark"
-    b64 = _load_bg_b64(theme)
+    initial_load = "atlas_light_mode" not in st.session_state
     st.markdown(ATLAS_CSS, unsafe_allow_html=True)
-    if light_mode:
-        st.markdown(ATLAS_CSS_LIGHT_OVERRIDES, unsafe_allow_html=True)
-    bg_css = ""
-    if b64:
-        overlay = "rgba(255,255,255,0.30)" if light_mode else "rgba(4,8,18,0.60)"
-        bg_css = f"""
+    st.markdown(ATLAS_CSS_LIGHT_OVERRIDES, unsafe_allow_html=True)
+    dark_b64 = _load_bg_b64("dark")
+    light_b64 = _load_bg_b64("light")
+    bg_default = "#060a14"
+    bg_dark = f"linear-gradient(rgba(4,8,18,0.60), rgba(4,8,18,0.60)), url('data:image/jpeg;base64,{dark_b64}') center/cover no-repeat fixed" if dark_b64 else "#060a14"
+    bg_light = f"linear-gradient(rgba(255,255,255,0.30), rgba(255,255,255,0.30)), url('data:image/jpeg;base64,{light_b64}') center/cover no-repeat fixed" if light_b64 else "#f0f4f8"
+    st.markdown(
+        f"""
         <style>
             .stApp {{
-                background:
-                    linear-gradient({overlay}, {overlay}),
-                    url('data:image/jpeg;base64,{b64}') center/cover no-repeat fixed !important;
+                background: {bg_dark} !important;
+                background-color: {bg_default} !important;
             }}
-        </style>
-        """
-    else:
-        bg_css = """
-        <style>
-            .stApp { background-color: #060a14 !important; }
-        </style>
-        """
-    st.markdown(bg_css, unsafe_allow_html=True)
-    st.markdown(
-        """
-        <style>
+            html[data-theme="light"] .stApp {{
+                background: {bg_light} !important;
+                background-color: #f0f4f8 !important;
+            }}
             [data-testid="stAppViewContainer"],
             .main,
-            [data-testid="stHeader"] {
+            [data-testid="stHeader"] {{
                 background-color: transparent !important;
                 background-image: none !important;
-            }
+            }}
+            html[data-theme="light"] [data-testid="stSidebar"] > div:first-child {{
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 244, 248, 0.9) 100%) !important;
+                backdrop-filter: blur(36px) saturate(1.6) !important;
+                -webkit-backdrop-filter: blur(36px) saturate(1.6) !important;
+            }}
         </style>
         """,
         unsafe_allow_html=True,
     )
-    if light_mode:
-        st.markdown(
-            """
-            <style>
-                [data-testid="stSidebar"],
-                [data-testid="stSidebarContent"],
-                [data-testid="stSidebar"] > div:first-child {
-                    background-color: #ffffff !important;
-                    background-image: none !important;
-                }
-                [data-testid="stSidebar"] > div:first-child {
-                    background: rgba(255, 255, 255, 0.95) !important;
-                }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
     st.markdown(
         f"""
         <script>
-            document.documentElement.setAttribute("data-theme", "{theme}");
+            var firstLoad = {str(initial_load).lower()};
+            if (firstLoad) {{
+                var osDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.setAttribute("data-theme", osDark ? "dark" : "light");
+            }} else {{
+                document.documentElement.setAttribute("data-theme", "{("light" if light_mode else "dark")}");
+            }}
         </script>
         """,
         unsafe_allow_html=True,
@@ -1269,7 +1250,7 @@ def apply_atlas_theme() -> None:
 
 def render_sidebar_navigation(active_page: str) -> None:
     with st.sidebar:
-        logo_path = Path(__file__).resolve().parents[1] / "assets" / "ATLAS LOGO.png"
+        logo_path = Path(__file__).resolve().parents[1] / "assets" / "atlas-logo.png"
         if logo_path.exists():
             st.markdown(
                 """<div class="atlas-sidebar-logo-wrap">""",
@@ -1306,7 +1287,7 @@ def render_sidebar_navigation(active_page: str) -> None:
             """
             <div class="atlas-nav-panel">
                 <p class="atlas-nav-caption">Layout: 12-column responsive shell</p>
-                <p class="atlas-nav-caption">UI mix: NASA science + Apple glass + neobrutal cards</p>
+                <p class="atlas-nav-caption">UI mix: NASA science + liquid glass</p>
             </div>
             """,
             unsafe_allow_html=True,

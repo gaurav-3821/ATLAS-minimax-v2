@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ATLAS CLIMATE - Reports &amp; Briefings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Geist:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#452b00",
+                    "on-secondary-container": "#ddcdff",
+                    "background": "#111318",
+                    "on-background": "#e2e2e8",
+                    "on-secondary-fixed-variant": "#5700c9",
+                    "surface-tint": "#00dbe7",
+                    "on-tertiary-container": "#845600",
+                    "surface-variant": "#333539",
+                    "on-secondary-fixed": "#23005b",
+                    "secondary-fixed-dim": "#d1bcff",
+                    "secondary-container": "#7000ff",
+                    "surface": "#111318",
+                    "surface-dim": "#111318",
+                    "primary": "#e1fdff",
+                    "tertiary-fixed-dim": "#ffb950",
+                    "tertiary": "#fff6ef",
+                    "on-primary-container": "#006a71",
+                    "tertiary-container": "#ffd49c",
+                    "on-secondary": "#3c0090",
+                    "primary-fixed": "#74f5ff",
+                    "primary-fixed-dim": "#00dbe7",
+                    "inverse-primary": "#00696f",
+                    "secondary": "#d1bcff",
+                    "outline-variant": "#3a494b",
+                    "surface-container-low": "#1a1c20",
+                    "surface-bright": "#37393e",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#1e2024",
+                    "on-primary-fixed-variant": "#004f54",
+                    "tertiary-fixed": "#ffddb3",
+                    "primary-container": "#00f2ff",
+                    "inverse-surface": "#e2e2e8",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#291800",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "surface-container-highest": "#333539",
+                    "inverse-on-surface": "#2f3035",
+                    "on-primary": "#00363a",
+                    "surface-container-high": "#282a2e",
+                    "outline": "#849495",
+                    "on-primary-fixed": "#002022",
+                    "surface-container-lowest": "#0c0e12",
+                    "on-surface": "#e2e2e8",
+                    "on-surface-variant": "#b9cacb",
+                    "secondary-fixed": "#e9ddff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "margin-sm": "16px",
+                    "gutter": "16px",
+                    "margin-md": "32px",
+                    "margin-lg": "48px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Space Grotesk"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "body-md": ["Geist"],
+                    "display-lg": ["Space Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "label-caps": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #111318;
+            overflow-x: hidden;
+            color: #e2e2e8;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .inner-glow {
+            box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1);
+        }
+        .liquid-hover:hover {
+            backdrop-filter: blur(30px) saturate(200%);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 219, 231, 0.3);
+            box-shadow: 0 0 20px rgba(0, 219, 231, 0.1);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .laser-focus:focus-within {
+            border-left: 2px solid #00dbe7;
+            background: rgba(0, 219, 231, 0.03);
+        }
+
+        .neo-border {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Global Background Animation -->
+
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="w-64 h-screen fixed left-0 top-0 bg-white/5 backdrop-blur-[30px] saturate-[180%] border-r border-white/20 flex flex-col py-margin-md z-[60]">
+<div class="px-margin-sm mb-margin-lg">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tighter">MISSION CONTROL</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70">OPERATOR 07-A</p>
+</div>
+<nav class="flex-1 space-y-unit">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center px-margin-sm py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center px-margin-sm py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">public</span> Global Map
+            </a>
+<a class="flex items-center px-margin-sm py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">warning</span> Risk Intel
+            </a>
+<a class="flex items-center px-margin-sm py-3 text-on-surface-variant opacity-70 hover:bg-white/10 hover:pl-6 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">insights</span> Predictions
+            </a>
+<a class="bg-secondary-container/30 text-primary border-l-4 border-primary flex items-center px-margin-sm py-3 transition-all duration-300 font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-3">science</span> Research
+            </a>
+</nav>
+<div class="px-margin-sm mt-auto space-y-4">
+<button class="w-full py-3 bg-primary text-on-primary font-label-caps text-label-caps tracking-widest active:brightness-125 transition-all shadow-[0_0_15px_rgba(0,219,231,0.3)]">
+                SYNC TELEMETRY
+            </button>
+<div class="pt-4 border-t border-white/10 space-y-2">
+<a class="flex items-center text-on-surface-variant opacity-70 hover:text-primary transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-2 text-[18px]">settings</span> Settings
+                </a>
+<a class="flex items-center text-on-surface-variant opacity-70 hover:text-primary transition-colors font-label-caps text-label-caps" href="#">
+<span class="material-symbols-outlined mr-2 text-[18px]">help</span> Support
+                </a>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority Source: JSON) -->
+<header class="flex justify-between items-center px-margin-lg w-full fixed top-0 z-50 bg-white/5 backdrop-blur-[20px] saturate-[180%] h-16 border-b border-white/20 shadow-[0_0_20px_rgba(0,219,231,0.1)] ml-64 overflow-hidden" style="width: calc(100% - 16rem);">
+<div class="flex items-center gap-margin-md">
+<span class="font-display-lg text-display-lg tracking-tighter text-primary scale-75 transform origin-left">ATLAS CLIMATE</span>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-white/5 border border-white/10 pl-10 pr-4 py-1 font-data-mono text-data-mono focus:ring-1 focus:ring-primary focus:outline-none transition-all w-64 rounded-none" placeholder="QUERY DATABASE..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-margin-sm">
+<button class="p-2 hover:bg-white/10 transition-all rounded-none text-on-surface-variant">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+<button class="p-2 hover:bg-white/10 transition-all rounded-none text-on-surface-variant relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-1.5 h-1.5 bg-primary rounded-full"></span>
+</button>
+<div class="h-8 w-8 rounded-none border border-white/20 overflow-hidden ml-2">
+<img class="w-full h-full object-cover" data-alt="A futuristic professional portrait of a data scientist with holographic interfaces reflected in their eyes, stylized with teal and violet laboratory lighting, captured in a sharp high-contrast cinematic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEWVnrSnSDCa3A2uVCdgsFz-yCZ0F-CuWAAtIPYz3YgWNUY6o8XLqZyxuNB_bqO8Plzj_hzbKCjYlZC2d3uNBlc5u5TVxIG3uIqM2lk3jFtAjUmRo1IVNzFZCVMMo08duK_yRXFE_-bdKq7PDt8lbv6rTvmpTce723RcfpMidhixHiKp__jE_n3QsjvhPv5pbomXz6qNgh9O1xGrMjxjiEJf4yBwGPEYwbIaKmRhbnw6C1188glK2EZErqsUDmJ0sRTFvpw_ExAg"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-margin-lg pb-margin-lg min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-margin-md">
+<div>
+<nav class="flex gap-2 text-on-surface-variant font-label-caps text-[10px] mb-2 uppercase tracking-widest">
+<span>Archive</span> <span class="opacity-30">/</span> <span class="text-primary">Reports</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tighter leading-none">REPORTS &amp; BRIEFINGS</h2>
+</div>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary font-label-caps text-label-caps hover:scale-[1.02] transition-transform active:scale-95 shadow-[0_0_20px_rgba(0,219,231,0.2)]" id="new-briefing-trigger">
+<span class="material-symbols-outlined">add</span> GENERATE NEW BRIEFING
+            </button>
+</div>
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- Library & Filters (Left Column) -->
+<section class="col-span-12 lg:col-span-4 space-y-gutter">
+<div class="glass-panel p-margin-sm inner-glow">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 border-b border-white/10 pb-2">FILTER LIBRARY</h3>
+<div class="space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/20 text-primary px-3 py-1 font-data-mono text-[10px] neo-border">PDF</span>
+<span class="bg-white/5 text-on-surface-variant px-3 py-1 font-data-mono text-[10px] border border-white/10 hover:border-primary/50 cursor-pointer transition-all">MARKDOWN</span>
+<span class="bg-white/5 text-on-surface-variant px-3 py-1 font-data-mono text-[10px] border border-white/10 hover:border-primary/50 cursor-pointer transition-all">CSV</span>
+</div>
+<div class="space-y-1">
+<label class="font-data-mono text-[11px] text-on-surface-variant/50">REGION</label>
+<select class="w-full bg-white/5 border-white/10 font-data-mono text-data-mono text-on-surface py-2 rounded-none focus:ring-primary">
+<option>ALL GLOBAL SECTORS</option>
+<option>ARCTIC NORTH</option>
+<option>PACIFIC RIM</option>
+<option>SUB-SAHARAN</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Library List -->
+<div class="space-y-2 max-h-[614px] overflow-y-auto no-scrollbar">
+<!-- Report Card 1 -->
+<div class="glass-panel p-4 liquid-hover group cursor-pointer border-l-2 border-l-transparent hover:border-l-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-[10px] text-primary bg-primary/10 px-2 py-0.5">FINAL_V2</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">more_vert</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-white group-hover:text-primary transition-colors">Q3 Arctic Melt Telemetry</h4>
+<div class="flex items-center gap-4 mt-3 font-data-mono text-[11px] text-on-surface-variant opacity-60">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> 12.OCT.2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">description</span> 4.2 MB</span>
+</div>
+</div>
+<!-- Report Card 2 -->
+<div class="glass-panel p-4 liquid-hover group cursor-pointer border-l-2 border-l-transparent hover:border-l-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-[10px] text-tertiary-fixed-dim bg-tertiary-fixed-dim/10 px-2 py-0.5">DRAFT</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">more_vert</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-white group-hover:text-primary transition-colors">Sub-Saharan Drought Risk Intel</h4>
+<div class="flex items-center gap-4 mt-3 font-data-mono text-[11px] text-on-surface-variant opacity-60">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> 09.OCT.2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">description</span> 1.8 MB</span>
+</div>
+</div>
+<!-- Report Card 3 -->
+<div class="glass-panel p-4 liquid-hover group cursor-pointer border-l-2 border-l-transparent hover:border-l-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-[10px] text-primary bg-primary/10 px-2 py-0.5">FINAL_V1</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">more_vert</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-white group-hover:text-primary transition-colors">Pacific Ocean Thermal Anomalies</h4>
+<div class="flex items-center gap-4 mt-3 font-data-mono text-[11px] text-on-surface-variant opacity-60">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> 04.OCT.2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">description</span> 12.5 MB</span>
+</div>
+</div>
+<!-- Report Card 4 -->
+<div class="glass-panel p-4 liquid-hover group cursor-pointer border-l-2 border-l-transparent hover:border-l-primary transition-all">
+<div class="flex justify-between items-start mb-2">
+<span class="font-data-mono text-[10px] text-primary bg-primary/10 px-2 py-0.5">ARCHIVED</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">more_vert</span>
+</div>
+<h4 class="font-headline-md text-[18px] text-white group-hover:text-primary transition-colors">Global 2023 Meta-Analysis</h4>
+<div class="flex items-center gap-4 mt-3 font-data-mono text-[11px] text-on-surface-variant opacity-60">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> 15.JAN.2024</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">description</span> 85.0 MB</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Preview Module (Right Column) -->
+<section class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="glass-panel overflow-hidden inner-glow relative">
+<!-- Top Ribbon -->
+<div class="bg-primary/10 px-margin-sm py-3 border-b border-primary/20 flex justify-between items-center">
+<span class="font-label-caps text-[10px] text-primary tracking-widest uppercase">Live Document Preview // ATLAS_V4_RPT</span>
+<div class="flex gap-4">
+<button class="flex items-center gap-1 font-data-mono text-[11px] text-primary hover:underline"><span class="material-symbols-outlined text-[16px]">download</span> EXPORT PDF</button>
+<button class="flex items-center gap-1 font-data-mono text-[11px] text-on-surface-variant hover:text-white"><span class="material-symbols-outlined text-[16px]">share</span> SHARE</button>
+</div>
+</div>
+<!-- Document Body -->
+<div class="p-margin-md bg-white/2 min-h-[700px] font-body-md text-on-surface/90">
+<!-- Report Header -->
+<div class="border-b-2 border-primary/30 pb-margin-sm mb-margin-md">
+<div class="flex justify-between">
+<h1 class="font-display-lg text-4xl text-white tracking-tight uppercase">Climate Briefing: Arctic-Sector 01</h1>
+<div class="text-right">
+<p class="font-data-mono text-[12px] text-primary">REPORT-ID: A-992384-T</p>
+<p class="font-data-mono text-[12px] text-on-surface-variant">TIMESTAMP: 2024.10.12 14:00 UTC</p>
+</div>
+</div>
+</div>
+<!-- Highlights Bento Section -->
+<div class="grid grid-cols-3 gap-4 mb-margin-md">
+<div class="col-span-2 glass-panel p-4 border-l-4 border-l-error">
+<p class="font-label-caps text-error text-[10px] mb-1">CRITICAL RISK HIGHLIGHT</p>
+<h5 class="font-headline-md text-xl mb-2">Abrupt Thermal Spike Detected</h5>
+<p class="text-sm opacity-80 leading-relaxed">Telemetry from buoy network Delta-7 indicates a +2.4°C anomaly relative to the 10-year rolling mean. Potential for accelerated surface melt in the Northwest Passage over the next 72-hour window.</p>
+</div>
+<div class="glass-panel p-4 flex flex-col justify-center items-center text-center neo-border">
+<span class="font-label-caps text-on-surface-variant text-[10px] mb-2">CONFIDENCE SCORE</span>
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-white/10" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175.9" stroke-dashoffset="17.5" stroke-width="4"></circle>
+</svg>
+<span class="font-data-mono text-lg text-primary">92%</span>
+</div>
+</div>
+</div>
+<!-- Region Visualization -->
+<div class="h-64 glass-panel mb-margin-md relative overflow-hidden neo-border">
+<div class="absolute inset-0 opacity-40">
+<img class="w-full h-full object-cover" data-location="Arctic Ocean" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRAVa7mXnQQzhMFG7XwO93TjbIPn32SaEbx8KjrD7j0xCo3ylimB1Tu1pH8owAXADbHi3nlgVQv1JAqLhvOAdQoKiG0tYtbMokeooc15hcGeqJJ4m_vJDL57COdnM0HVBgh-b90NdcDj4b5nwK_y9vkPzQmLK_pmIxoNtHhLA41tjCuG-chXAKdLlEKRJocXL1HSdds_WC2W6HTYPe6jnZ4FjyjDNyJX1D4mAFP2WPkFYLVghbmNVTPtrTUGMYwK7NfH8PMo-gVw"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#111318] to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<p class="font-label-caps text-[10px] text-primary">GEOSPATIAL FOCUS</p>
+<p class="font-headline-md text-xl">Sector 01: North Latitude Basin</p>
+</div>
+</div>
+<!-- Data Breakdown -->
+<div class="space-y-6">
+<h3 class="font-label-caps text-primary border-b border-white/10 pb-1">01. EXECUTIVE SUMMARY</h3>
+<p class="text-sm opacity-80 leading-relaxed">The current briefing synthesizes multispectral satellite imagery with localized sensor nodes. Observations confirm a persistent high-pressure cell stalling over the Chukchi Sea, exacerbating albedo reduction as surface ice transitions to liquid phase. Atmospheric moisture content has climbed 12% above seasonal norms, suggesting imminent storm surges.</p>
+<div class="grid grid-cols-2 gap-8 py-4">
+<div>
+<h4 class="font-data-mono text-[12px] text-white mb-2 underline">OBSERVED TRENDS</h4>
+<ul class="space-y-2 text-sm opacity-70">
+<li class="flex items-start gap-2"><span class="text-primary mt-1">▶</span> Permafrost degradation rate: +0.4%/mo</li>
+<li class="flex items-start gap-2"><span class="text-primary mt-1">▶</span> Sea level relative height: +12mm</li>
+<li class="flex items-start gap-2"><span class="text-primary mt-1">▶</span> Carbon sequestration flux: -2.1%</li>
+</ul>
+</div>
+<div>
+<h4 class="font-data-mono text-[12px] text-white mb-2 underline">MITIGATION STATUS</h4>
+<ul class="space-y-2 text-sm opacity-70">
+<li class="flex items-start gap-2"><span class="text-tertiary-fixed-dim mt-1">⚠</span> Local infrastructure warning issued</li>
+<li class="flex items-start gap-2"><span class="text-primary mt-1">▶</span> Sensor relay redundancy: 100%</li>
+<li class="flex items-start gap-2"><span class="text-primary mt-1">▶</span> Evacuation window: &gt; 48 hours</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Footer Sign-off -->
+<div class="mt-margin-lg pt-4 border-t border-white/10 flex justify-between items-center opacity-50">
+<p class="font-data-mono text-[10px]">GENERATED BY ATLAS A.I. CORE</p>
+<p class="font-data-mono text-[10px]">ENCRYPTION KEY: 0x88...F2A</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Modal: New Briefing Wizard (Hidden by default) -->
+<div class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-margin-md hidden opacity-0 transition-opacity duration-300" id="wizard-overlay">
+<div class="glass-panel w-full max-container-max max-w-4xl p-margin-md inner-glow relative">
+<button class="absolute top-4 right-4 text-on-surface-variant hover:text-white" id="wizard-close">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex gap-margin-lg">
+<!-- Sidebar Steps -->
+<div class="w-48 space-y-8 border-r border-white/10 pr-margin-sm">
+<div class="step-active text-primary font-label-caps">
+<span class="block text-[10px] opacity-50 mb-1">STEP 01</span>
+<span class="text-sm">REGION PARAMS</span>
+</div>
+<div class="opacity-30 text-on-surface-variant font-label-caps">
+<span class="block text-[10px] opacity-50 mb-1">STEP 02</span>
+<span class="text-sm">DATA SOURCES</span>
+</div>
+<div class="opacity-30 text-on-surface-variant font-label-caps">
+<span class="block text-[10px] opacity-50 mb-1">STEP 03</span>
+<span class="text-sm">FORMAT &amp; TAGS</span>
+</div>
+</div>
+<!-- Step Content -->
+<div class="flex-1">
+<h2 class="font-display-lg text-3xl mb-1 text-white">GENERATE NEW BRIEFING</h2>
+<p class="text-on-surface-variant mb-margin-md font-body-md">Configure geospatial parameters and intelligence priority.</p>
+<div class="grid grid-cols-2 gap-gutter mb-margin-md">
+<div class="space-y-2 laser-focus p-2 transition-all">
+<label class="font-label-caps text-[11px] text-primary">SELECT TARGET SECTOR</label>
+<select class="w-full bg-white/5 border border-white/20 rounded-none p-3 font-data-mono text-sm focus:ring-primary focus:border-primary">
+<option>ARCTIC_SECTOR_01</option>
+<option>ANTARCTIC_SECTOR_05</option>
+<option>ATLANTIC_GULF_STREAM</option>
+<option>AMAZON_BASIN_DELTA</option>
+</select>
+</div>
+<div class="space-y-2 laser-focus p-2 transition-all">
+<label class="font-label-caps text-[11px] text-primary">ANALYSIS DEPTH</label>
+<div class="flex gap-2 h-[46px]">
+<button class="flex-1 neo-border bg-primary/20 text-primary font-data-mono text-[10px]">STANDARD</button>
+<button class="flex-1 border border-white/10 text-on-surface-variant font-data-mono text-[10px]">DEEP SCAN</button>
+<button class="flex-1 border border-white/10 text-on-surface-variant font-data-mono text-[10px]">REAL-TIME</button>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<label class="font-label-caps text-[11px] text-on-surface-variant">INTELLIGENCE OVERLAY</label>
+<div class="grid grid-cols-3 gap-2">
+<div class="glass-panel p-3 border border-white/10 flex items-center gap-3 cursor-pointer hover:border-primary transition-colors">
+<input checked="" class="rounded-none bg-transparent border-primary text-primary focus:ring-0" type="checkbox"/>
+<span class="font-data-mono text-[11px]">THERMAL ANOMALIES</span>
+</div>
+<div class="glass-panel p-3 border border-white/10 flex items-center gap-3 cursor-pointer hover:border-primary transition-colors">
+<input class="rounded-none bg-transparent border-primary text-primary focus:ring-0" type="checkbox"/>
+<span class="font-data-mono text-[11px]">WATER SALINITY</span>
+</div>
+<div class="glass-panel p-3 border border-white/10 flex items-center gap-3 cursor-pointer hover:border-primary transition-colors">
+<input class="rounded-none bg-transparent border-primary text-primary focus:ring-0" type="checkbox"/>
+<span class="font-data-mono text-[11px]">ALBEDO RATIO</span>
+</div>
+</div>
+</div>
+<div class="mt-margin-lg flex justify-end gap-4">
+<button class="px-8 py-3 font-label-caps text-label-caps text-on-surface-variant hover:text-white transition-colors">CANCEL</button>
+<button class="px-8 py-3 bg-primary text-on-primary font-label-caps text-label-caps shadow-[0_0_20px_rgba(0,219,231,0.3)] hover:brightness-110">NEXT STEP</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Feedback (Toast-like) -->
+<div class="fixed bottom-margin-md right-margin-md glass-panel p-4 flex items-center gap-4 translate-y-20 opacity-0 transition-all duration-500 z-[200] border-l-4 border-l-primary" id="notification">
+<span class="material-symbols-outlined text-primary">sync</span>
+<div>
+<p class="font-label-caps text-[11px] text-white">REPORTS REFRESHED</p>
+<p class="font-data-mono text-[10px] text-on-surface-variant">DATABASE SYNC SUCCESSFUL (0.04ms)</p>
+</div>
+</div>
+<script>
+        // Modal Logic
+        const trigger = document.getElementById('new-briefing-trigger');
+        const overlay = document.getElementById('wizard-overlay');
+        const close = document.getElementById('wizard-close');
+
+        trigger.addEventListener('click', () => {
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+            }, 10);
+        });
+
+        close.addEventListener('click', () => {
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
+        });
+
+        // Atmospheric micro-interaction: Report list hover sound effect (visual)
+        const reportCards = document.querySelectorAll('.glass-panel.liquid-hover');
+        reportCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Future: Add oscillator sound effect
+            });
+        });
+
+        // Auto-refresh notification simulation
+        setTimeout(() => {
+            const notif = document.getElementById('notification');
+            notif.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                notif.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
+        }, 2000);
+
+        // Simple tab/state highlighting
+        const libraryTabs = document.querySelectorAll('.library-filter-tab');
+        libraryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                libraryTabs.forEach(t => t.classList.remove('bg-primary/20', 'text-primary'));
+                tab.classList.add('bg-primary/20', 'text-primary');
+            });
+        });
+    </script>
+</body></html>
