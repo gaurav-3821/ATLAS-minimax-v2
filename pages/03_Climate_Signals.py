@@ -9,6 +9,8 @@ from ui_ux.chart_factory import (
     create_ranked_bar_figure,
     create_seasonality_bar_figure,
     create_timeline_figure,
+    PINK,
+    GREEN,
 )
 from utils.data_loader import (
     REGION_BOUNDS,
@@ -187,7 +189,7 @@ def main() -> None:
                 title="Pressure trend",
                 value_column="value",
                 y_label="hPa",
-                color="#FF5C8A",
+                color=PINK,
             ),
             use_container_width=True,
         )
@@ -203,7 +205,7 @@ def main() -> None:
                 title="Wind trend",
                 value_column="value",
                 y_label="m/s",
-                color="#6EFF9A",
+                color=GREEN,
             ),
             use_container_width=True,
         )

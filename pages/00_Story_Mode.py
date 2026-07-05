@@ -56,7 +56,7 @@ def _render_visual(step: dict[str, object]) -> None:
             create_story_comparison(
                 aa["years"],
                 {"Global": aa["anomaly_c"]["Global"], "Arctic": aa["anomaly_c"]["Arctic"]},
-                {"Global": "#00E5FF", "Arctic": "#FF5C8A"},
+                {"Global": "#00dbe7", "Arctic": "#FF5C8A"},
                 "Global vs Arctic Warming",
             ),
             use_container_width=True,
@@ -77,7 +77,7 @@ def _render_visual(step: dict[str, object]) -> None:
         return
     if component == "scenario_projection_chart":
         fp = source["future_projection"]
-        scenario_colors = {"low_emissions": "#6EFF9A", "medium_emissions": "#FFD84D", "high_emissions": "#FF5C8A"}
+        scenario_colors = {"low_emissions": "#6EFF9A", "medium_emissions": "#ffb950", "high_emissions": "#FF5C8A"}
         st.plotly_chart(
             create_story_scenarios(fp["scenarios"], scenario_colors, "Future Warming Scenarios"),
             use_container_width=True,

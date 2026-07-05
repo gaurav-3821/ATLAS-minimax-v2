@@ -7,12 +7,12 @@ import plotly.graph_objects as go
 
 FONT_FAMILY = "'Geist', sans-serif"
 PAPER_BG = "rgba(0,0,0,0)"
-PLOT_BG = "rgba(17,24,39,0.86)"
+PLOT_BG = "rgba(30,32,36,0.85)"
 GRID_COLOR = "rgba(255,255,255,0.08)"
-TEXT_COLOR = "#FFFFFF"
-MUTED_COLOR = "#9CA3AF"
-CYAN = "#00E5FF"
-YELLOW = "#FFD84D"
+TEXT_COLOR = "#e2e2e8"
+MUTED_COLOR = "#b9cacb"
+CYAN = "#00dbe7"
+YELLOW = "#ffb950"
 PINK = "#FF5C8A"
 GREEN = "#6EFF9A"
 SLATE = "#94A3B8"
@@ -23,8 +23,8 @@ GEO_COUNTRY = "rgba(255,255,255,0.22)"
 GEO_LAND = "rgba(32,42,65,0.62)"
 GEO_OCEAN = "rgba(7,11,22,0.88)"
 GEO_GRID = "rgba(255,255,255,0.10)"
-GLOBE_BASE_DARK = "#0F172A"
-GLOBE_BASE_LIGHT = "#23314F"
+GLOBE_BASE_DARK = "#0c0e12"
+GLOBE_BASE_LIGHT = "#cbd5e1"
 
 
 def set_chart_theme(dark: bool = True) -> None:
@@ -32,19 +32,19 @@ def set_chart_theme(dark: bool = True) -> None:
     global GEO_COASTLINE, GEO_COUNTRY, GEO_LAND, GEO_OCEAN, GEO_GRID
     global GLOBE_BASE_DARK, GLOBE_BASE_LIGHT
     if dark:
-        PLOT_BG = "rgba(17,24,39,0.86)"
+        PLOT_BG = "rgba(30,32,36,0.85)"
         GRID_COLOR = "rgba(255,255,255,0.08)"
-        TEXT_COLOR = "#FFFFFF"
-        MUTED_COLOR = "#9CA3AF"
+        TEXT_COLOR = "#e2e2e8"
+        MUTED_COLOR = "#b9cacb"
         GEO_COASTLINE = "rgba(255,255,255,0.55)"
         GEO_COUNTRY = "rgba(255,255,255,0.22)"
         GEO_LAND = "rgba(32,42,65,0.62)"
         GEO_OCEAN = "rgba(7,11,22,0.88)"
         GEO_GRID = "rgba(255,255,255,0.10)"
-        GLOBE_BASE_DARK = "#0F172A"
-        GLOBE_BASE_LIGHT = "#23314F"
+        GLOBE_BASE_DARK = "#0c0e12"
+        GLOBE_BASE_LIGHT = "#cbd5e1"
     else:
-        PLOT_BG = "rgba(240,244,248,0.95)"
+        PLOT_BG = "rgba(241,245,249,0.95)"
         GRID_COLOR = "rgba(0,0,0,0.08)"
         TEXT_COLOR = "#0f172a"
         MUTED_COLOR = "#64748b"
@@ -53,8 +53,8 @@ def set_chart_theme(dark: bool = True) -> None:
         GEO_LAND = "rgba(210,225,235,0.85)"
         GEO_OCEAN = "rgba(190,212,230,0.55)"
         GEO_GRID = "rgba(0,0,0,0.08)"
-        GLOBE_BASE_DARK = "#D0D8E0"
-        GLOBE_BASE_LIGHT = "#E8EEF4"
+        GLOBE_BASE_DARK = "#cbd5e1"
+        GLOBE_BASE_LIGHT = "#cbd5e1"
 
 
 def _downsample_grid(

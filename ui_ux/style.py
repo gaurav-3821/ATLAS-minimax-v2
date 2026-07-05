@@ -36,7 +36,8 @@ ATLAS_CSS = """
         --atlas-surface-container-lowest: #0c0e12;
         --atlas-surface-bright: #37393e;
         --atlas-surface-variant: #333539;
-        --atlas-primary: #00dbe7;
+        --atlas-primary: #e1fdff;
+        --atlas-primary-fixed-dim: #00dbe7;
         --atlas-primary-container: #00f2ff;
         --atlas-primary-fixed: #74f5ff;
         --atlas-on-primary: #00363a;
@@ -111,10 +112,14 @@ ATLAS_CSS = """
         66% { background-position: -1% -2%; }
         100% { background-position: 0% 0%; }
     }
-
     @keyframes atlasPulse {
         0%, 100% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.8; transform: scale(0.98); }
+    }
+
+    @keyframes atlasPulseDot {
+        0%, 100% { opacity: 0.4; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.2); }
     }
 
     @keyframes atlasScan {
@@ -140,7 +145,17 @@ ATLAS_CSS = """
 
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    ::-webkit-scrollbar-thumb { background: var(--atlas-primary); border-radius: var(--atlas-radius-full); }
+    ::-webkit-scrollbar-thumb { background: var(--atlas-primary-fixed-dim); border-radius: var(--atlas-radius-full); }
+
+    .atlas-status-dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--atlas-primary-fixed-dim);
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px var(--atlas-primary-fixed-dim);
+        animation: atlasPulseDot 2s infinite ease-in-out;
+    }
 
     #MainMenu { display: none; }
     footer { visibility: hidden; }
@@ -202,10 +217,27 @@ ATLAS_CSS = """
         color: var(--atlas-text-secondary) !important;
         text-decoration: none !important;
         transition: color var(--atlas-transition);
+        font-family: var(--atlas-font-mono) !important;
+        font-size: 0.72rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
     }
 
     [data-testid="stSidebar"] a:hover {
-        color: var(--atlas-text) !important;
+        color: var(--atlas-primary-fixed-dim) !important;
+    }
+
+    [data-testid="stSidebar"] div[data-testid="stPageLink"] a {
+        padding: 0.5rem 0.75rem !important;
+        border-radius: var(--atlas-radius-sm) !important;
+        border: 1px solid transparent !important;
+        transition: padding var(--atlas-transition), background var(--atlas-transition), border var(--atlas-transition), color var(--atlas-transition) !important;
+    }
+
+    [data-testid="stSidebar"] div[data-testid="stPageLink"] a:hover {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid var(--atlas-glass-border) !important;
+        padding-left: 1.25rem !important;
     }
 
     [data-testid="stAppViewContainer"] > .main {
@@ -296,6 +328,39 @@ ATLAS_CSS = """
         color: var(--atlas-muted);
         font-size: 0.85rem;
         line-height: 1.4;
+    }
+
+    .atlas-topbar-card-new {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-bottom: 0.5rem;
+    }
+
+    .atlas-topbar-kicker-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+    }
+
+    .atlas-topbar-kicker {
+        font-family: var(--atlas-font-mono) !important;
+        font-size: 0.72rem !important;
+        color: var(--atlas-primary-fixed-dim) !important;
+        text-transform: uppercase;
+        font-weight: 700 !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    .atlas-topbar-title {
+        font-family: var(--atlas-font-heading) !important;
+        font-size: 2.2rem !important;
+        line-height: 1.1 !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        letter-spacing: -0.02em !important;
+        color: var(--atlas-primary) !important;
     }
 
     .atlas-chip-row {
@@ -443,16 +508,18 @@ ATLAS_CSS = """
     }
 
     .atlas-active-page {
-        padding: 0.45rem 0.65rem;
+        padding: 0.6rem 0.85rem;
         border: 1px solid rgba(0,219,231,0.25);
+        border-left: 4px solid var(--atlas-primary-fixed-dim) !important;
         border-radius: var(--atlas-radius-sm);
         background: linear-gradient(135deg, rgba(0,219,231,0.10) 0%, rgba(112,0,255,0.08) 100%);
         font-family: var(--atlas-font-mono);
         font-size: 0.72rem;
-        color: var(--atlas-primary);
-        margin-bottom: 0.5rem;
+        color: var(--atlas-primary-fixed-dim) !important;
+        margin-bottom: 0.75rem;
         backdrop-filter: blur(14px) saturate(150%);
         -webkit-backdrop-filter: blur(14px) saturate(150%);
+        box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1);
     }
 
     .atlas-hero {
@@ -744,10 +811,17 @@ ATLAS_CSS = """
         transition: border-color var(--atlas-transition-fast), box-shadow var(--atlas-transition-fast);
     }
 
+    .stTextInput input {
+        font-family: var(--atlas-font-mono) !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 0.05em !important;
+        text-transform: uppercase !important;
+    }
+
     .stTextInput input:focus,
     .stNumberInput input:focus,
     .stTextArea textarea:focus {
-        border-color: var(--atlas-primary) !important;
+        border-color: var(--atlas-primary-fixed-dim) !important;
         box-shadow: 0 0 15px rgba(0,219,231,0.3), inset 0 2px 4px rgba(0,0,0,0.2), 0 0 0 3px rgba(0,219,231,0.15) !important;
     }
 
@@ -876,6 +950,7 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         --atlas-surface-bright: #ffffff;
         --atlas-surface-variant: #e2e8f0;
         --atlas-primary: #0891b2;
+        --atlas-primary-fixed-dim: #0891b2;
         --atlas-primary-container: #22d3ee;
         --atlas-primary-fixed: #cffafe;
         --atlas-on-primary: #ffffff;
@@ -1195,25 +1270,29 @@ def render_sidebar_navigation(active_page: str) -> None:
 
 
 def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Search climate signals, regions, or datasets") -> str:
-    left, center = st.columns((1.15, 1.0))
+    left, right = st.columns((1.3, 0.7))
     with left:
         st.markdown(
             f"""
-            <div class="atlas-topbar-card" role="region" aria-label="Active view: {_escape(active_page)}">
-                <div class="atlas-kicker">Active View</div>
-                <h2>{_escape(active_page)}</h2>
-                <p>{_escape(subtitle)}</p>
+            <div class="atlas-topbar-card-new" role="region" aria-label="Active view: {_escape(active_page)}">
+                <div class="atlas-topbar-kicker-row">
+                    <span class="atlas-status-dot"></span>
+                    <span class="atlas-topbar-kicker">ACTIVE VIEW // {_escape(subtitle)}</span>
+                </div>
+                <h1 class="atlas-topbar-title">{_escape(active_page).upper()}</h1>
             </div>
             """,
             unsafe_allow_html=True,
         )
-    with center:
+    with right:
+        st.markdown('<div style="margin-top: 24px;">', unsafe_allow_html=True)
         search_value = st.text_input(
             "Global Search",
             placeholder=search_placeholder,
             key=f"atlas_topbar_search_{active_page.lower().replace(' ', '_')}",
             label_visibility="collapsed",
         )
+        st.markdown('</div>', unsafe_allow_html=True)
     return search_value
 
 
