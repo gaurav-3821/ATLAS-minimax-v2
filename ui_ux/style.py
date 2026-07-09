@@ -228,16 +228,16 @@ ATLAS_CSS = """
 
     [data-testid="stSidebar"] a,
     [data-testid="stSidebar"] div[data-testid="stPageLink"] a {
-        padding: 0.5rem 0.75rem !important;
-        border-radius: var(--atlas-radius-sm) !important;
-        border: 1px solid transparent !important;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--atlas-radius-md);
+        border: 1px solid transparent;
         transition: padding var(--atlas-transition), background var(--atlas-transition), border var(--atlas-transition), color var(--atlas-transition) !important;
     }
 
     [data-testid="stSidebar"] div[data-testid="stPageLink"] a:hover {
         background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid var(--atlas-glass-border) !important;
-        padding-left: 1.25rem !important;
+        border: 1px solid var(--atlas-glass-border);
+        padding-left: 1.25rem;
     }
 
     [data-testid="stAppViewContainer"] > .main {
@@ -448,7 +448,7 @@ ATLAS_CSS = """
         margin-bottom: 0.5rem;
     }
 
-    .atlas-stitch-nav-item {
+    [data-testid="stSidebar"] .atlas-stitch-nav-item {
         display: flex;
         align-items: center;
         gap: 0.75rem;
@@ -464,25 +464,25 @@ ATLAS_CSS = """
         border: 1px solid transparent;
     }
 
-    .atlas-stitch-nav-item:hover {
+    [data-testid="stSidebar"] .atlas-stitch-nav-item:hover {
         background: rgba(255,255,255,0.06);
         color: var(--atlas-text);
         border-color: var(--atlas-glass-border);
     }
 
-    .atlas-stitch-nav-item.active {
+    [data-testid="stSidebar"] .atlas-stitch-nav-item.active {
         background: rgba(0,219,231,0.10);
         color: var(--atlas-primary);
         border-color: rgba(0,219,231,0.20);
         font-weight: 600;
     }
 
-    .atlas-stitch-nav-item .material-symbols-outlined {
+    [data-testid="stSidebar"] .atlas-stitch-nav-item .material-symbols-outlined {
         font-size: 1.15rem;
         color: var(--atlas-primary-fixed-dim);
     }
 
-    .atlas-stitch-nav-item.active .material-symbols-outlined {
+    [data-testid="stSidebar"] .atlas-stitch-nav-item.active .material-symbols-outlined {
         color: var(--atlas-primary);
     }
 
@@ -1216,11 +1216,11 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
     }
 
     html[data-theme="light"] [data-testid="stSidebar"] a {
-        color: #475569 !important;
+        color: #475569;
     }
 
     html[data-theme="light"] [data-testid="stSidebar"] a:hover {
-        color: #0f172a !important;
+        color: #0f172a;
     }
 
     html[data-theme="light"] .atlas-side-section {
@@ -1319,22 +1319,22 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         border-color: rgba(0,0,0,0.08) !important;
     }
 
-    html[data-theme="light"] .atlas-stitch-nav-item {
+    html[data-theme="light"] [data-testid="stSidebar"] .atlas-stitch-nav-item {
         color: #334155;
     }
 
-    html[data-theme="light"] .atlas-stitch-nav-item:hover {
+    html[data-theme="light"] [data-testid="stSidebar"] .atlas-stitch-nav-item:hover {
         background: rgba(0,0,0,0.04);
         color: #0f172a;
     }
 
-    html[data-theme="light"] .atlas-stitch-nav-item.active {
+    html[data-theme="light"] [data-testid="stSidebar"] .atlas-stitch-nav-item.active {
         background: rgba(8,145,178,0.08);
         color: #0891b2;
         border-color: rgba(8,145,178,0.20);
     }
 
-    html[data-theme="light"] .atlas-stitch-nav-item .material-symbols-outlined {
+    html[data-theme="light"] [data-testid="stSidebar"] .atlas-stitch-nav-item .material-symbols-outlined {
         color: #0891b2;
     }
 
