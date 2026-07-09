@@ -3,6 +3,7 @@ from __future__ import annotations
 import html
 
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from utils.ai_copilot import generate_prediction_brief, get_openrouter_api_key, validate_openrouter_key
@@ -264,16 +265,38 @@ def main() -> None:
         + (" The AI analysis above contextualizes these numbers against recent momentum and seasonal patterns." if has_ai else ""),
         eyebrow="Forecast",
     )
-    st.plotly_chart(
-        create_prediction_figure(
-            observed_df=observed_df,
-            forecast_df=forecast_df,
-            title=f"{region_name} {variable_label} outlook{forecast_tag}",
-            value_column="value",
-            y_label=unit_label,
-        ),
-        use_container_width=True,
+    fig_pred = create_prediction_figure(
+        observed_df=observed_df,
+        forecast_df=forecast_df,
+        title=f"{region_name} {variable_label} outlook{forecast_tag}",
+        value_column="value",
+        y_label=unit_label,
     )
+    if has_ai:
+        fc_last = forecast_df.iloc[-1]
+        fc_first = forecast_df.iloc[0]
+        fig_pred.add_annotation(
+            x=fc_last["time"], y=fc_last["forecast"],
+            text=f"End: {float(fc_last['forecast']):.2f} {unit_label}",
+            showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=1.5, arrowcolor="var(--atlas-primary-fixed-dim)",
+            font=dict(size=10, color="var(--atlas-primary-fixed-dim)"),
+            bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+            ax=40, ay=-30,
+        )
+        fig_pred.add_annotation(
+            x=fc_first["time"], y=float(fc_first["forecast"]),
+            text=f"Start: {float(fc_first['forecast']):.2f}",
+            showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=1.5, arrowcolor="var(--atlas-muted)",
+            font=dict(size=10, color="var(--atlas-muted)"),
+            bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+            ax=-40, ay=30,
+        )
+        fig_pred.add_hline(
+            y=float(fc_last["forecast"]),
+            line_dash="dot", line_color="var(--atlas-primary-fixed-dim)", line_width=1,
+            annotation_text=f"{float(fc_last['forecast']):.2f}", annotation_position="right",
+        )
+    st.plotly_chart(fig_pred, use_container_width=True)
 
     top_left, top_right = st.columns(2)
     with top_left:
@@ -282,29 +305,59 @@ def main() -> None:
             f"Bars show each forecast step change. The strongest modeled step is {float(result['peak_delta']):+.2f} {unit_label}.",
             eyebrow="Momentum",
         )
-        st.plotly_chart(
-            create_forecast_delta_figure(
-                forecast_df,
-                title=f"Forecast momentum | peak {float(result['peak_delta']):+.2f} {unit_label}",
-                value_label=f"{variable_label} step change ({unit_label})",
-            ),
-            use_container_width=True,
+        fig_delta = create_forecast_delta_figure(
+            forecast_df,
+            title=f"Forecast momentum | peak {float(result['peak_delta']):+.2f} {unit_label}",
+            value_label=f"{variable_label} step change ({unit_label})",
         )
+        if has_ai:
+            frame = forecast_df.copy()
+            val_col = "temperature_c" if "temperature_c" in frame.columns else "forecast"
+            frame["delta"] = frame[val_col].diff().fillna(0.0)
+            peak_idx = int(frame["delta"].abs().idxmax()) if not frame.empty else -1
+            if peak_idx >= 0:
+                peak_time = frame.iloc[peak_idx]["time"]
+                peak_delta_val = float(frame.iloc[peak_idx]["delta"])
+                fig_delta.add_annotation(
+                    x=peak_time, y=peak_delta_val,
+                    text=f"Peak: {peak_delta_val:+.2f}",
+                    showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=1.5, arrowcolor="var(--atlas-primary-fixed-dim)",
+                    font=dict(size=10, color="var(--atlas-primary-fixed-dim)"),
+                    bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+                    ax=0, ay=-40,
+                )
+        st.plotly_chart(fig_delta, use_container_width=True)
     with top_right:
         render_section_intro(
             "Seasonal pattern",
             f"Monthly averages explain the seasonal signal carried into the forecast. The observed high is around {result['peak_month']}.",
             eyebrow="Seasonality",
         )
-        st.plotly_chart(
-            create_seasonality_bar_figure(
-                observed_df,
-                title=f"Observed seasonal pattern | high {result['peak_month']}",
-                value_column="value",
-                y_label=unit_label,
-            ),
-            use_container_width=True,
+        fig_season = create_seasonality_bar_figure(
+            observed_df,
+            title=f"Observed seasonal pattern | high {result['peak_month']}",
+            value_column="value",
+            y_label=unit_label,
         )
+        if has_ai and result["peak_month"] != "n/a":
+            monthly_vals = observed_df.copy()
+            monthly_vals["time"] = pd.to_datetime(monthly_vals["time"])
+            monthly_vals["month_label"] = monthly_vals["time"].dt.strftime("%b")
+            monthly_avg = monthly_vals.groupby("month_label")["value"].mean()
+            peak_val = float(monthly_avg.max())
+            fig_season.add_annotation(
+                x=result["peak_month"], y=peak_val,
+                text=f"Peak: {peak_val:.2f}",
+                showarrow=True, arrowhead=2, arrowsize=1, arrowwidth=1.5, arrowcolor="var(--atlas-primary-fixed-dim)",
+                font=dict(size=10, color="var(--atlas-primary-fixed-dim)"),
+                bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+                ax=0, ay=-40,
+            )
+            fig_season.add_hline(
+                y=peak_val, line_dash="dot", line_color="var(--atlas-primary-fixed-dim)", line_width=1,
+                annotation_text=f"high {peak_val:.2f}", annotation_position="left",
+            )
+        st.plotly_chart(fig_season, use_container_width=True)
 
     lower_left, lower_right = st.columns((1.1, 0.9))
     with lower_left:
@@ -313,15 +366,34 @@ def main() -> None:
             f"Recent bars show the observed pre-forecast move of {float(result['recent_change']):+.2f} {unit_label}.",
             eyebrow="Observed",
         )
-        st.plotly_chart(
-            create_anomaly_bar_figure(
-                observed_df.tail(30),
-                title=f"Recent observed values | {float(result['recent_change']):+.2f} {unit_label}",
-                value_column="value",
-                y_label=unit_label,
-            ),
-            use_container_width=True,
+        fig_recent = create_anomaly_bar_figure(
+            observed_df.tail(30),
+            title=f"Recent observed values | {float(result['recent_change']):+.2f} {unit_label}",
+            value_column="value",
+            y_label=unit_label,
         )
+        if has_ai:
+            recent_tail = observed_df.tail(30)
+            first_val = float(recent_tail["value"].iloc[0])
+            last_val = float(recent_tail["value"].iloc[-1])
+            mid_idx = len(recent_tail) // 2
+            fig_recent.add_annotation(
+                x=recent_tail.iloc[0]["time"], y=first_val,
+                text=f"Start: {first_val:.2f}",
+                showarrow=True, arrowhead=2, arrowsize=1, arrowcolor="var(--atlas-muted)",
+                font=dict(size=9, color="var(--atlas-muted)"),
+                bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+                ax=-30, ay=20,
+            )
+            fig_recent.add_annotation(
+                x=recent_tail.iloc[-1]["time"], y=last_val,
+                text=f"End: {last_val:.2f}",
+                showarrow=True, arrowhead=2, arrowsize=1, arrowcolor="var(--atlas-primary-fixed-dim)",
+                font=dict(size=9, color="var(--atlas-primary-fixed-dim)"),
+                bgcolor="rgba(0,0,0,0.6)", bordercolor="var(--atlas-glass-border)", borderwidth=1,
+                ax=30, ay=-20,
+            )
+        st.plotly_chart(fig_recent, use_container_width=True)
         render_section_intro(
             "Natural-language query",
             "The parser maps plain language onto the available historical variables and regions so teams can move faster.",
