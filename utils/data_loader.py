@@ -23,10 +23,10 @@ SESSION_NAME_KEY = "atlas_uploaded_name"
 SESSION_DATASET_KEY = "atlas_dataset_choice"
 
 DATASET_CHOICES = {
-    "ATLAS Demo (ERA5-style)": "Synthetic monthly reanalysis-like dataset for reliable demos.",
-    "ERA5 Monthly Reanalysis": "Use uploaded or demo data while presenting the workflow as ERA5-compatible.",
-    "CMIP6 Climate Model": "Use uploaded or demo data while presenting the workflow as CMIP6-compatible.",
-    "CESM Simulation Output": "Use uploaded or demo data while presenting the workflow as CESM-compatible.",
+    "ATLAS Demo Support Fields": "Bundled synthetic precipitation, pressure, wind, and fallback temperature fields.",
+    "Uploaded NetCDF": "Use an uploaded climate NetCDF file when available.",
+    "ERA5-compatible Upload": "Use an uploaded ERA5-style NetCDF file without implying bundled ERA5 data.",
+    "CMIP6-compatible Upload": "Use an uploaded CMIP6-style NetCDF file without implying bundled CMIP6 data.",
 }
 
 REGION_BOUNDS: dict[str, dict[str, tuple[float, float] | None]] = {
@@ -222,7 +222,11 @@ def register_dataset_choice(choice: str) -> None:
 
 
 def get_dataset_choice() -> str:
-    return st.session_state.get(SESSION_DATASET_KEY, get_dataset_choices()[0])
+    selected = st.session_state.get(SESSION_DATASET_KEY, get_dataset_choices()[0])
+    if selected not in DATASET_CHOICES:
+        selected = get_dataset_choices()[0]
+        st.session_state[SESSION_DATASET_KEY] = selected
+    return selected
 
 
 def get_active_dataset() -> tuple[xr.Dataset, str]:
@@ -259,6 +263,21 @@ def format_variable_label(data_array: xr.DataArray, variable_name: str) -> str:
 
 def format_variable_units(data_array: xr.DataArray) -> str:
     return str(data_array.attrs.get("units", ""))
+
+
+def is_anomaly_array(data_array: xr.DataArray) -> bool:
+    text = " ".join(
+        str(data_array.attrs.get(name, ""))
+        for name in ("long_name", "standard_name", "units", "description", "source")
+    )
+    return "anomaly" in text.lower()
+
+
+def format_analysis_label(data_array: xr.DataArray, variable_name: str, anomaly_mode: bool = False) -> str:
+    label = format_variable_label(data_array, variable_name)
+    if (anomaly_mode or is_anomaly_array(data_array)) and "anomaly" not in label.lower():
+        return f"{label} anomaly"
+    return label
 
 
 def to_display_array(data_array: xr.DataArray, variable_name: str) -> xr.DataArray:
@@ -322,7 +341,7 @@ def prepare_map_slice(
     if time_axis is None:
         raise ValueError("Selected variable does not have a time axis.")
     map_slice = _data_array.sel({time_axis: selected_time}, method="nearest")
-    if anomaly_mode:
+    if anomaly_mode and not is_anomaly_array(_data_array):
         map_slice = map_slice - _data_array.mean(dim=time_axis)
     return subset_region(map_slice, axes, region_name)
 
@@ -341,7 +360,7 @@ def nearest_point_series(
         raise ValueError("The variable must include latitude, longitude, and time.")
 
     series = _data_array.sel({lat_axis: selected_lat, lon_axis: selected_lon}, method="nearest")
-    if anomaly_mode:
+    if anomaly_mode and not is_anomaly_array(_data_array):
         series = series - series.mean(dim=time_axis)
     return series
 
@@ -371,7 +390,7 @@ def annual_mean_series(
         raise ValueError("Selected variable does not have a time axis.")
 
     annual = _data_array.groupby(f"{time_axis}.year").mean(dim=time_axis)
-    if anomaly_mode:
+    if anomaly_mode and not is_anomaly_array(_data_array):
         annual = annual - annual.mean(dim="year")
     return subset_region(annual, axes, region_name)
 
@@ -390,7 +409,7 @@ def spatial_mean_series(
 
     region_view = subset_region(_data_array, axes, region_name)
     series = region_view.mean(dim=[lat_axis, lon_axis])
-    if anomaly_mode:
+    if anomaly_mode and not is_anomaly_array(_data_array):
         series = series - series.mean(dim=time_axis)
     return series
 
