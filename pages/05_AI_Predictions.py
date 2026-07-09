@@ -74,36 +74,75 @@ def _forecast_results(observed_df: pd.DataFrame, forecast_df: pd.DataFrame, hori
     }
 
 
-def _render_copilot_card(title: str, brief: str, result: dict[str, object], variable_label: str, unit_label: str) -> None:
+def _render_ai_narrative(title: str, brief: str, result: dict[str, object], variable_label: str, unit_label: str) -> None:
+    """Render the AI copilot brief as a flowing narrative section with inline key metrics."""
+    direction = str(result.get("direction", "flat"))
+    projected = float(result.get("projected_change", 0.0))
+    peak = float(result.get("peak_delta", 0.0))
+    peak_month = str(result.get("peak_month", "n/a"))
+    horizon = int(result.get("horizon", 24))
+    latest_fc = float(result.get("latest_forecast", 0.0))
+    conf_width = float(result.get("confidence_width", 0.0))
+    recent = float(result.get("recent_change", 0.0))
+
     chips = [
-        f"{result['direction']} {float(result['projected_change']):+.2f}",
-        f"peak step {float(result['peak_delta']):+.2f}",
-        f"{result['peak_month']} seasonal high",
+        f"{direction} {projected:+.2f}",
+        f"peak step {peak:+.2f}",
+        f"{peak_month} seasonal high",
     ]
-    chip_html = "".join(f"<span class='atlas-chip cyan'>{html.escape(chip)}</span>" for chip in chips)
-    result_lines = [
-        f"Line chart: {variable_label} is {result['direction']} by {float(result['projected_change']):+.2f} {unit_label} over {int(result['horizon'])} months.",
-        f"Momentum bars: the strongest modeled step is {float(result['peak_delta']):+.2f} {unit_label}.",
-        f"Recent bars: the observed pre-forecast move is {float(result['recent_change']):+.2f} {unit_label}.",
-    ]
-    live_lines = [
-        line for line in _clean_brief_lines(brief)
-        if 40 <= len(line) <= 220 and not line.endswith("-") and "unavailable" not in line.lower()
-    ]
-    if brief and live_lines:
-        result_lines.append(f"Live note: {live_lines[0]}")
-    items_html = "".join(f"<li>{html.escape(line)}</li>" for line in result_lines)
+    if conf_width > 0.0:
+        chips.append(f"band \u00b1{conf_width:.2f}")
+    chip_html = "".join(f"<span class='atlas-chip cyan'>{html.escape(c)}</span>" for c in chips)
+
+    lines = _clean_brief_lines(brief)
+    paragraphs = []
+    for line in lines:
+        if line and "unavailable" not in line.lower():
+            paragraphs.append(
+                f'<p style="font-family: var(--atlas-font-body); font-size: 0.88rem; '
+                f'color: var(--atlas-text-secondary); line-height: 1.75; margin: 0 0 0.5rem 0;">'
+                f'{html.escape(line)}</p>'
+            )
+    narrative_html = "\n".join(paragraphs) if paragraphs else ""
+
+    trend_color = "var(--atlas-error)" if projected > 0 else "var(--atlas-primary-fixed-dim)"
+    recent_color = "var(--atlas-error)" if recent > 0 else "var(--atlas-primary-fixed-dim)"
+
     st.markdown(
         f"""
-        <article class="atlas-feature-card atlas-copilot-card" tabindex="0" role="article" aria-label="{html.escape(title)}">
-            <div class="atlas-chip-row">{chip_html}</div>
-            <h4>{html.escape(title)}</h4>
-            <p class="atlas-copilot-lede">
-                {html.escape(variable_label)} forecast ends at {float(result['latest_forecast']):.2f} {html.escape(unit_label)}
-                after {int(result['horizon'])} months, with a {float(result['confidence_width']):.2f} band width.
-            </p>
-            <ul class="atlas-copilot-list">{items_html}</ul>
-        </article>
+        <div class="glass-panel" style="padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; border-top: 2px solid var(--atlas-primary-fixed-dim);">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span class="material-symbols-outlined" style="color: var(--atlas-primary-fixed-dim); font-size: 1.25rem;">auto_awesome</span>
+                    <span style="font-family: var(--atlas-font-mono); font-size: 0.6rem; color: var(--atlas-primary-fixed-dim); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700;">{html.escape(title)}</span>
+                </div>
+                <span style="font-family: var(--atlas-font-mono); font-size: 0.55rem; color: var(--atlas-muted); letter-spacing: 0.08em;">{html.escape(unit_label)}</span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap;">{chip_html}</div>
+            {narrative_html}
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--atlas-glass-border);">
+                <div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.55rem; color: var(--atlas-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem;">Forecast end</div>
+                    <div style="font-family: var(--atlas-font-heading); font-size: 1.2rem; font-weight: 700; color: var(--atlas-text);">{latest_fc:.2f}</div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.6rem; color: var(--atlas-muted);">{html.escape(unit_label)}</div>
+                </div>
+                <div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.55rem; color: var(--atlas-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem;">Projected</div>
+                    <div style="font-family: var(--atlas-font-heading); font-size: 1.2rem; font-weight: 700; color: {trend_color};">{projected:+.2f}</div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.6rem; color: var(--atlas-muted);">{direction} over {horizon}mo</div>
+                </div>
+                <div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.55rem; color: var(--atlas-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem;">Recent shift</div>
+                    <div style="font-family: var(--atlas-font-heading); font-size: 1.2rem; font-weight: 700; color: {recent_color};">{recent:+.2f}</div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.6rem; color: var(--atlas-muted);">pre-forecast 30mo</div>
+                </div>
+                <div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.55rem; color: var(--atlas-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem;">Confidence band</div>
+                    <div style="font-family: var(--atlas-font-heading); font-size: 1.2rem; font-weight: 700; color: var(--atlas-primary-fixed-dim);">{conf_width:.2f}</div>
+                    <div style="font-family: var(--atlas-font-mono); font-size: 0.6rem; color: var(--atlas-muted);">width at horizon</div>
+                </div>
+            </div>
+        </div>
         """,
         unsafe_allow_html=True,
     )
@@ -169,6 +208,7 @@ def main() -> None:
             "Temperature uses NASA GISTEMP anomaly data directly. The anomaly toggle will not re-center it a second time."
         )
 
+    has_ai = False
     if generate_live_brief:
         with st.spinner("Generating AI climate brief..."):
             try:
@@ -187,32 +227,48 @@ def main() -> None:
                     forecast_df,
                     result_context,
                 )
+                st.session_state["ai_brief"] = ai_brief
+                st.session_state["ai_generated"] = True
             except Exception as exc:
-                ai_brief = f"AI briefing unavailable: {exc}"
-        _render_copilot_card("ATLAS Copilot", ai_brief, result, variable_label, unit_label)
-    else:
-        _render_copilot_card("ATLAS Copilot", "", result, variable_label, unit_label)
+                st.session_state["ai_brief"] = f"AI briefing unavailable: {exc}"
+                st.session_state["ai_generated"] = False
 
-    metric_cols = st.columns(4)
-    with metric_cols[0]:
-        render_metric_card("Latest value", f"{diagnostics['latest']:.2f}", f"{region_name} regional mean")
-    with metric_cols[1]:
-        render_metric_card("Long-run mean", f"{diagnostics['mean']:.2f}", "Historical baseline from selected series")
-    with metric_cols[2]:
-        render_metric_card("Volatility", f"{diagnostics['volatility']:.2f}", "Standard deviation of observed series")
-    with metric_cols[3]:
-        render_metric_card("Projected change", f"{projected_change:+.2f}", f"{horizon}-month {result['direction']} move")
+    if st.session_state.get("ai_generated") and st.session_state.get("ai_brief"):
+        has_ai = True
+        ai_brief = str(st.session_state["ai_brief"])
+        _render_ai_narrative(
+            f"Copilot analysis: {region_name} {variable_label}",
+            ai_brief, result, variable_label, unit_label,
+        )
+        # Inline regenerate button
+        if st.button(":material/refresh: Regenerate analysis", key="regen_ai", use_container_width=True):
+            st.session_state.pop("ai_generated", None)
+            st.session_state.pop("ai_brief", None)
+            st.rerun()
 
+    if not has_ai:
+        metric_cols = st.columns(4)
+        with metric_cols[0]:
+            render_metric_card("Latest value", f"{diagnostics['latest']:.2f}", f"{region_name} regional mean")
+        with metric_cols[1]:
+            render_metric_card("Long-run mean", f"{diagnostics['mean']:.2f}", "Historical baseline from selected series")
+        with metric_cols[2]:
+            render_metric_card("Volatility", f"{diagnostics['volatility']:.2f}", "Standard deviation of observed series")
+        with metric_cols[3]:
+            render_metric_card("Projected change", f"{projected_change:+.2f}", f"{horizon}-month {result['direction']} move")
+
+    forecast_tag = f" | AI: {projected_change:+.2f} over {horizon}mo" if has_ai else ""
     render_section_intro(
         "Prediction surface",
-        f"The forecast line, confidence band, and result cards all reference the same {horizon}-month {result['direction']} move of {projected_change:+.2f} {unit_label}.",
+        f"The forecast line and confidence band show a {horizon}-month {result['direction']} move of {projected_change:+.2f} {unit_label}."
+        + (" The AI analysis above contextualizes these numbers against recent momentum and seasonal patterns." if has_ai else ""),
         eyebrow="Forecast",
     )
     st.plotly_chart(
         create_prediction_figure(
             observed_df=observed_df,
             forecast_df=forecast_df,
-            title=f"{region_name} {variable_label} outlook | {projected_change:+.2f} {unit_label}",
+            title=f"{region_name} {variable_label} outlook{forecast_tag}",
             value_column="value",
             y_label=unit_label,
         ),

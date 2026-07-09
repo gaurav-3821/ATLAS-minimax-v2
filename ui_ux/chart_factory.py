@@ -801,19 +801,24 @@ def create_seasonality_bar_figure(
     return _apply_chart_style(figure, title=title, xaxis_title="Month", yaxis_title=y_label, show_legend=False)
 
 
-def create_forecast_delta_figure(forecast_df: pd.DataFrame, title: str) -> go.Figure:
+def create_forecast_delta_figure(
+    forecast_df: pd.DataFrame,
+    title: str,
+    *,
+    value_label: str = "Forecast shift",
+) -> go.Figure:
     frame = forecast_df.copy()
     value_column = "temperature_c" if "temperature_c" in frame.columns else "forecast"
-    frame["temp_delta_c"] = frame[value_column].diff().fillna(0.0)
-    colors = [PINK if value >= 0 else CYAN for value in frame["temp_delta_c"]]
+    frame["forecast_delta"] = frame[value_column].diff().fillna(0.0)
+    colors = [PINK if value >= 0 else CYAN for value in frame["forecast_delta"]]
     figure = go.Figure()
     figure.add_trace(
         go.Bar(
             x=frame["time"],
-            y=frame["temp_delta_c"],
-            name="Temperature shift",
+            y=frame["forecast_delta"],
+            name=value_label,
             marker=dict(color=colors, line=dict(color="rgba(255,255,255,0.08)", width=1)),
-            hovertemplate="Time %{x}<br>Temp shift %{y:.2f} C<extra></extra>",
+            hovertemplate=f"Time %{{x}}<br>{value_label} %{{y:.2f}}<extra></extra>",
         )
     )
     if "precip_probability_pct" in frame.columns:
@@ -839,7 +844,7 @@ def create_forecast_delta_figure(forecast_df: pd.DataFrame, title: str) -> go.Fi
                 color=TEXT_COLOR,
             )
         )
-    _apply_chart_style(figure, title=title, xaxis_title="Time", yaxis_title="Temperature shift (C)")
+    _apply_chart_style(figure, title=title, xaxis_title="Time", yaxis_title=value_label)
     figure.update_layout(yaxis=dict(zeroline=True, zerolinecolor="rgba(255,255,255,0.35)"))
     return figure
 
