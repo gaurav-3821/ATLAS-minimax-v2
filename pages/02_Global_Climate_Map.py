@@ -9,7 +9,7 @@ from ui_ux.chart_factory import create_globe, create_heatmap, create_latitude_pr
 from utils.data_loader import (
     REGION_BOUNDS,
     detect_axes,
-    format_variable_label,
+    format_analysis_label,
     format_variable_units,
     get_active_dataset,
     get_time_values,
@@ -22,7 +22,8 @@ from utils.data_loader import (
 )
 from utils.live_data import SATELLITE_LAYERS, fetch_satellite_snapshot, get_default_location_query, resolve_location
 from utils.real_climate import get_real_temperature_array
-from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_page_hero, render_section_intro
+from ui_ux.stitch_components import render_bento_card, render_signal_card
 
 
 st.set_page_config(page_title="ATLAS | Global Climate Map", page_icon=":material/public:", layout="wide")
@@ -82,19 +83,20 @@ def main() -> None:
     lat_values = region_view[axes["lat"]].values
     lon_values = region_view[axes["lon"]].values
 
+    layer_label = format_analysis_label(data_array, selected_var, anomaly_mode)
     render_info_banner(
-        f"Map layer: {format_variable_label(data_array, selected_var)}. Source: {source_label}. Region filter currently targets {region_name}."
+        f"Map layer: {layer_label}. Source: {source_label}. Region filter currently targets {region_name}."
     )
 
     metric_cols = st.columns(4)
     with metric_cols[0]:
-        render_metric_card("Layer", format_variable_label(data_array, selected_var), "Current climate field")
+        render_bento_card("Layer", layer_label, "", "Current climate field", icon="layers")
     with metric_cols[1]:
-        render_metric_card("Timeline", pd.Timestamp(selected_time).strftime("%b %Y"), "Historical timeline scrubber")
+        render_bento_card("Timeline", pd.Timestamp(selected_time).strftime("%b %Y"), "", "Historical timeline scrubber", icon="schedule")
     with metric_cols[2]:
-        render_metric_card("Hotspots", str(len(hotspots)), "Top-ranked cells by absolute signal strength")
+        render_bento_card("Hotspots", str(len(hotspots)), "", "Top-ranked cells by absolute signal strength", icon="local_fire_department")
     with metric_cols[3]:
-        render_metric_card("Region extent", region_name, f"{len(lat_values)} lat cells x {len(lon_values)} lon cells")
+        render_bento_card("Region", region_name, "", f"{len(lat_values)} lat x {len(lon_values)} lon cells", icon="public")
 
     left_col, right_col = st.columns((1.35, 0.85))
     with left_col:
@@ -109,7 +111,7 @@ def main() -> None:
                 create_spatial_map(
                     map_slice,
                     axes,
-                    title=f"{format_variable_label(data_array, selected_var)} - {pd.Timestamp(selected_time).strftime('%B %Y')}",
+                    title=f"{layer_label} - {pd.Timestamp(selected_time).strftime('%B %Y')}",
                     colorscale=colorscale,
                     colorbar_title=format_variable_units(data_array) or selected_var,
                     projection=projection,
@@ -145,7 +147,8 @@ def main() -> None:
             "These ranked cells highlight where the selected layer is strongest or most unusual inside the current region window.",
             eyebrow="Hotspots",
         )
-        render_feature_card("Map readout", f"Current view: {region_name} in {projection.lower()} mode for {pd.Timestamp(selected_time).strftime('%B %Y')}. Temperature layers use NASA GISTEMP when available.")
+        render_signal_card("MAP MODE", projection.lower(), "Active projection", change_color="var(--atlas-primary-fixed-dim)")
+        render_signal_card("SATELLITE", satellite_layer, f"Date: {satellite_date}", change_color="var(--atlas-tertiary-fixed-dim)")
         if hotspots.empty:
             st.info("No hotspot cells were generated for the current slice.")
         else:

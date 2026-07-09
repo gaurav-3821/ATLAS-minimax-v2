@@ -18,10 +18,18 @@ from ui_ux.chart_factory import (
     create_timeline_figure,
 )
 from utils.data_loader import detect_axes, get_active_dataset, spatial_mean_series, to_display_array
-from utils.live_data import fetch_air_quality, fetch_forecast, fetch_noaa_station_history, fetch_current_weather, get_default_location_query, resolve_location
+from utils.live_data import (
+    fetch_air_quality_with_source,
+    fetch_current_weather_with_source,
+    fetch_forecast_with_source,
+    fetch_noaa_station_history_with_source,
+    get_default_location_query,
+    resolve_location_with_source,
+)
 from utils.risk_engine import build_risk_profile, build_risk_timeline
 from utils.real_climate import get_real_global_temperature_frames
-from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_feature_card, render_info_banner, render_page_hero, render_section_intro
+from ui_ux.stitch_components import render_bento_card, render_alert_card, render_ticker_bar
 
 
 st.set_page_config(page_title="ATLAS | Dashboard", page_icon=":material/dashboard:", layout="wide")
@@ -64,27 +72,18 @@ def main() -> None:
     anomaly_bars = global_df.tail(24).copy()
     anomaly_bars["anomaly"] = anomaly_bars["temperature"] - anomaly_baseline
 
-    location = None
-    weather = None
-    forecast_df = pd.DataFrame()
-    air_current = None
-    air_forecast = pd.DataFrame()
-    noaa_result = None
-    live_error = None
-
     with st.spinner("Connecting to live data sources..."):
-        try:
-            location, resolved_weather = resolve_location(location_query)
-            weather = resolved_weather or fetch_current_weather(location["lat"], location["lon"])
-            forecast_df = fetch_forecast(location["lat"], location["lon"])
-            air_current, air_forecast = fetch_air_quality(location["lat"], location["lon"])
-            try:
-                noaa_result = fetch_noaa_station_history(location["lat"], location["lon"], days=history_days)
-            except Exception:
-                noaa_result = None
-        except Exception as exc:
-            live_error = str(exc)
-    live_mode = "Live stack connected" if not live_error else "Offline demo fallback"
+        location, resolved_weather, location_source = resolve_location_with_source(location_query)
+        if resolved_weather:
+            weather = resolved_weather
+            weather_source = location_source
+        else:
+            weather, weather_source = fetch_current_weather_with_source(location["lat"], location["lon"])
+        forecast_df, forecast_source = fetch_forecast_with_source(location["lat"], location["lon"])
+        air_current, air_forecast, air_source = fetch_air_quality_with_source(location["lat"], location["lon"])
+        noaa_result, noaa_source = fetch_noaa_station_history_with_source(location["lat"], location["lon"], days=history_days)
+    source_items = [weather_source, forecast_source, air_source, noaa_source]
+    live_count = sum(1 for item in source_items if item["is_live"])
 
     risk_profile = build_risk_profile(
         weather or {"temperature_c": 0.0, "humidity_pct": 0.0, "wind_mps": 0.0, "pressure_hpa": 1013.0},
@@ -94,33 +93,43 @@ def main() -> None:
     )
     risk_timeline = build_risk_timeline(forecast_df)
 
-    if live_error:
-        render_info_banner(
-            f"Live operations are not fully connected for '{location_query}'. Historical climate analytics remain active in {live_mode} mode. Details: {live_error}"
-        )
-    else:
-        render_info_banner(
-            f"Tracking {location['label']} with live weather, AQI, and station context layered over the historical climate baseline from {source_label}."
-        )
+    render_info_banner(
+        f"Tracking {location['label']} with {live_count}/{len(source_items)} live operational feeds. "
+        f"Global temperature anomaly source: {source_label}."
+    )
+
+    ticker_items = [
+        {"icon": "thermostat", "label": "GLOBAL", "value": f"{global_df['temperature'].iloc[-1]:+.2f} C", "color": "var(--atlas-primary-fixed-dim)"},
+        {"icon": "location_on", "label": location["label"].split(",")[0].upper(), "value": f"{weather['temperature_c']:.1f} C" if weather else "N/A", "color": "var(--atlas-tertiary-fixed-dim)"},
+        {"icon": "air", "label": "AQI", "value": f"{air_current['aqi']}" if air_current else "N/A", "color": "var(--atlas-error)"},
+        {"icon": "warning", "label": "RISK", "value": f"{risk_profile['composite']:.0f}/100", "color": "var(--atlas-primary-fixed-dim)"},
+        {"icon": "satellite_alt", "label": "FEEDS", "value": f"{live_count}/{len(source_items)} LIVE", "color": "var(--atlas-primary-fixed-dim)"},
+    ]
+    render_ticker_bar(ticker_items)
+
     render_feature_card("Operational target", f"Primary dashboard context is pinned to {location['label'] if location else 'Delhi, IN'} so the live and historical views point to the same place.")
+    source_cols = st.columns(4)
+    for column, title, source in zip(source_cols, ["Weather", "Forecast", "AQI", "Station"], source_items):
+        with column:
+            render_feature_card(f"{title}: {source['mode']}", str(source["detail"]))
 
     metric_cols = st.columns(5)
     with metric_cols[0]:
-        render_metric_card("Global temperature", f"{global_df['temperature'].iloc[-1]:.2f} deg C", f"Latest global anomaly from {source_label}")
+        render_bento_card("Global Anomaly", f"{global_df['temperature'].iloc[-1]:+.2f}", "C", f"Source: {source_label}", icon="thermostat")
     with metric_cols[1]:
         if weather:
-            render_metric_card("Tracked city", f"{weather['temperature_c']:.1f} deg C", str(location["label"]))
+            render_bento_card("Tracked City", f"{weather['temperature_c']:.1f}", "C", str(location["label"]), icon="location_on")
         else:
-            render_metric_card("Tracked city", "Offline demo", "OpenWeather is unavailable, so the page uses the local climate profile")
+            render_bento_card("Tracked City", "N/A", "", "Offline demo", icon="location_off")
     with metric_cols[2]:
         if air_current:
-            render_metric_card("Air quality", f"AQI {air_current['aqi']}", str(air_current["category"]))
+            render_bento_card("Air Quality", f"AQI {air_current['aqi']}", "", str(air_current["category"]), icon="air", accent_color="var(--atlas-error)")
         else:
-            render_metric_card("Air quality", "Offline demo", "Air-quality fallback keeps the dashboard usable without live credentials")
+            render_bento_card("Air Quality", "N/A", "", "Offline demo", icon="air", accent_color="var(--atlas-muted)")
     with metric_cols[3]:
-        render_metric_card("Climate anomaly", f"{recent_anomaly:+.2f} deg C", "Relative to the trailing 10-year mean")
+        render_bento_card("Climate Anomaly", f"{recent_anomaly:+.2f}", "C", "Relative to trailing 10-year mean", icon="trending_up")
     with metric_cols[4]:
-        render_metric_card("Risk index", f"{risk_profile['composite']:.0f}/100", str(risk_profile["composite_label"]))
+        render_bento_card("Risk Index", f"{risk_profile['composite']:.0f}", "/100", str(risk_profile["composite_label"]), icon="warning", progress_pct=risk_profile["composite"])
 
     render_section_intro(
         "Executive surface",
@@ -140,7 +149,7 @@ def main() -> None:
                     global_df,
                     title="Global activity timeline",
                     value_column="temperature",
-                    y_label="Global mean temperature (deg C)",
+                    y_label="Global temperature anomaly (deg C)",
                 ),
                 use_container_width=True,
             )
@@ -208,7 +217,8 @@ def main() -> None:
             eyebrow="Alerts",
         )
         for title, panel in risk_profile["panels"].items():
-            render_feature_card(title, f"Score {panel['score']:.0f}/100 - {panel['label']}")
+            severity = "critical" if panel["score"] >= 70 else "warning" if panel["score"] >= 40 else "info"
+            render_alert_card(title, f"Score {panel['score']:.0f}/100 - {panel['label']}", severity=severity)
         if risk_profile["alerts"]:
             for alert in risk_profile["alerts"]:
                 render_info_banner(alert)

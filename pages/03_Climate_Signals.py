@@ -22,7 +22,8 @@ from utils.data_loader import (
     to_display_array,
 )
 from utils.real_climate import get_real_global_temperature_frames, get_real_temperature_array
-from ui_ux.style import render_app_shell, render_info_banner, render_metric_card, render_page_hero, render_section_intro
+from ui_ux.style import render_app_shell, render_info_banner, render_page_hero, render_section_intro
+from ui_ux.stitch_components import render_bento_card, render_hero_analysis
 
 
 st.set_page_config(page_title="ATLAS | Climate Signals", page_icon=":material/query_stats:", layout="wide")
@@ -106,15 +107,24 @@ def main() -> None:
         f"Temperature signals are derived from {temp_source}; precipitation, pressure, and wind remain on the active workspace ({label}) over {region_name}."
     )
 
+    render_hero_analysis(
+        vector_label=f"{region_name} TEMPERATURE",
+        value=f"{temp_frame['anomaly'].iloc[-1]:+.2f}",
+        unit="deg C",
+        yoy_change=f"{temp_frame['anomaly'].iloc[-1]:+.2f}",
+        baseline=f"{baseline_a}-{baseline_b}",
+        confidence_pct=85.0,
+    )
+
     metric_cols = st.columns(4)
     with metric_cols[0]:
-        render_metric_card("Latest anomaly", f"{temp_frame['anomaly'].iloc[-1]:+.2f} deg C", f"vs {baseline_a}-{baseline_b}")
+        render_bento_card("Anomaly", f"{temp_frame['anomaly'].iloc[-1]:+.2f}", "C", f"vs {baseline_a}-{baseline_b}", icon="thermostat")
     with metric_cols[1]:
-        render_metric_card("Recent precipitation", f"{precip_frame['value'].iloc[-1]:.1f} mm/month", "Annualized regional mean")
+        render_bento_card("Precipitation", f"{precip_frame['value'].iloc[-1]:.1f}", "mm/month", "Annualized mean", icon="water_drop")
     with metric_cols[2]:
-        render_metric_card("Pressure pulse", f"{pressure_frame['value'].iloc[-1]:.1f} hPa", "Latest regional mean")
+        render_bento_card("Pressure", f"{pressure_frame['value'].iloc[-1]:.1f}", "hPa", "Regional mean", icon="speed")
     with metric_cols[3]:
-        render_metric_card("Wind transport", f"{wind_frame['value'].iloc[-1]:.2f} m/s", "Latest regional mean")
+        render_bento_card("Wind", f"{wind_frame['value'].iloc[-1]:.2f}", "m/s", "Regional mean", icon="air")
 
     top_left, top_right = st.columns(2)
     with top_left:
@@ -183,32 +193,34 @@ def main() -> None:
             "Sea-level pressure acts as a compact atmospheric circulation indicator across the region.",
             eyebrow="Signal 05",
         )
-        st.plotly_chart(
-            create_timeline_figure(
-                pressure_frame,
-                title="Pressure trend",
-                value_column="value",
-                y_label="hPa",
-                color=PINK,
-            ),
-            use_container_width=True,
-        )
+        with st.expander("View pressure trend chart"):
+            st.plotly_chart(
+                create_timeline_figure(
+                    pressure_frame,
+                    title="Pressure trend",
+                    value_column="value",
+                    y_label="hPa",
+                    color=PINK,
+                ),
+                use_container_width=True,
+            )
     with lower_right:
         render_section_intro(
             "Wind transport",
             "Regional wind speed highlights circulation shifts that can support transport, storms, or fire weather.",
             eyebrow="Signal 06",
         )
-        st.plotly_chart(
-            create_timeline_figure(
-                wind_frame,
-                title="Wind trend",
-                value_column="value",
-                y_label="m/s",
-                color=GREEN,
-            ),
-            use_container_width=True,
-        )
+        with st.expander("View wind trend chart"):
+            st.plotly_chart(
+                create_timeline_figure(
+                    wind_frame,
+                    title="Wind trend",
+                    value_column="value",
+                    y_label="m/s",
+                    color=GREEN,
+                ),
+                use_container_width=True,
+            )
 
     render_section_intro(
         "Comparison heatmap",

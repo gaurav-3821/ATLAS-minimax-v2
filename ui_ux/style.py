@@ -6,19 +6,21 @@ from pathlib import Path
 import streamlit as st
 
 from ui_ux.chart_factory import set_chart_theme
+from ui_ux.stitch_effects import ALL_STITCH_EFFECTS
+from ui_ux.stitch_tokens import NAV_ITEMS_STITCH, NAV_ITEMS_SECONDARY
 
 
 NAV_ITEMS = [
-    {"label": "Story Mode", "path": "pages/00_Story_Mode.py", "icon": ":material/play_circle:"},
-    {"label": "Dashboard", "path": "pages/01_Dashboard.py", "icon": ":material/dashboard:"},
-    {"label": "Global Map", "path": "pages/02_Global_Climate_Map.py", "icon": ":material/public:"},
-    {"label": "Climate Signals", "path": "pages/03_Climate_Signals.py", "icon": ":material/query_stats:"},
-    {"label": "Risk Intelligence", "path": "pages/04_Risk_Intelligence.py", "icon": ":material/warning:"},
-    {"label": "Predictions", "path": "pages/05_AI_Predictions.py", "icon": ":material/auto_graph:"},
-    {"label": "Data Explorer", "path": "pages/06_Data_Explorer.py", "icon": ":material/travel_explore:"},
-    {"label": "Research Lab", "path": "pages/07_Research_Lab.py", "icon": ":material/science:"},
-    {"label": "Reports", "path": "pages/08_Reports.py", "icon": ":material/description:"},
-    {"label": "Settings", "path": "pages/09_Settings.py", "icon": ":material/settings:"},
+    {"label": "Story Mode", "route": "/Story_Mode", "icon": "play_circle"},
+    {"label": "Dashboard", "route": "/Dashboard", "icon": "dashboard"},
+    {"label": "Global Map", "route": "/Global_Climate_Map", "icon": "public"},
+    {"label": "Climate Signals", "route": "/Climate_Signals", "icon": "query_stats"},
+    {"label": "Risk Intelligence", "route": "/Risk_Intelligence", "icon": "warning"},
+    {"label": "Predictions", "route": "/AI_Predictions", "icon": "auto_graph"},
+    {"label": "Data Explorer", "route": "/Data_Explorer", "icon": "travel_explore"},
+    {"label": "Research Lab", "route": "/Research_Lab", "icon": "science"},
+    {"label": "Reports", "route": "/Reports", "icon": "description"},
+    {"label": "Settings", "route": "/Settings", "icon": "settings"},
 ]
 
 
@@ -83,7 +85,7 @@ ATLAS_CSS = """
         --atlas-transition-fast: 200ms ease;
     }
 
-    html, body, [class*="css"], [class*="st-"], .stApp, .main, div, span, p, a, li, label, input, textarea, select, button, option {
+    html, body, .stApp, .main, div, p, a, li, label, input, textarea, select, button, option {
         font-family: var(--atlas-font-body) !important;
         color: var(--atlas-text) !important;
     }
@@ -96,6 +98,14 @@ ATLAS_CSS = """
     .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], [data-testid="stToolbar"] {
         background-color: var(--atlas-bg) !important;
         background-image: none !important;
+    }
+
+    [data-testid="stToolbar"],
+    [data-testid="stDecoration"],
+    [data-testid="stStatusWidget"],
+    .stDeployButton {
+        display: none !important;
+        visibility: hidden !important;
     }
 
     .stApp {
@@ -139,8 +149,11 @@ ATLAS_CSS = """
     }
 
     .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined' !important;
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         vertical-align: middle;
+        color: inherit !important;
+        line-height: 1;
     }
 
     ::-webkit-scrollbar { width: 4px; }
@@ -208,25 +221,12 @@ ATLAS_CSS = """
     }
 
     [data-testid="stSidebar"] .block-container {
-        padding-top: 0.8rem;
+        padding-top: 1rem;
         padding-left: 0.8rem;
         padding-right: 0.8rem;
     }
 
-    [data-testid="stSidebar"] a {
-        color: var(--atlas-text-secondary) !important;
-        text-decoration: none !important;
-        transition: color var(--atlas-transition);
-        font-family: var(--atlas-font-mono) !important;
-        font-size: 0.72rem !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
-    }
-
-    [data-testid="stSidebar"] a:hover {
-        color: var(--atlas-primary-fixed-dim) !important;
-    }
-
+    [data-testid="stSidebar"] a,
     [data-testid="stSidebar"] div[data-testid="stPageLink"] a {
         padding: 0.5rem 0.75rem !important;
         border-radius: var(--atlas-radius-sm) !important;
@@ -246,8 +246,8 @@ ATLAS_CSS = """
 
     .main .block-container {
         max-width: 1440px;
-        padding-top: 1.2rem;
-        padding-bottom: 4rem;
+        padding-top: 0.85rem;
+        padding-bottom: 2.5rem;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -310,8 +310,8 @@ ATLAS_CSS = """
     }
 
     .atlas-topbar-card {
-        padding: 0.85rem 1rem;
-        min-height: 80px;
+        padding: 0.7rem 0.9rem;
+        min-height: 58px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -328,39 +328,6 @@ ATLAS_CSS = """
         color: var(--atlas-muted);
         font-size: 0.85rem;
         line-height: 1.4;
-    }
-
-    .atlas-topbar-card-new {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding-bottom: 0.5rem;
-    }
-
-    .atlas-topbar-kicker-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
-    }
-
-    .atlas-topbar-kicker {
-        font-family: var(--atlas-font-mono) !important;
-        font-size: 0.72rem !important;
-        color: var(--atlas-primary-fixed-dim) !important;
-        text-transform: uppercase;
-        font-weight: 700 !important;
-        letter-spacing: 0.1em !important;
-    }
-
-    .atlas-topbar-title {
-        font-family: var(--atlas-font-heading) !important;
-        font-size: 2.2rem !important;
-        line-height: 1.1 !important;
-        font-weight: 700 !important;
-        margin: 0 !important;
-        letter-spacing: -0.02em !important;
-        color: var(--atlas-primary) !important;
     }
 
     .atlas-chip-row {
@@ -393,68 +360,6 @@ ATLAS_CSS = """
     .atlas-chip.green { color: #6EFF9A; background: rgba(110,255,154,0.10); border-color: rgba(110,255,154,0.18); }
     .atlas-chip.pink { color: #FF5C8A; background: rgba(255,92,138,0.10); border-color: rgba(255,92,138,0.18); }
 
-    .atlas-side-brand {
-        padding: 0.85rem;
-        margin-bottom: 0.75rem;
-        border: 1px solid var(--atlas-glass-border);
-        border-radius: var(--atlas-radius-md);
-        background: linear-gradient(135deg, rgba(0,219,231,0.08) 0%, var(--atlas-glass-fill) 100%);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        box-shadow: var(--atlas-shadow-glass);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .atlas-side-brand::after {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--atlas-primary), transparent);
-        opacity: 0.3;
-        pointer-events: none;
-    }
-
-    .atlas-sidebar-logo-wrap {
-        padding: 0.5rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid var(--atlas-glass-border);
-        border-radius: var(--atlas-radius-lg);
-        background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, var(--atlas-glass-fill) 100%);
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        box-shadow: var(--atlas-shadow-glass);
-        position: relative;
-        overflow: hidden;
-        text-align: center;
-    }
-
-    .atlas-sidebar-logo-wrap::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.04), transparent 60%);
-        pointer-events: none;
-    }
-
-    .atlas-sidebar-logo-wrap::after {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--atlas-primary), transparent);
-        opacity: 0.15;
-        pointer-events: none;
-    }
-
-    .atlas-sidebar-logo-wrap img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        filter: drop-shadow(0 2px 8px rgba(0,219,231,0.15)) drop-shadow(0 4px 16px rgba(0,0,0,0.3));
-    }
-
     .atlas-hero-logo-wrap {
         padding: 0.25rem;
         border: 1px solid var(--atlas-glass-border);
@@ -470,13 +375,9 @@ ATLAS_CSS = """
 
     .atlas-hero-logo-wrap img {
         display: block;
-        max-width: 100%;
+        max-width: 128px;
         height: auto;
-    }
-
-    .atlas-side-brand .atlas-kicker {
-        margin-bottom: 0.3rem;
-        font-size: 0.65rem;
+        margin: 0 auto;
     }
 
     .atlas-kicker {
@@ -507,19 +408,258 @@ ATLAS_CSS = """
         font-weight: 700;
     }
 
-    .atlas-active-page {
-        padding: 0.6rem 0.85rem;
-        border: 1px solid rgba(0,219,231,0.25);
-        border-left: 4px solid var(--atlas-primary-fixed-dim) !important;
-        border-radius: var(--atlas-radius-sm);
-        background: linear-gradient(135deg, rgba(0,219,231,0.10) 0%, rgba(112,0,255,0.08) 100%);
+
+    /* ── Stitch Sidebar Upgrade ─────────────────────────────────────────── */
+    .atlas-stitch-sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--atlas-glass-border);
+    }
+
+    .atlas-stitch-sidebar-brand img {
+        width: 36px;
+        height: 36px;
+        border-radius: var(--atlas-radius-md);
+    }
+
+    .atlas-stitch-sidebar-brand-text {
+        font-family: var(--atlas-font-heading);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--atlas-text);
+        letter-spacing: -0.02em;
+    }
+
+    .atlas-stitch-nav-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .atlas-stitch-nav-label {
+        font-family: var(--atlas-font-mono);
+        font-size: 0.6rem;
+        color: var(--atlas-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        padding: 0 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .atlas-stitch-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.65rem 0.75rem;
+        margin: 0.15rem 0.5rem;
+        border-radius: var(--atlas-radius-md);
+        color: var(--atlas-text-secondary);
+        text-decoration: none;
+        font-family: var(--atlas-font-body);
+        font-size: 0.82rem;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+    }
+
+    .atlas-stitch-nav-item:hover {
+        background: rgba(255,255,255,0.06);
+        color: var(--atlas-text);
+        border-color: var(--atlas-glass-border);
+    }
+
+    .atlas-stitch-nav-item.active {
+        background: rgba(0,219,231,0.10);
+        color: var(--atlas-primary);
+        border-color: rgba(0,219,231,0.20);
+        font-weight: 600;
+    }
+
+    .atlas-stitch-nav-item .material-symbols-outlined {
+        font-size: 1.15rem;
+        color: var(--atlas-primary-fixed-dim);
+    }
+
+    .atlas-stitch-nav-item.active .material-symbols-outlined {
+        color: var(--atlas-primary);
+    }
+
+    .atlas-stitch-sidebar-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem 0.75rem;
+        border-top: 1px solid var(--atlas-glass-border);
+        background: var(--atlas-glass-fill);
+    }
+
+    /* ── Stitch Topbar Upgrade ──────────────────────────────────────────── */
+    .atlas-stitch-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.5rem;
+        margin-bottom: 1rem;
+        background: var(--atlas-glass-fill);
+        border: 1px solid var(--atlas-glass-border);
+        border-radius: var(--atlas-radius-lg);
+        backdrop-filter: blur(var(--atlas-glass-blur)) saturate(var(--atlas-glass-saturate));
+    }
+
+    .atlas-stitch-topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .atlas-stitch-topbar-kicker {
+        font-family: var(--atlas-font-mono);
+        font-size: 0.65rem;
+        color: var(--atlas-primary-fixed-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+    }
+
+    .atlas-stitch-topbar-title {
+        font-family: var(--atlas-font-heading);
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--atlas-text);
+        letter-spacing: -0.02em;
+    }
+
+    .atlas-stitch-topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .atlas-stitch-topbar-search {
+        min-width: 280px;
+    }
+
+    .atlas-stitch-ticker-bar {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        background: rgba(0,0,0,0.20);
+        border: 1px solid var(--atlas-glass-border);
+        border-radius: var(--atlas-radius-md);
+        margin-bottom: 1rem;
+    }
+
+    .atlas-stitch-ticker-track {
+        display: inline-flex;
+        align-items: center;
+        gap: 2rem;
+        animation: atlasTickerScroll 40s linear infinite;
+        padding: 0 1rem;
+    }
+
+    .atlas-stitch-ticker-track:hover {
+        animation-play-state: paused;
+    }
+
+    .atlas-stitch-ticker-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .atlas-stitch-ticker-item .material-symbols-outlined {
+        font-size: 1rem;
+    }
+
+    .atlas-stitch-ticker-label {
+        font-family: var(--atlas-font-mono);
+        font-size: 0.6rem;
+        color: var(--atlas-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .atlas-stitch-ticker-value {
         font-family: var(--atlas-font-mono);
         font-size: 0.72rem;
-        color: var(--atlas-primary-fixed-dim) !important;
-        margin-bottom: 0.75rem;
-        backdrop-filter: blur(14px) saturate(150%);
-        -webkit-backdrop-filter: blur(14px) saturate(150%);
-        box-shadow: inset 1px 1px 0px rgba(255, 255, 255, 0.1);
+        font-weight: 600;
+    }
+
+    .atlas-stitch-ticker-divider {
+        height: 16px;
+        width: 1px;
+        background: rgba(255,255,255,0.15);
+    }
+
+    /* ── Ambient Micro-Interactions ──────────────────────────────────────── */
+    .atlas-feature-card,
+    .atlas-metric-card,
+    .atlas-source-card,
+    .atlas-info-banner,
+    .atlas-story-panel {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .atlas-feature-card:hover,
+    .atlas-metric-card:hover,
+    .atlas-source-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2), 0 0 20px rgba(0,219,231,0.08);
+        border-color: rgba(0,219,231,0.3);
+    }
+
+    html[data-theme="light"] .atlas-feature-card:hover,
+    html[data-theme="light"] .atlas-metric-card:hover,
+    html[data-theme="light"] .atlas-source-card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 0 20px rgba(8,145,178,0.06);
+    }
+
+    .atlas-stitch-nav-item {
+        transition: all 0.15s ease;
+    }
+
+    .atlas-stitch-nav-item:active {
+        transform: scale(0.98);
+    }
+
+    .stButton > button {
+        transition: all 0.2s ease;
+    }
+
+    .stButton > button:active {
+        transform: scale(0.97);
+    }
+
+    @keyframes atlasFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .atlas-feature-card,
+    .atlas-metric-card,
+    .atlas-hero,
+    .atlas-info-banner {
+        animation: atlasFadeIn 0.3s ease-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .atlas-feature-card,
+        .atlas-metric-card,
+        .atlas-hero,
+        .atlas-info-banner {
+            animation: none;
+        }
+        .atlas-feature-card:hover,
+        .atlas-metric-card:hover,
+        .atlas-source-card:hover {
+            transform: none;
+        }
     }
 
     .atlas-hero {
@@ -548,10 +688,10 @@ ATLAS_CSS = """
 
     .atlas-hero h1 {
         margin: 0.8rem 0 0.3rem 0;
-        font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+        font-size: 3.5rem;
         line-height: 1;
         font-weight: 700;
-        letter-spacing: -0.04em;
+        letter-spacing: 0;
         background: linear-gradient(135deg, #FFFFFF 0%, var(--atlas-muted) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -581,7 +721,7 @@ ATLAS_CSS = """
     }
 
     .atlas-section-head {
-        padding: 1rem 1.15rem;
+        padding: 0.7rem 0.9rem;
         margin-bottom: 0.75rem;
         border-left: 3px solid var(--atlas-primary);
         border-radius: 0 var(--atlas-radius-sm) var(--atlas-radius-sm) 0;
@@ -595,6 +735,7 @@ ATLAS_CSS = """
     }
 
     .atlas-section-head p {
+        display: none;
         margin: 0;
         color: var(--atlas-muted);
         font-size: 0.82rem;
@@ -625,6 +766,32 @@ ATLAS_CSS = """
     .atlas-info-banner {
         background: linear-gradient(135deg, rgba(0,219,231,0.08) 0%, var(--atlas-glass-fill) 100%);
         border-left: 3px solid var(--atlas-primary);
+    }
+
+    .atlas-copilot-card {
+        border-left: 3px solid var(--atlas-primary-fixed-dim);
+    }
+
+    .atlas-copilot-card h4 {
+        margin-top: 0.8rem;
+        color: var(--atlas-primary);
+    }
+
+    .atlas-copilot-lede {
+        margin-bottom: 0.8rem !important;
+    }
+
+    .atlas-copilot-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: var(--atlas-text-secondary);
+    }
+
+    .atlas-copilot-list li {
+        margin: 0.35rem 0;
+        color: var(--atlas-text-secondary);
+        font-size: 0.86rem;
+        line-height: 1.5;
     }
 
     .atlas-card-grid {
@@ -830,33 +997,45 @@ ATLAS_CSS = """
     }
 
     .stTabs [data-baseweb="tab-list"] {
-        gap: 0.4rem;
-        margin-bottom: 0.75rem;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        display: inline-flex;
+        gap: 0.25rem;
+        width: auto;
+        max-width: 100%;
+        margin-bottom: 0.9rem;
+        padding: 0.25rem;
+        border: 1px solid var(--atlas-glass-border);
+        border-radius: var(--atlas-radius-md);
+        background: rgba(255,255,255,0.05);
+        box-shadow: inset 1px 1px 0 rgba(255,255,255,0.08);
+        overflow-x: auto;
     }
 
     .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        border: none;
-        border-radius: 0;
+        min-height: 2.35rem;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        border-radius: var(--atlas-radius-sm) !important;
         box-shadow: none;
-        color: var(--atlas-muted);
-        padding: 0.5rem 0.75rem;
-        border-bottom: 2px solid transparent;
-        transition: color var(--atlas-transition), border-color var(--atlas-transition);
-        margin-bottom: -1px;
-        font-size: 0.85rem;
+        color: var(--atlas-muted) !important;
+        padding: 0.45rem 0.85rem !important;
+        margin: 0 !important;
+        transition: color var(--atlas-transition), border-color var(--atlas-transition), background var(--atlas-transition), box-shadow var(--atlas-transition);
+        font-size: 0.82rem;
+        font-weight: 700;
+        white-space: nowrap;
     }
 
     .stTabs [data-baseweb="tab"]:hover {
-        color: var(--atlas-text);
-        background: transparent;
+        color: var(--atlas-text) !important;
+        background: rgba(255,255,255,0.07) !important;
+        border-color: rgba(255,255,255,0.10) !important;
     }
 
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: var(--atlas-primary);
-        background: transparent;
-        border-bottom-color: var(--atlas-primary);
+        color: var(--atlas-on-primary) !important;
+        background: var(--atlas-primary-fixed-dim) !important;
+        border-color: var(--atlas-primary-fixed-dim) !important;
+        box-shadow: 0 0 18px rgba(0,219,231,0.18) !important;
     }
 
     [data-testid="stMetric"] {
@@ -906,7 +1085,7 @@ ATLAS_CSS = """
     }
 
     @media (max-width: 1200px) {
-        .atlas-hero h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+        .atlas-hero h1 { font-size: 2.8rem; }
         .atlas-metric-value { font-size: 1.35rem; }
         [data-testid="stHorizontalBlock"] { flex-wrap: wrap; }
     }
@@ -920,6 +1099,10 @@ ATLAS_CSS = """
         .atlas-hero { padding: 1.5rem; }
         .atlas-hero h1 { font-size: 2.2rem; }
         .atlas-topbar-card { min-height: 60px; padding: 0.6rem 0.85rem; }
+        .atlas-topbar-title { font-size: 1.45rem !important; }
+        .atlas-topbar-kicker { font-size: 0.62rem !important; line-height: 1.35; }
+        .atlas-sidebar-logo-wrap img,
+        .atlas-hero-logo-wrap img { max-width: 92px; }
     }
 
     @media (max-width: 640px) {
@@ -1050,12 +1233,6 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         border-color: rgba(8,145,178,0.15) !important;
     }
 
-    html[data-theme="light"] .atlas-active-page {
-        color: #0891b2 !important;
-        background: linear-gradient(135deg, rgba(8,145,178,0.08) 0%, rgba(99,102,241,0.05) 100%) !important;
-        border-color: rgba(8,145,178,0.25) !important;
-    }
-
     html[data-theme="light"] .atlas-hero {
         background:
             radial-gradient(ellipse at 100% 0%, rgba(8,145,178,0.06), transparent 40%),
@@ -1137,37 +1314,155 @@ ATLAS_CSS_LIGHT_OVERRIDES = """
         box-shadow: var(--atlas-shadow-glass), 0 0 20px rgba(8,145,178,0.06);
     }
 
-    html[data-theme="light"] .atlas-side-brand {
-        background: linear-gradient(135deg, rgba(8,145,178,0.06) 0%, rgba(255,255,255,0.65) 100%) !important;
-    }
-
-    html[data-theme="light"] .atlas-sidebar-logo-wrap {
-        background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.65) 100%) !important;
-        border-color: rgba(0,0,0,0.08) !important;
-    }
-
     html[data-theme="light"] .atlas-hero-logo-wrap {
         background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.65) 100%) !important;
         border-color: rgba(0,0,0,0.08) !important;
     }
 
+    html[data-theme="light"] .atlas-stitch-nav-item {
+        color: #334155;
+    }
+
+    html[data-theme="light"] .atlas-stitch-nav-item:hover {
+        background: rgba(0,0,0,0.04);
+        color: #0f172a;
+    }
+
+    html[data-theme="light"] .atlas-stitch-nav-item.active {
+        background: rgba(8,145,178,0.08);
+        color: #0891b2;
+        border-color: rgba(8,145,178,0.20);
+    }
+
+    html[data-theme="light"] .atlas-stitch-nav-item .material-symbols-outlined {
+        color: #0891b2;
+    }
+
+    html[data-theme="light"] .atlas-stitch-topbar {
+        background: rgba(255,255,255,0.8);
+        border-color: rgba(0,0,0,0.08);
+    }
+
+    html[data-theme="light"] .atlas-stitch-topbar-title {
+        color: #0f172a;
+    }
+
+    html[data-theme="light"] .atlas-stitch-ticker-bar {
+        background: rgba(0,0,0,0.03);
+        border-color: rgba(0,0,0,0.06);
+    }
+
+    html[data-theme="light"] .atlas-stitch-ticker-divider {
+        background: rgba(0,0,0,0.15);
+    }
+
     html[data-theme="light"] .stTabs [data-baseweb="tab-list"] {
-        border-bottom-color: rgba(0,0,0,0.06) !important;
+        background: rgba(255,255,255,0.78) !important;
+        border-color: rgba(0,0,0,0.08) !important;
+        box-shadow: inset 1px 1px 0 rgba(255,255,255,0.85) !important;
     }
 
     html[data-theme="light"] .stTabs [data-baseweb="tab"] {
         color: #64748b !important;
     }
 
+    html[data-theme="light"] .stTabs [data-baseweb="tab"]:hover {
+        color: #0f172a !important;
+        background: rgba(0,0,0,0.04) !important;
+        border-color: rgba(0,0,0,0.08) !important;
+    }
+
     html[data-theme="light"] .stTabs [data-baseweb="tab"][aria-selected="true"] {
-        color: #0891b2 !important;
+        color: #ffffff !important;
+        background: #0891b2 !important;
+        border-color: #0891b2 !important;
+        box-shadow: 0 4px 14px rgba(8,145,178,0.18) !important;
+    }
+
+    html[data-theme="light"] .atlas-glass-panel::before,
+    html[data-theme="light"] .atlas-hero::before,
+    html[data-theme="light"] .atlas-feature-card::before,
+    html[data-theme="light"] .atlas-metric-card::before,
+    html[data-theme="light"] .atlas-source-card::before,
+    html[data-theme="light"] .atlas-info-banner::before,
+    html[data-theme="light"] .atlas-story-panel::before,
+    html[data-theme="light"] .atlas-section-head::before {
+        opacity: 0.03;
+    }
+
+    html[data-theme="light"] .atlas-glass-panel::after,
+    html[data-theme="light"] .atlas-hero::after,
+    html[data-theme="light"] .atlas-feature-card::after,
+    html[data-theme="light"] .atlas-metric-card::after,
+    html[data-theme="light"] .atlas-source-card::after,
+    html[data-theme="light"] .atlas-info-banner::after,
+    html[data-theme="light"] .atlas-story-panel::after {
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(0,0,0,0.015) 3px,
+            rgba(0,0,0,0.015) 4px
+        );
+    }
+
+    html[data-theme="light"] .stButton > button {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    html[data-theme="light"] .stButton > button:hover {
+        box-shadow: 0 4px 16px rgba(8,145,178,0.12);
+        background: rgba(8,145,178,0.06) !important;
     }
 </style>
+"""
+
+LIGHT_ROOT_CSS = """
+:root {
+    --atlas-bg: #f0f4f8;
+    --atlas-bg-deep: #e2e8f0;
+    --atlas-surface: #f8fafc;
+    --atlas-surface-container: #f1f5f9;
+    --atlas-surface-container-low: #f8fafc;
+    --atlas-surface-container-lowest: #ffffff;
+    --atlas-surface-bright: #ffffff;
+    --atlas-surface-variant: #e2e8f0;
+    --atlas-primary: #0891b2;
+    --atlas-primary-fixed-dim: #0891b2;
+    --atlas-primary-container: #22d3ee;
+    --atlas-primary-fixed: #cffafe;
+    --atlas-on-primary: #ffffff;
+    --atlas-on-primary-container: #164e63;
+    --atlas-secondary: #6366f1;
+    --atlas-secondary-container: #a5b4fc;
+    --atlas-tertiary-fixed-dim: #d97706;
+    --atlas-text: #0f172a;
+    --atlas-text-secondary: #334155;
+    --atlas-muted: #64748b;
+    --atlas-subtle: #cbd5e1;
+    --atlas-outline: #cbd5e1;
+    --atlas-outline-variant: #e2e8f0;
+    --atlas-glass-fill: rgba(255,255,255,0.7);
+    --atlas-glass-border: rgba(0,0,0,0.08);
+    --atlas-glass-edge: rgba(255,255,255,0.9);
+    --atlas-shadow-glass: 0 8px 32px rgba(0,0,0,0.06);
+    --atlas-shadow-sidebar: 10px 0 30px rgba(0,0,0,0.06);
+}
 """
 
 
 def _escape(value: str) -> str:
     return html.escape(value, quote=True)
+
+
+@st.cache_data(show_spinner=False)
+def _load_b64(path_str: str) -> str:
+    import base64
+    path = Path(path_str)
+    if path.exists():
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+    return ""
 
 
 @st.cache_data(show_spinner=False)
@@ -1184,8 +1479,8 @@ def _load_bg_b64(mode: str) -> str:
 
 def apply_atlas_theme() -> None:
     light_mode = st.session_state.get("atlas_light_mode", False)
-    initial_load = "atlas_light_mode" not in st.session_state
     st.markdown(ATLAS_CSS, unsafe_allow_html=True)
+    st.markdown(ALL_STITCH_EFFECTS, unsafe_allow_html=True)
     st.markdown(ATLAS_CSS_LIGHT_OVERRIDES, unsafe_allow_html=True)
     dark_b64 = _load_bg_b64("dark")
     light_b64 = _load_bg_b64("light")
@@ -1195,11 +1490,12 @@ def apply_atlas_theme() -> None:
     st.markdown(
         f"""
         <style>
+            {LIGHT_ROOT_CSS if light_mode else ""}
             .stApp {{
                 background: {bg_dark} !important;
                 background-color: {bg_default} !important;
             }}
-            html[data-theme="light"] .stApp {{
+            {"html .stApp" if light_mode else 'html[data-theme="light"] .stApp'} {{
                 background: {bg_light} !important;
                 background-color: #f0f4f8 !important;
             }}
@@ -1213,79 +1509,81 @@ def apply_atlas_theme() -> None:
         """,
         unsafe_allow_html=True,
     )
-    st.markdown(
-        f"""
-        <script>
-            var firstLoad = {str(initial_load).lower()};
-            if (firstLoad) {{
-                var osDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                document.documentElement.setAttribute("data-theme", osDark ? "dark" : "light");
-            }} else {{
-                document.documentElement.setAttribute("data-theme", "{("light" if light_mode else "dark")}");
-            }}
-        </script>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 def render_sidebar_navigation(active_page: str) -> None:
     with st.sidebar:
         logo_path = Path(__file__).resolve().parents[1] / "assets" / "atlas-logo.png"
+        logo_html = ""
         if logo_path.exists():
+            logo_html = f'<img src="data:image/png;base64,{_load_b64(str(logo_path))}" alt="ATLAS logo" />'
+
+        st.markdown(
+            f"""
+            <div class="atlas-stitch-sidebar-brand">
+                {logo_html}
+                <span class="atlas-stitch-sidebar-brand-text">ATLAS</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("<div class='atlas-stitch-nav-label'>Navigation</div>", unsafe_allow_html=True)
+        for item in NAV_ITEMS_STITCH:
+            active_class = " active" if item["label"] == active_page else ""
             st.markdown(
-                """<div class="atlas-sidebar-logo-wrap">""",
+                f"""
+                <a class="atlas-stitch-nav-item{active_class}" href="{_escape(item["route"])}" aria-label="{_escape(item["label"])}">
+                    <span class="material-symbols-outlined" aria-hidden="true">{_escape(item["icon"])}</span>
+                    <span>{_escape(item["label"])}</span>
+                </a>
+                """,
                 unsafe_allow_html=True,
             )
-            st.image(str(logo_path), use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="atlas-side-brand" role="banner" aria-label="ATLAS brand">
-                <div class="atlas-kicker">MISSION CONTROL</div>
-                <p style="color: var(--atlas-muted); font-size: 0.72rem; line-height: 1.4; margin: 0.3rem 0 0 0;">
-                    OPERATOR 07-A // CLIMATE INTEL
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown("<div class='atlas-side-section'>Theme</div>", unsafe_allow_html=True)
+
+        st.markdown("<div class='atlas-stitch-nav-label' style='margin-top: 1.5rem;'>More</div>", unsafe_allow_html=True)
+        for item in NAV_ITEMS_SECONDARY:
+            active_class = " active" if item["label"] == active_page else ""
+            st.markdown(
+                f"""
+                <a class="atlas-stitch-nav-item{active_class}" href="{_escape(item["route"])}" aria-label="{_escape(item["label"])}">
+                    <span class="material-symbols-outlined" aria-hidden="true">{_escape(item["icon"])}</span>
+                    <span>{_escape(item["label"])}</span>
+                </a>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
         st.toggle("Light mode", key="atlas_light_mode")
-        st.page_link("app.py", label="Landing", icon=":material/rocket_launch:")
-        st.markdown("<div class='atlas-side-section'>Workspace</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='atlas-active-page'>Active: {_escape(active_page)}</div>", unsafe_allow_html=True)
-        for item in NAV_ITEMS:
-            st.page_link(item["path"], label=item["label"], icon=item["icon"])
-        st.markdown("<div class='atlas-side-section'>System</div>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="atlas-nav-panel">
-                <p class="atlas-nav-caption">SYNC TELEMETRY</p>
-                <p class="atlas-nav-caption">UI: Stitch Mission Control</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
 
-def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Search climate signals, regions, or datasets") -> str:
-    left, right = st.columns((1.3, 0.7))
+def render_topbar(
+    active_page: str,
+    subtitle: str,
+    search_placeholder: str = "Search climate signals, regions, or datasets",
+    show_search: bool = True,
+) -> str:
+    kicker = subtitle if len(subtitle) <= 32 else "Workspace"
+
+    left, right = st.columns((1.3, 0.7)) if show_search else (st.container(), None)
     with left:
         st.markdown(
             f"""
-            <div class="atlas-topbar-card-new" role="region" aria-label="Active view: {_escape(active_page)}">
-                <div class="atlas-topbar-kicker-row">
-                    <span class="atlas-status-dot"></span>
-                    <span class="atlas-topbar-kicker">ACTIVE VIEW // {_escape(subtitle)}</span>
+            <div class="atlas-stitch-topbar" role="region" aria-label="Active view: {_escape(active_page)}">
+                <div class="atlas-stitch-topbar-left">
+                    <span class="atlas-stitch-topbar-kicker">{_escape(kicker)}</span>
+                    <span style="color: var(--atlas-muted); font-size: 0.8rem;">|</span>
+                    <span class="atlas-stitch-topbar-title">{_escape(active_page)}</span>
                 </div>
-                <h1 class="atlas-topbar-title">{_escape(active_page).upper()}</h1>
             </div>
             """,
             unsafe_allow_html=True,
         )
+    if not show_search:
+        return ""
     with right:
-        st.markdown('<div style="margin-top: 24px;">', unsafe_allow_html=True)
+        st.markdown('<div style="margin-top: 8px;">', unsafe_allow_html=True)
         search_value = st.text_input(
             "Global Search",
             placeholder=search_placeholder,
@@ -1293,14 +1591,19 @@ def render_topbar(active_page: str, subtitle: str, search_placeholder: str = "Se
             label_visibility="collapsed",
         )
         st.markdown('</div>', unsafe_allow_html=True)
-    return search_value
+        return search_value
 
 
-def render_app_shell(active_page: str, subtitle: str, search_placeholder: str = "Search climate signals, regions, or datasets") -> str:
+def render_app_shell(
+    active_page: str,
+    subtitle: str,
+    search_placeholder: str = "Search climate signals, regions, or datasets",
+    show_search: bool = True,
+) -> str:
     apply_atlas_theme()
     set_chart_theme(dark=not st.session_state.get("atlas_light_mode", False))
     render_sidebar_navigation(active_page)
-    return render_topbar(active_page, subtitle, search_placeholder)
+    return render_topbar(active_page, subtitle, search_placeholder, show_search)
 
 
 def render_page_hero(kicker: str, title: str, body: str, subtitle: str | None = None) -> None:
@@ -1368,17 +1671,6 @@ def render_metric_card(title: str, value: str, subtext: str) -> None:
     )
 
 
-def render_story_panel(title: str, body: str) -> None:
-    st.markdown(
-        f"""
-        <div class="atlas-story-panel" role="article" aria-label="{_escape(title)}">
-            <h4>{_escape(title)}</h4>
-            <p>{_escape(body)}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
 
 def render_source_card(title: str, status: str, detail: str) -> None:
     sl = status.lower()
@@ -1398,17 +1690,4 @@ def render_source_card(title: str, status: str, detail: str) -> None:
     )
 
 
-def render_story_stepper(steps: list[dict[str, str]], active_index: int) -> None:
-    chips: list[str] = []
-    for idx, step in enumerate(steps):
-        active_class = "active" if idx == active_index else ""
-        sublabel = step.get("region") or step.get("title") or ""
-        chips.append(
-            f"""
-            <div class="atlas-step-chip {active_class}">
-                <strong>{idx + 1}. {_escape(step["slug"])}</strong>
-                <span>{_escape(sublabel)}</span>
-            </div>
-            """
-        )
-    st.markdown(f"<div class='atlas-stepper'>{''.join(chips)}</div>", unsafe_allow_html=True)
+

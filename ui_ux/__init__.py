@@ -9,8 +9,6 @@ from ui_ux.style import (
     render_section_intro,
     render_sidebar_navigation,
     render_source_card,
-    render_story_panel,
-    render_story_stepper,
     render_topbar,
 )
 from ui_ux.chart_factory import (
@@ -42,4 +40,41 @@ from ui_ux.chart_factory import (
     create_story_timeline,
     create_time_series,
     create_timeline_figure,
+)
+
+# ── Stitch Design System (additive — new components, old ones untouched) ───
+from ui_ux.stitch_tokens import (
+    COLORS_DARK,
+    COLORS_LIGHT,
+    FONT_FAMILIES,
+    FONT_SIZES,
+    SPACING,
+    BORDER_RADIUS,
+    SEMANTIC_DARK,
+    SEMANTIC_LIGHT,
+    NAV_ITEMS_STITCH,
+    NAV_ITEMS_SECONDARY,
+)
+from ui_ux.stitch_effects import (
+    STITCH_SCANLINE,
+    STITCH_NOISE_TEXTURE,
+    STITCH_NEO_BRUTALIST,
+    STITCH_LIQUID_HOVER,
+    STITCH_LASER_FOCUS,
+    STITCH_INNER_GLOW,
+    STITCH_STATUS_DOT,
+    STITCH_PROGRESS_BAR,
+    ALL_STITCH_EFFECTS,
+    render_ticker_css,
+    render_ticker_bar as render_ticker_bar_html,
+    render_progress_bar,
+)
+from ui_ux.stitch_components import (
+    render_bento_card,
+    render_anomaly_feed,
+    render_signal_card,
+    render_alert_card,
+    render_hero_analysis,
+    render_planetary_gauge,
+    render_ticker_bar,
 )

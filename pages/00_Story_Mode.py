@@ -11,7 +11,8 @@ from ui_ux.chart_factory import (
     create_story_scenarios,
     create_story_timeline,
 )
-from ui_ux.style import render_app_shell, render_page_hero
+from ui_ux.style import render_app_shell, render_page_hero, render_info_banner
+from ui_ux.stitch_components import render_alert_card
 from utils.story_content import STORY_MODE_CONFIG
 
 
@@ -129,9 +130,13 @@ def main() -> None:
     st.markdown("### Visualization")
     _render_visual(step)
 
-    st.markdown("### " + str(step["title"]))
-    st.write(step["narrative_panel"]["text"])
-    st.info("AI Insight: " + str(step["narrative_panel"].get("ai_insight", "No AI insight available for this scene.")))
+    narrative_col, insight_col = st.columns((1.2, 0.8))
+    with narrative_col:
+        st.markdown("### " + str(step["title"]))
+        st.write(step["narrative_panel"]["text"])
+    with insight_col:
+        ai_insight = str(step["narrative_panel"].get("ai_insight", "No AI insight available for this scene."))
+        render_alert_card("AI Insight", ai_insight, severity="info")
 
 
 if __name__ == "__main__":
