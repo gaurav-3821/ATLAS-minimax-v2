@@ -50,6 +50,26 @@ def get_openrouter_model() -> str:
     return _secret_value(OPENROUTER_MODEL_NAMES) or "openrouter/auto"
 
 
+def validate_openrouter_key() -> str | None:
+    """Return None if the configured key is valid, or an error string if not."""
+    api_key = get_openrouter_api_key()
+    if not api_key:
+        return "No OpenRouter API key configured. Add one in Settings."
+    try:
+        resp = requests.get(
+            "https://openrouter.ai/api/v1/auth/key",
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=10,
+        )
+        if resp.status_code == 200:
+            return None
+        if resp.status_code == 401:
+            return "OpenRouter API key is invalid or expired."
+        return f"OpenRouter returned HTTP {resp.status_code}."
+    except requests.RequestException as exc:
+        return f"Cannot reach OpenRouter: {exc}"
+
+
 def _extract_message_text(choice: dict[str, Any]) -> str:
     message = choice.get("message", {})
     content = message.get("content")
@@ -91,6 +111,7 @@ def generate_prediction_brief(
     variable: str,
     observed_df: pd.DataFrame,
     forecast_df: pd.DataFrame,
+    result_context: str = "",
 ) -> str:
     api_key = get_openrouter_api_key()
     if not api_key:
@@ -108,7 +129,8 @@ def generate_prediction_brief(
                 "role": "system",
                 "content": (
                     "You are ATLAS Copilot, a concise climate analytics assistant. "
-                    "Summarize forecast risk, trend direction, and one action-oriented takeaway."
+                    "Use only the supplied ATLAS data summaries. Do not add outside facts, citations, or source references. "
+                    "The trend direction must match the computed result context exactly."
                 ),
             },
             {
@@ -117,9 +139,10 @@ def generate_prediction_brief(
                     f"User query: {query}\n"
                     f"Region: {region}\n"
                     f"Variable: {variable}\n"
+                    f"Computed result context: {result_context or 'Not provided.'}\n"
                     f"Observed summary: {observed_summary}\n"
                     f"Forecast summary: {forecast_summary}\n"
-                    "Respond in 3 short bullet points."
+                    "Respond in 3 short bullet points. Each bullet must connect directly to the line chart, momentum bars, or recent observed bars."
                 ),
             },
         ],
@@ -135,6 +158,11 @@ def generate_prediction_brief(
         json=payload,
         timeout=45,
     )
+    if response.status_code == 401:
+        raise RuntimeError(
+            "OpenRouter API key is invalid or expired. "
+            "Update it in Settings → OpenRouter or set the OPENROUTER_API_KEY environment variable."
+        )
     response.raise_for_status()
     data = response.json()
     choices = data.get("choices") or []
